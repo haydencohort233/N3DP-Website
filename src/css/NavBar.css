@@ -1,4 +1,4 @@
-.nav { position: sticky; top: 0; z-index: 100; background: var(--nav-bg); color: var(--text); border-bottom: 1px solid var(--nav-border); }
+.nav { position: sticky; top: 0; z-index: 10000; background: var(--nav-bg); color: var(--text); border-bottom: 1px solid var(--nav-border); }
 .nav-inner { position: relative; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px; padding: 10px 16px; }
 
 /* Brand (left) */
@@ -37,9 +37,20 @@
   display: block;
 }
 
+.nav-right {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Hide right-side slot on mobile */
+@media (max-width: 868px) {
+  .nav-right { display: none; }
+}
 
 /* -------- Responsive -------- */
-@media (max-width: 768px) {
+@media (max-width: 868px) {
   .nav-inner { grid-template-columns: auto 1fr; }
   .nav-links { display: none; }                 /* hide desktop center */
   .nav-links-mobile { display: flex; }

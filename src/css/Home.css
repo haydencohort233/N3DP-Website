@@ -1,18 +1,137 @@
+/* src/css/Home.css */
+
 .home {
   font-family: system-ui, sans-serif;
   line-height: 1.7;
   color: var(--text);
 }
 
-.home h1 {
+/* ===========================
+   Welcome block (top)
+=========================== */
+.home-welcome {
+  padding: 18px 0 14px;
   text-align: center;
-  margin-bottom: 24px;
+}
+
+.home-welcome-title {
+  margin: 0;
   font-size: 2.2rem;
   color: var(--text);
 }
 
-.home p {
-  margin-bottom: 18px;
-  text-align: justify;
+.home-welcome-subtitle {
+  margin: 10px 0 0;
   color: var(--muted);
+  max-width: 62ch;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.home-welcome-actions {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+
+.home-welcome-link {
+  text-decoration: none;
+  font-weight: 650;
+  color: var(--link);
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--nav-border);
+  background: var(--surface-2);
+}
+
+.home-welcome-link:hover {
+  color: var(--link-hover);
+  background: var(--surface);
+}
+
+/* ===========================
+   Social section (bottom)
+=========================== */
+.home-social-inline {
+  margin: 18px 0 8px;
+  padding: 14px 0 0;
+  border-top: 1px solid var(--nav-border);
+}
+
+.home-social-title {
+  margin: 0 0 12px;
+  font-size: 1.15rem;
+  color: var(--text);
+}
+
+.home-social-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.home-social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--nav-border);
+  background: var(--surface-2);
+}
+
+.home-social-link:hover {
+  background: var(--surface);
+}
+
+.home-social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: 12px;
+  border: 1px solid var(--nav-border);
+  background: var(--surface);
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: var(--muted);
+}
+
+.home-social-text {
+  font-weight: 650;
+}
+
+.home-social-icon-img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  display: block;
+  flex: 0 0 auto;
+}
+
+/* ===========================
+   Mobile tuning
+=========================== */
+@media (max-width: 768px) {
+  .home-welcome-title {
+    font-size: 1.6rem;
+  }
+
+  .home-social-links {
+    display: grid;
+    gap: 10px;
+  }
+
+  .home-social-link {
+    width: 100%;
+  }
 }

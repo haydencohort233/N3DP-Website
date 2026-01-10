@@ -1,57 +1,125 @@
+// src/pages/Home.jsx
+import { useMemo } from "react";
+import { NavLink } from "react-router-dom";
 import Button from "../components/Button";
-import Card from "../components/Card";
-import CardGrid from "../components/CardGrid";
 import SEO from "../components/SEO";
 import seoConfig from "../config/Seo";
 import config from "../config";
-import materials from "../config/materials";
-import MaterialStepper from "../components/MaterialStepper";
+import PhotoGallery from "../components/PhotoGallery";
 import "../css/Home.css";
 
+function buildSocialLinks(social = {}) {
+  const facebook = social.facebook
+    ? social.facebook.startsWith("http")
+      ? social.facebook
+      : `https://www.facebook.com/${social.facebook}`
+    : null;
+
+  const instagram = social.instagram
+    ? social.instagram.startsWith("http")
+      ? social.instagram
+      : `https://www.instagram.com/${social.instagram}`
+    : null;
+
+  // Etsy can be either "shopname" or a full URL
+  const etsy = social.etsy
+    ? social.etsy.startsWith("http")
+      ? social.etsy
+      : social.etsy.includes("etsy.com")
+      ? `https://${social.etsy.replace(/^https?:\/\//, "")}`
+      : `https://www.etsy.com/shop/${social.etsy}`
+    : null;
+
+  return { facebook, instagram, etsy };
+}
+
 export default function Home() {
-  const { site } = config;
+  const { site, social } = config;
+  const { facebook, instagram, etsy } = useMemo(
+    () => buildSocialLinks(social),
+    [social]
+  );
 
   return (
     <main className="home" id="about">
       <SEO
         title={`Home — ${site.name}`}
-        description="Nashville-based 3D printing and CAD/design services for prototyping and custom parts."
+        description="3D printing and CAD/design services for prototypes and custom parts in Nashville."
         keywords={seoConfig.keywords}
       />
 
-      <h1>Welcome</h1>
+      {/* Featured gallery */}
+      <PhotoGallery
+        title="Featured Prints"
+        subtitle="Latest from the shop"
+        sort="newest"
+        rows={2}
+        showViewAll
+        viewAllTo="/gallery"
+        viewAllLabel="View Gallery"
+        enableLightbox
+      />
 
-      <p>
-        We are Nashville 3D Printing, previously known as Valley3DPrints in
-        California. We’ve been printing since 2020 and provide 3D printing
-        services and CAD/design for prototyping and custom parts.
-      </p>
+      {/* Social media */}
+      <section className="home-social-inline" aria-label="Find us on social media">
+        <h2 className="home-social-title">Find us on social media</h2>
 
-      <p>
-        We’ve worked with 100+ companies and 1,000+ customers through local
-        markets, retail partnerships, and Etsy.
-      </p>
+        <div className="home-social-links">
+          {instagram && (
+            <a
+              className="home-social-link"
+              href={instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open Instagram"
+            >
+              <img
+                className="home-social-icon-img"
+                src="/assets/social/instagram.png"
+                alt=""
+                aria-hidden="true"
+              />
+              <span className="home-social-text">Nashville3DPrints</span>
+            </a>
+          )}
 
-      <CardGrid>
-        <Card title="3D Printing + CAD/Design">
-          <p>
-            We provide FDM 3D printing and CAD/design support for prototypes,
-            functional parts, and custom designs—built for fit, finish, and
-            real-world use.
-          </p>
-          <Button href="/contact">Get a Quote</Button>
-        </Card>
+          {etsy && (
+            <a
+              className="home-social-link"
+              href={etsy}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open Etsy"
+            >
+              <img
+                className="home-social-icon-img"
+                src="/assets/social/etsy.png"
+                alt=""
+                aria-hidden="true"
+              />
+              <span className="home-social-text">Nashville 3D Prints</span>
+            </a>
+          )}
 
-        <Card title="Fast Defaults, Flexible Options">
-          <p>
-            Default filament colors: <strong>Black</strong> and{" "}
-            <strong>White</strong> for the fastest turnaround. Other colors and
-            finishes may be available upon request.
-          </p>
-        </Card>
-      </CardGrid>
-
-      <MaterialStepper materials={materials} />
+          {facebook && (
+            <a
+              className="home-social-link"
+              href={facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open Facebook"
+            >
+              <img
+                className="home-social-icon-img"
+                src="/assets/social/facebook.png"
+                alt=""
+                aria-hidden="true"
+              />
+              <span className="home-social-text">Nashville 3D Prints</span>
+            </a>
+          )}
+        </div>
+      </section>
     </main>
   );
 }

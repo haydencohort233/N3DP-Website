@@ -1,0 +1,254 @@
+/* ===========================
+   Shared base
+=========================== */
+.bh {
+  color: var(--text);
+}
+
+.bh__toggle {
+  border: 0;
+  cursor: pointer;
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bh__main {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.bh__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--nav-bg) 70%, transparent);
+}
+
+.bh__text {
+  font-weight: 650;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bh__chev {
+  color: var(--muted);
+  font-size: 0.9rem;
+  flex: 0 0 auto;
+}
+
+/* Expand/collapse panel: shared */
+.bh__panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 220ms ease;
+}
+
+.bh__panel.is-open {
+  max-height: 520px;
+}
+
+.bh__grid {
+  display: grid;
+  gap: 8px;
+}
+
+.bh__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  border: 1px solid var(--nav-border);
+}
+
+.bh__row.is-today {
+  outline: 2px solid color-mix(in oklab, var(--accent) 45%, transparent);
+}
+
+.bh__day {
+  font-weight: 650;
+}
+
+.bh__time {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.bh__contact {
+  margin-top: 10px;
+}
+
+.bh__email {
+  display: inline-block;
+  text-decoration: none;
+  color: var(--link);
+  font-weight: 600;
+}
+
+.bh__email:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+/* ===========================
+   Variant: BAR (mobile extension)
+   - Full width
+   - Centered label
+=========================== */
+.bh--bar {
+  border-top: 1px solid var(--nav-border);
+  background: var(--nav-bg);
+}
+
+.bh--bar .bh__toggle {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* centered label */
+
+  padding: 10px 14px;
+  background: transparent;
+}
+
+.bh--bar .bh__main {
+  max-width: calc(100% - 48px); /* reserve room for chevron */
+}
+
+.bh--bar .bh__chev {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.bh--bar .bh__panel {
+  background: var(--nav-bg);
+}
+
+.bh--bar .bh__grid {
+  padding: 10px 14px 12px;
+}
+
+.bh--bar .bh__contact {
+  padding: 0 14px 12px;
+  margin-top: 0;
+}
+
+/* ===========================
+   Variant: INLINE (desktop pill)
+   - Compact pill button
+   - Dropdown panel aligned right
+=========================== */
+.bh--inline {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.bh--inline .bh__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 999px;
+
+  border: 1px solid var(--nav-border);
+  background: var(--surface-2);
+}
+
+.bh--inline .bh__text {
+  font-size: 0.9rem;
+}
+
+/* INLINE panel: truly hidden when closed */
+.bh--inline .bh__panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+
+  width: 280px;
+
+  /* closed state */
+  max-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+
+  overflow: hidden;
+  transition: max-height 220ms ease, padding 220ms ease;
+  z-index: 200;
+}
+
+/* open state: add the “box” styles here */
+.bh--inline .bh__panel.is-open {
+  max-height: 520px;
+  padding: 10px;
+
+  background: var(--nav-bg);
+  border: 1px solid var(--nav-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+
+/* For inline, we don't want animated max-height "push" affecting layout,
+   so we keep the transition but it is in an absolutely positioned panel anyway. */
+.bh--inline .bh__grid {
+  padding: 0;
+}
+
+.bh--inline .bh__contact {
+  margin-top: 10px;
+  padding: 0;
+}
+
+/* ===========================
+   Status colors (applies to both variants)
+   - Fill the button/bar with tasteful tint
+   - Dot matches status
+=========================== */
+.bh--open.bh--bar .bh__toggle {
+  background: color-mix(in oklab, #1fb56d 22%, var(--nav-bg));
+}
+.bh--open.bh--inline .bh__toggle {
+  background: color-mix(in oklab, #1fb56d 24%, var(--surface-2));
+}
+.bh--open .bh__dot {
+  background: #1fb56d;
+}
+
+.bh--soon.bh--bar .bh__toggle {
+  background: color-mix(in oklab, #f5b301 22%, var(--nav-bg));
+}
+.bh--soon.bh--inline .bh__toggle {
+  background: color-mix(in oklab, #f5b301 24%, var(--surface-2));
+}
+.bh--soon .bh__dot {
+  background: #f5b301;
+}
+
+.bh--closed.bh--bar .bh__toggle {
+  background: color-mix(in oklab, #e84d4d 22%, var(--nav-bg));
+}
+.bh--closed.bh--inline .bh__toggle {
+  background: color-mix(in oklab, #e84d4d 24%, var(--surface-2));
+}
+.bh--closed .bh__dot {
+  background: #e84d4d;
+}
+
+.bh--neutral .bh__dot {
+  background: var(--muted);
+}

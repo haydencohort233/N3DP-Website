@@ -5,7 +5,7 @@ const galleryData = [
     src: "/assets/gallery/photo1.png",
     title: "Ghost Mickey K-Cup Holder",
     description: "A K-Cup Holder for Halloween. With Mickey Mouse as a ghost.",
-    date: "2024-01-12",
+    date: "2026-01-12",
     category: "Kitchen",
     tags: ["Custom", "Halloween", "Disney", "Mickey Mouse"]
   },

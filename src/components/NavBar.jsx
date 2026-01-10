@@ -3,12 +3,13 @@ import { NavLink } from "react-router-dom";
 import "../css/NavBar.css";
 import ThemeToggle from "./ThemeToggle";
 import config from "../config";
+import BusinessHours from "./BusinessHours";
 
 const LINKS = config.nav.links;
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(3); // fallback
+  const [visibleCount, setVisibleCount] = useState(3);
   const dropdownRef = useRef(null);
   const toggleRef = useRef(null);
   const innerRef = useRef(null);
@@ -32,8 +33,10 @@ export default function NavBar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const NAV_BREAKPOINT_PX = 920;
+
   function isMobileView() {
-    return window.matchMedia("(max-width: 768px)").matches;
+    return window.matchMedia(`(max-width: ${NAV_BREAKPOINT_PX}px)`).matches;
   }
 
   function measure() {
@@ -96,97 +99,94 @@ export default function NavBar() {
   const logoAlt = config?.site?.logoAlt || `${config.site.name} logo`;
   const brandTo = config?.site?.logoLinkTo || "/";
 
-  return (
-    <header className="nav" role="banner" data-navbar>
-      <div className="nav-inner" ref={innerRef}>
-        {/* Brand (left) */}
-        <div className="nav-brand" ref={brandRef}>
-          <NavLink to={brandTo} className="brand-home" aria-label={`Go to ${config.site.name} home`}>
-            {logoSrc ? (
-              <img className="brand-logo-img" src={logoSrc} alt={logoAlt} />
-            ) : (
-              <div className="brand-logo" aria-hidden="true" />
-            )}
-            <span className="brand-text">{config.site.name}</span>
-          </NavLink>
+// Navbar.jsx (only showing the relevant JSX section)
 
-          <ThemeToggle />
-        </div>
-
-        {/* Desktop: centered links */}
-        <nav className="nav-links" aria-label="Primary navigation">
-          {LINKS.map(({ to, label, end }) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={end}
-              className="nav-link"
-              aria-label={`Go to ${label} page`}
-            >
-              {label}
-            </NavLink>
-          ))}
-        </nav>
-
-        {/* Mobile: dynamic inline + More */}
-        <nav className="nav-links-mobile" aria-label="Primary navigation (mobile)">
-          {primary.map(({ to, label, end }) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={end}
-              className="nav-link"
-              aria-label={`Go to ${label} page`}
-              onClick={() => setOpen(false)}
-            >
-              {label}
-            </NavLink>
-          ))}
-
-          {overflow.length > 0 && (
-            <button
-              ref={toggleRef}
-              className="more-toggle"
-              aria-label={open ? "Hide more navigation links" : "Show more navigation links"}
-              aria-expanded={open}
-              onClick={() => setOpen((v) => !v)}
-            >
-              ☰
-            </button>
-          )}
-        </nav>
-      </div>
-
-      {/* Hidden measurement row */}
-      <div className="nav-measure" aria-hidden="true" ref={measureRef}>
-        {LINKS.map(({ label }) => (
-          <span key={label} className="nav-link-measure">
-            {label}
-          </span>
-        ))}
-      </div>
-
-      {/* Mobile overflow dropdown */}
-      {open && overflow.length > 0 && (
-        <nav
-          ref={dropdownRef}
-          className="nav-dropdown"
-          aria-label="More navigation links"
-          onClick={(e) => e.stopPropagation()}
+return (
+  <header className="nav" role="banner" data-navbar>
+    <div className="nav-inner" ref={innerRef}>
+      {/* Brand (left) */}
+      <div className="nav-brand" ref={brandRef}>
+        <NavLink
+          to={brandTo}
+          className="brand-home"
+          aria-label={`Go to ${config.site.name} home`}
         >
-          {overflow.map(({ to, label }) => (
-            <NavLink
-              key={to}
-              to={to}
-              className="nav-link"
-              aria-label={`Go to ${label} page`}
-              onClick={() => setOpen(false)}
-            >
-              {label}
-            </NavLink>
-          ))}
-        </nav>
-      )}
-    </header>
-  );
+          {logoSrc ? (
+            <img className="brand-logo-img" src={logoSrc} alt={logoAlt} />
+          ) : (
+            <div className="brand-logo" aria-hidden="true" />
+          )}
+          <span className="brand-text">{config.site.name}</span>
+        </NavLink>
+
+        <ThemeToggle />
+      </div>
+
+      {/* Desktop: centered links */}
+      <nav className="nav-links" aria-label="Primary navigation">
+        {LINKS.map(({ to, label, end }) => (
+          <NavLink key={to} to={to} end={end} className="nav-link">
+            {label}
+          </NavLink>
+        ))}
+      </nav>
+
+      {/* Mobile: dynamic inline + More */}
+      <nav className="nav-links-mobile" aria-label="Primary navigation (mobile)">
+        {primary.map(({ to, label, end }) => (
+          <NavLink
+            key={to}
+            to={to}
+            end={end}
+            className="nav-link"
+            onClick={() => setOpen(false)}
+          >
+            {label}
+          </NavLink>
+        ))}
+
+        {overflow.length > 0 && (
+          <button
+            ref={toggleRef}
+            className="more-toggle"
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
+            ☰
+          </button>
+        )}
+      </nav>
+
+      {/* Desktop-only BusinessHours pill */}
+      <div className="nav-right">
+        <BusinessHours variant="inline" desktopOnly breakpointPx={NAV_BREAKPOINT_PX} />
+      </div>
+    </div>
+
+    {/* Mobile-only BusinessHours full-width bar */}
+    <div className="nav-hours-bar">
+      <BusinessHours variant="bar" mobileOnly breakpointPx={NAV_BREAKPOINT_PX} />
+    </div>
+
+    {/* Hidden measurement row */}
+    <div className="nav-measure" aria-hidden="true" ref={measureRef}>
+      {LINKS.map(({ label }) => (
+        <span key={label} className="nav-link-measure">
+          {label}
+        </span>
+      ))}
+    </div>
+
+    {/* Mobile overflow dropdown */}
+    {open && overflow.length > 0 && (
+      <nav ref={dropdownRef} className="nav-dropdown" aria-label="More navigation links">
+        {overflow.map(({ to, label }) => (
+          <NavLink key={to} to={to} className="nav-link" onClick={() => setOpen(false)}>
+            {label}
+          </NavLink>
+        ))}
+      </nav>
+    )}
+  </header>
+);
 }

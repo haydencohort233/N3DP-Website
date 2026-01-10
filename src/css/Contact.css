@@ -1,107 +1,684 @@
 /* src/css/Contact.css */
 
+/* Prevent input overflow (critical) */
+.contact-page,
+.contact-page * {
+  box-sizing: border-box;
+}
+
+.contact-form,
+.contact-grid,
+.contact-field {
+  min-width: 0;
+}
+
+.contact-field input,
+.contact-field select,
+.contact-field textarea {
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+}
+
 .contact-page {
+  padding: 20px;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 24px 20px 40px;
-  background: var(--bg);
   color: var(--text);
 }
 
-.contact-header h1 {
-  font-size: 1.8rem;
-  margin-bottom: 8px;
+/* ===== Hero ===== */
+.contact-hero {
   text-align: center;
+  margin-bottom: 18px;
 }
 
-.contact-header p {
-  margin: 0 0 0px;
-  text-align: center;
-  color: var(--muted);
-  font-size: 0.95rem;
-}
-
-/* Two-column layout */
-.contact-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.6fr);
-  gap: 24px;
-  align-items: flex-start;
-}
-
-/* LEFT COLUMN: just layout, Card will style the box */
-.contact-info {
-  /* remove background/border/shadow here if you had them */
-}
-
-/* text inside the card */
-.contact-info p {
-  margin-bottom: 10px;
-  font-size: 0.92rem;
-  line-height: 1.5;
-}
-
-.contact-details h3 {
-  margin-top: 14px;
-  margin-bottom: 4px;
-  font-size: 0.95rem;
-}
-
-.contact-details p {
+.contact-title {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 2rem;
 }
 
-.contact-details a {
-  color: var(--link);
+.contact-subtitle {
+  margin: 10px auto 0;
+  max-width: 70ch;
+  color: var(--muted);
 }
 
-/* button inside the card */
-.contact-open-tally {
+/* ===== Layout shell ===== */
+.contact-shell {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+/* If there's NO reference card, keep the form centered and not “left squeezed” */
+.contact-shell:not(:has(.contact-ref)) {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* ===== Form ===== */
+.contact-form {
+  border: 1px solid var(--nav-border);
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.contact-field {
+  display: grid;
+  gap: 6px;
+}
+
+.contact-label {
+  font-weight: 750;
+  color: var(--text);
+}
+
+.contact-field input,
+.contact-field select,
+.contact-field textarea {
+  width: 100%;
+  border: 1px solid var(--nav-border);
+  background: var(--surface-2);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+}
+
+.contact-field textarea {
+  resize: vertical;
+  min-height: 160px;
+}
+
+.contact-field--full {
+  grid-column: 1 / -1;
+}
+
+.contact-actions {
   margin-top: 14px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--brand);
+  display: grid;
+  gap: 10px;
+}
+
+.contact-submit {
+  border: 1px solid var(--nav-border);
   background: var(--brand);
   color: var(--brand-contrast);
+  padding: 12px 14px;
+  border-radius: 999px;
+  font-weight: 800;
   cursor: pointer;
+}
+
+.contact-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.contact-status {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--nav-border);
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.contact-status--success {
+  border-color: color-mix(in oklab, #1fb56d 55%, var(--nav-border));
+}
+
+.contact-status--error {
+  border-color: color-mix(in oklab, #e11d48 55%, var(--nav-border));
+}
+
+/* Honeypot hidden */
+.contact-hp {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+}
+
+/* ===== Reference card (compact bar on mobile) ===== */
+.contact-ref {
+  border: 1px solid var(--nav-border);
+  background: var(--surface-2);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+
+.contact-ref-row {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  grid-template-areas: "thumb meta controls";
+  gap: 10px;
+  align-items: center;
+}
+
+.contact-ref-thumb {
+  grid-area: thumb;
+}
+
+.contact-ref-thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.contact-ref-thumb--empty {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  border: 1px solid var(--nav-border);
+  background: var(--surface);
+}
+
+.contact-ref-meta {
+  grid-area: meta;
+  min-width: 0;
+}
+
+.contact-ref-kicker {
+  color: var(--muted);
+  font-weight: 750;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.contact-ref-name {
+  margin-top: 2px;
+  font-weight: 850;
+  font-size: 0.98rem;
+  line-height: 1.15;
+
+  /* desktop/tablet: keep single-line ellipsis */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contact-ref-id {
+  margin-top: 2px;
+  color: var(--muted);
+  font-weight: 650;
+  font-size: 0.85rem;
+}
+
+.contact-ref-toggle {
+  border: 1px solid var(--nav-border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 6px 10px; /* smaller */
+  font-weight: 800;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.contact-ref-expanded {
+  margin-top: 10px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--nav-border);
+  background: var(--surface);
+}
+
+.contact-ref-expanded img {
+  width: 100%;
+  max-height: 220px; /* prevents giant image on mobile */
+  object-fit: cover;
+  display: block;
+}
+
+.contact-ref-note {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+/* ===== Reference controls column ===== */
+.contact-ref-controls {
+  grid-area: controls;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* Quantity stepper (compact, fits mobile + desktop) */
+.contact-qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;                 /* tighter */
+
+  border: 1px solid var(--nav-border);
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 4px 6px;         /* tighter */
+}
+
+.contact-qty.is-empty {
+  border-color: color-mix(in oklab, #e11d48 55%, var(--nav-border));
+}
+
+.contact-qty-btn {
+  width: 26px;              /* smaller */
+  height: 26px;             /* smaller */
+  border-radius: 999px;
+  border: 1px solid var(--nav-border);
+  background: var(--surface-2);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.contact-qty-input {
+  width: 34px;              /* smaller */
+  text-align: center;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-weight: 850;
+  outline: none;
   font-size: 0.9rem;
 }
 
-/* RIGHT COLUMN: form container */
-.contact-form-embed {
-  padding: 16px 18px;
-  border-radius: var(--radius);
-  background: var(--surface);
-  border: 1px solid var(--nav-border);
-  box-shadow: var(--shadow);
+/* Make placeholder look intentional */
+.contact-qty-input::placeholder {
+  color: var(--muted);
+  font-weight: 750;
 }
 
-.contact-form-embed iframe {
-  width: 100%;
-  min-height: 720px;
-  border: none;
-  border-radius: calc(var(--radius) - 2px);
-  background: transparent;
-}
+/* ===== Reference bar: redesigned desktop layout ===== */
 
-/* Responsive */
-@media (max-width: 800px) {
-  .contact-layout {
-    grid-template-columns: 1fr;
+/* Base (mobile stays fine as-is) */
+/* Keep your existing mobile layout if you like it */
+
+/* Desktop/tablet: 2-column layout, controls under meta */
+@media (min-width: 640px) {
+  .contact-ref-row {
+    grid-template-columns: 86px minmax(0, 1fr);
+    grid-template-areas:
+      "thumb meta"
+      "thumb controls";
+    align-items: start;
+    gap: 12px;
   }
 
-  .contact-form-embed iframe {
-    min-height: 820px;
+  .contact-ref-thumb,
+  .contact-ref-thumb--empty {
+    width: 86px;
+    height: 86px;
+    border-radius: 14px;
+  }
+
+  .contact-ref-meta {
+    min-width: 0;
+  }
+
+  /* Make title actually visible on desktop */
+  .contact-ref-name {
+    white-space: normal;              /* allow wrap */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;            /* show up to 2 lines */
+    -webkit-box-orient: vertical;
+    font-size: 1.05rem;
+  }
+
+  /* Keep kicker clean and horizontal */
+  .contact-ref-kicker {
+    white-space: nowrap;
+  }
+
+  /* Controls become their own row under meta */
+  .contact-ref-controls {
+    justify-content: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;                  /* if needed on narrower screens */
+    margin-top: 6px;
   }
 }
 
-@media (max-width: 600px) {
+/* Make the note feel intentional and not jammed into the layout */
+.contact-ref-note {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--nav-border);
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+
+/* ===== Desktop cleanup for reference row ===== */
+@media (min-width: 768px) {
+  .contact-ref-row {
+    grid-template-columns: 86px minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: center;
+  }
+
+  /* Make the thumbnail consistent on desktop */
+  .contact-ref-thumb,
+  .contact-ref-thumb--empty {
+    width: 86px;
+    height: 86px;
+    border-radius: 14px;
+  }
+
+  /* Keep "REORDER / REFERENCE" on one line */
+  .contact-ref-kicker {
+    white-space: nowrap;
+  }
+
+  /* Meta block should not get squeezed into a thin column */
+  .contact-ref-meta {
+    min-width: 0;
+  }
+
+  /* Title stays one line with ellipsis, and has room */
+  .contact-ref-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 54ch; /* prevents weird wrapping */
+  }
+
+  .contact-ref-id {
+    margin-top: 2px;
+  }
+
+  /* Controls should be compact and not steal the whole row */
+  .contact-ref-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
+    white-space: nowrap;
+  }
+
+  .contact-ref-toggle {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+
+  /* Smaller qty group so it doesn't crush the meta */
+  .contact-qty {
+    padding: 4px 6px;
+    gap: 4px;
+  }
+
+  .contact-qty-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .contact-qty-input {
+    width: 36px;
+    font-size: 0.95rem;
+  }
+
+  .contact-ref-meta {
+    min-width: 0; /* you already have this, keep it */
+  }
+
+  .contact-ref-kicker {
+    display: inline-block;   /* prevents weird break behavior */
+    white-space: nowrap;
+  }
+}
+
+
+/* Slightly smaller on tiny screens */
+@media (max-width: 420px) {
+  .contact-ref-thumb,
+  .contact-ref-thumb--empty {
+    width: 56px;
+    height: 56px;
+  }
+  .contact-qty-btn {
+    width: 30px;
+    height: 30px;
+  }
+  .contact-qty-input {
+    width: 40px;
+  }
+}
+
+/* Desktop: keep your side-by-side layout, allow a larger thumbnail */
+@media (min-width: 1024px) {
+  .contact-ref {
+    padding: 16px;
+  }
+
+  .contact-ref-row {
+    grid-template-columns: 86px minmax(0, 1fr) auto;
+    gap: 12px;
+  }
+
+  .contact-ref-thumb,
+  .contact-ref-thumb--empty {
+    width: 86px;
+    height: 86px;
+    border-radius: 14px;
+  }
+
+  .contact-ref-name {
+    font-size: 1.05rem;
+  }
+
+  .contact-ref-expanded img {
+    max-height: 280px;
+  }
+}
+
+/* ===== Desktop polish ===== */
+/* Increase breakpoint and give more breathing room */
+@media (min-width: 1024px) {
   .contact-page {
-    padding-inline: 16px;
+    padding: 28px 20px;
   }
 
-  .contact-header h1 {
-    font-size: 1.5rem;
+  .contact-shell {
+    gap: 18px;
+  }
+
+  /* Two-column layout ONLY when reference card exists */
+  .contact-shell:has(.contact-ref) {
+    grid-template-columns: minmax(320px, 0.9fr) minmax(520px, 1.1fr);
+  }
+
+  .contact-form {
+    padding: 18px;
+  }
+
+  .contact-ref {
+    padding: 18px;
+  }
+
+  /* Form grid becomes true 2-col on desktop */
+  .contact-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .contact-field textarea {
+    min-height: 180px;
+  }
+}
+
+/* Wide desktop: keep it elegant, not stretched */
+@media (min-width: 1280px) {
+  .contact-page {
+    max-width: 1180px;
+  }
+}
+
+/* ===== Cart ===== */
+.contact-cart {
+  border: 1px solid var(--nav-border);
+  background: var(--surface-2);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+
+.contact-cart-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.contact-cart-title {
+  font-weight: 850;
+  letter-spacing: 0.2px;
+}
+
+.contact-cart-clear {
+  border: 1px solid var(--nav-border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.contact-cart-list {
+  display: grid;
+  gap: 10px;
+}
+
+.cartbar {
+  border: 1px solid var(--nav-border);
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.cartbar--warn {
+  border-color: color-mix(in oklab, #e11d48 55%, var(--nav-border));
+}
+
+.cartbar-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--nav-border);
+  background: var(--surface-2);
+}
+
+.cartbar-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cartbar-meta {
+  min-width: 0;
+}
+
+.cartbar-kicker {
+  color: var(--muted);
+  font-weight: 750;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cartbar-name {
+  margin-top: 2px;
+  font-weight: 850;
+  font-size: 0.98rem;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cartbar-id {
+  margin-top: 2px;
+  color: var(--muted);
+  font-weight: 650;
+  font-size: 0.85rem;
+}
+
+.cartbar-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-end;
+  white-space: nowrap;
+}
+
+.cartbar-remove {
+  border: 1px solid var(--nav-border);
+  background: transparent;
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.cartbar-remove:hover {
+  color: var(--text);
+  background: var(--surface-2);
+}
+
+.contact-cart-note {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--nav-border);
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+/* Mobile: stack controls below meta so titles don’t get crushed */
+@media (max-width: 520px) {
+  .cartbar {
+    grid-template-columns: 56px minmax(0, 1fr);
+    grid-template-areas:
+      "thumb meta"
+      "controls controls";
+    align-items: start;
+  }
+
+  .cartbar-thumb {
+    width: 56px;
+    height: 56px;
+  }
+
+  .cartbar-controls {
+    margin-top: 6px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .cartbar-name {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }

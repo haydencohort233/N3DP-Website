@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import galleryData from "../config/galleryData";
 import SEO from "../components/SEO";
 import seoConfig from "../config/Seo";
+import PhotoViewer from "../components/PhotoViewer";
 import "../css/Gallery.css";
 
 export default function Gallery() {
@@ -331,7 +332,6 @@ useEffect(() => {
 
             <div className="lightbox-info">
               <div className="lightbox-info-left">
-                <h3>Details</h3>
                 <p>
                   <span className="label">Date:</span>{" "}
                   {filteredImages[lightboxIndex].date}

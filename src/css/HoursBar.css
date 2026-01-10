@@ -1,0 +1,144 @@
+/* Sits as a “second row” under the sticky navbar */
+.hoursbar {
+  border-top: 1px solid var(--nav-border);
+  background: var(--nav-bg);
+}
+
+/* Clickable summary row */
+.hoursbar__toggle {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* center the main text */
+  gap: 10px;
+
+  padding: 10px 14px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.hoursbar__main {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  max-width: calc(100% - 48px); /* leave room for chevron */
+}
+
+.hoursbar__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--nav-bg) 75%, transparent);
+}
+
+.hoursbar__text {
+  font-weight: 650;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hoursbar__chev {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* Expand/collapse panel */
+.hoursbar__panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 220ms ease;
+}
+
+.hoursbar__panel.is-open {
+  max-height: 420px;
+}
+
+.hoursbar__grid {
+  padding: 10px 14px 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.hoursbar__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  border: 1px solid var(--nav-border);
+}
+
+.hoursbar__row.is-today {
+  outline: 2px solid color-mix(in oklab, var(--accent) 45%, transparent);
+}
+
+.hoursbar__day {
+  font-weight: 650;
+}
+
+.hoursbar__time {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* Contact row */
+.hoursbar__contact {
+  padding: 0 14px 12px;
+}
+
+.hoursbar__email {
+  display: inline-block;
+  text-decoration: none;
+  color: var(--link);
+  font-weight: 600;
+}
+
+.hoursbar__email:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+/* ====== Status: colored fill + dot ======
+   Use gentle tint so it looks professional on both themes.
+*/
+.hoursbar--open .hoursbar__toggle {
+  background: color-mix(in oklab, #1fb56d 22%, var(--nav-bg));
+}
+.hoursbar--open .hoursbar__dot {
+  background: #1fb56d;
+}
+
+.hoursbar--soon .hoursbar__toggle {
+  background: color-mix(in oklab, #f5b301 22%, var(--nav-bg));
+}
+.hoursbar--soon .hoursbar__dot {
+  background: #f5b301;
+}
+
+.hoursbar--closed .hoursbar__toggle {
+  background: color-mix(in oklab, #e84d4d 22%, var(--nav-bg));
+}
+.hoursbar--closed .hoursbar__dot {
+  background: #e84d4d;
+}
+
+.hoursbar--neutral .hoursbar__toggle {
+  background: var(--nav-bg);
+}
+.hoursbar--neutral .hoursbar__dot {
+  background: var(--muted);
+}
