@@ -53,6 +53,7 @@ const heroConfig = {
     ],
     desktop: [
       "/assets/hero1-wide.png",
+      "/assets/hero2-wide.png",
     ],
   },
 };

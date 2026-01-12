@@ -55,12 +55,9 @@ export default function PhotoGallery({
   tags, // string | string[]
   tagMatch = "any", // "any" | "all"
   sort = "newest", // newest | oldest | title-asc | title-desc
-
-  // Full-rows control:
-  // rows={2} => shows 2 complete rows based on current CSS column count
   rows = 2,
-
-  // Optional hard cap (applied after rows logic, still keeps full rows)
+  
+  // Optional hard cap of images shown
   limit,
 
   showViewAll = true,
@@ -94,7 +91,6 @@ export default function PhotoGallery({
     return [...tagFiltered].sort(bySort(sort));
   }, [cats, tgs, tagMatch, sort]);
 
-  // Read actual columns from CSS (source of truth)
   const gridRef = useRef(null);
   const [cols, setCols] = useState(5);
 
@@ -110,7 +106,7 @@ export default function PhotoGallery({
     const ro = new ResizeObserver(() => measure());
     ro.observe(el);
 
-    // Also react to viewport changes
+    // React to viewport changes
     window.addEventListener("resize", measure);
 
     return () => {
@@ -221,14 +217,14 @@ export default function PhotoGallery({
           </button>
         ))}
       </div>
-{enableLightbox && lbIndex !== null && (
-  <PhotoViewer
-    images={filtered}
-    index={lbIndex}
-    onClose={() => setLbIndex(null)}
-    onIndexChange={(i) => setLbIndex(i)}
-  />
-)}
+      {enableLightbox && lbIndex !== null && (
+        <PhotoViewer
+          images={filtered}
+          index={lbIndex}
+          onClose={() => setLbIndex(null)}
+          onIndexChange={(i) => setLbIndex(i)}
+        />
+      )}
     </section>
   );
 }

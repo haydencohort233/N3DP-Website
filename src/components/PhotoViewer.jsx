@@ -1,3 +1,6 @@
+/* Reusable photoviewer for when any photo is opened
+* Used in "PhotoGallery.jsx" and in "Gallery.jsx" */
+
 import { useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Gallery.css";
@@ -15,8 +18,8 @@ export default function PhotoViewer({
   onIndexChange,
   allowTagClick = false,
   onTagClick,
-  quoteTo = "/contact",          // NEW: where the quote form lives
-  quoteButtonLabel = "Get Quote" // NEW: button label
+  quoteTo = "/contact",
+  quoteButtonLabel = "Get Quote"
 }) {
   const navigate = useNavigate();
 
@@ -76,7 +79,6 @@ export default function PhotoViewer({
       window.removeEventListener("keydown", handleKey);
       document.body.style.overflow = prevOverflow;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, safeIndex, len]);
 
   if (!isOpen) return null;
@@ -95,13 +97,13 @@ export default function PhotoViewer({
         </div>
 
         <div className="lightbox-media">
-  <img src={img.src} alt={title} loading="lazy" />
-  <button type="button" className="lightbox-cta lightbox-cta--overlay" onClick={goToQuote}>
-    {quoteButtonLabel}
-  </button>
-</div>
+          <img src={img.src} alt={title} loading="lazy" />
+          <button type="button" className="lightbox-cta lightbox-cta--overlay" onClick={goToQuote}>
+            {quoteButtonLabel}
+          </button>
+        </div>
 
-<h2>{title}</h2>
+        <h2>{title}</h2>
 
         <div className="lightbox-info">
           <div className="lightbox-info-left">

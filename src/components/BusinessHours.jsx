@@ -76,7 +76,6 @@ export default function BusinessHours({
   const isMobile = useMedia(`(max-width: ${breakpointPx}px)`);
   const isDesktop = !isMobile;
 
-  // IMPORTANT: don't return early before hooks below
   const shouldRender =
     (!mobileOnly || isMobile) && (!desktopOnly || isDesktop);
 

@@ -101,92 +101,92 @@ export default function NavBar() {
 
 // Navbar.jsx (only showing the relevant JSX section)
 
-return (
-  <header className="nav" role="banner" data-navbar>
-    <div className="nav-inner" ref={innerRef}>
-      {/* Brand (left) */}
-      <div className="nav-brand" ref={brandRef}>
-        <NavLink
-          to={brandTo}
-          className="brand-home"
-          aria-label={`Go to ${config.site.name} home`}
-        >
-          {logoSrc ? (
-            <img className="brand-logo-img" src={logoSrc} alt={logoAlt} />
-          ) : (
-            <div className="brand-logo" aria-hidden="true" />
-          )}
-          <span className="brand-text">{config.site.name}</span>
-        </NavLink>
-
-        <ThemeToggle />
-      </div>
-
-      {/* Desktop: centered links */}
-      <nav className="nav-links" aria-label="Primary navigation">
-        {LINKS.map(({ to, label, end }) => (
-          <NavLink key={to} to={to} end={end} className="nav-link">
-            {label}
-          </NavLink>
-        ))}
-      </nav>
-
-      {/* Mobile: dynamic inline + More */}
-      <nav className="nav-links-mobile" aria-label="Primary navigation (mobile)">
-        {primary.map(({ to, label, end }) => (
+  return (
+    <header className="nav" role="banner" data-navbar>
+      <div className="nav-inner" ref={innerRef}>
+        {/* Brand (left) */}
+        <div className="nav-brand" ref={brandRef}>
           <NavLink
-            key={to}
-            to={to}
-            end={end}
-            className="nav-link"
-            onClick={() => setOpen(false)}
+            to={brandTo}
+            className="brand-home"
+            aria-label={`Go to ${config.site.name} home`}
           >
-            {label}
+            {logoSrc ? (
+              <img className="brand-logo-img" src={logoSrc} alt={logoAlt} />
+            ) : (
+              <div className="brand-logo" aria-hidden="true" />
+            )}
+            <span className="brand-text">{config.site.name}</span>
           </NavLink>
-        ))}
 
-        {overflow.length > 0 && (
-          <button
-            ref={toggleRef}
-            className="more-toggle"
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
-          >
-            ☰
-          </button>
-        )}
-      </nav>
+          <ThemeToggle />
+        </div>
 
-      {/* Desktop-only BusinessHours pill */}
-      <div className="nav-right">
-        <BusinessHours variant="inline" desktopOnly breakpointPx={NAV_BREAKPOINT_PX} />
+        {/* Desktop: centered links */}
+        <nav className="nav-links" aria-label="Primary navigation">
+          {LINKS.map(({ to, label, end }) => (
+            <NavLink key={to} to={to} end={end} className="nav-link">
+              {label}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Mobile: dynamic inline + More */}
+        <nav className="nav-links-mobile" aria-label="Primary navigation (mobile)">
+          {primary.map(({ to, label, end }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={end}
+              className="nav-link"
+              onClick={() => setOpen(false)}
+            >
+              {label}
+            </NavLink>
+          ))}
+
+          {overflow.length > 0 && (
+            <button
+              ref={toggleRef}
+              className="more-toggle"
+              aria-expanded={open}
+              onClick={() => setOpen((v) => !v)}
+            >
+              ☰
+            </button>
+          )}
+        </nav>
+
+        {/* Desktop-only BusinessHours pill */}
+        <div className="nav-right">
+          <BusinessHours variant="inline" desktopOnly breakpointPx={NAV_BREAKPOINT_PX} />
+        </div>
       </div>
-    </div>
 
-    {/* Mobile-only BusinessHours full-width bar */}
-    <div className="nav-hours-bar">
-      <BusinessHours variant="bar" mobileOnly breakpointPx={NAV_BREAKPOINT_PX} />
-    </div>
+      {/* Mobile-only BusinessHours full-width bar */}
+      <div className="nav-hours-bar">
+        <BusinessHours variant="bar" mobileOnly breakpointPx={NAV_BREAKPOINT_PX} />
+      </div>
 
-    {/* Hidden measurement row */}
-    <div className="nav-measure" aria-hidden="true" ref={measureRef}>
-      {LINKS.map(({ label }) => (
-        <span key={label} className="nav-link-measure">
-          {label}
-        </span>
-      ))}
-    </div>
-
-    {/* Mobile overflow dropdown */}
-    {open && overflow.length > 0 && (
-      <nav ref={dropdownRef} className="nav-dropdown" aria-label="More navigation links">
-        {overflow.map(({ to, label }) => (
-          <NavLink key={to} to={to} className="nav-link" onClick={() => setOpen(false)}>
+      {/* Hidden measurement row */}
+      <div className="nav-measure" aria-hidden="true" ref={measureRef}>
+        {LINKS.map(({ label }) => (
+          <span key={label} className="nav-link-measure">
             {label}
-          </NavLink>
+          </span>
         ))}
-      </nav>
-    )}
-  </header>
-);
+      </div>
+
+      {/* Mobile overflow dropdown */}
+      {open && overflow.length > 0 && (
+        <nav ref={dropdownRef} className="nav-dropdown" aria-label="More navigation links">
+          {overflow.map(({ to, label }) => (
+            <NavLink key={to} to={to} className="nav-link" onClick={() => setOpen(false)}>
+              {label}
+            </NavLink>
+          ))}
+        </nav>
+      )}
+    </header>
+  );
 }

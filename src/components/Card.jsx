@@ -31,7 +31,7 @@ export default function Card({
         collapsed ? "collapsed" : "expanded"
       );
     } catch {
-      // ignore write errors
+      // ignore errors
     }
   }, [collapsed, minimizable, storageKey]);
 

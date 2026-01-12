@@ -7,7 +7,7 @@ export default function Button({
   type = "button",
   variant = "primary",
   href,
-  ariaLabel, // ✅ optional accessible label
+  ariaLabel,
 }) {
   const className = `btn btn-${variant}`;
 
@@ -25,7 +25,7 @@ export default function Button({
     );
   }
 
-  // External link (new tab, secure)
+  // External link in new tab
   if (href) {
     return (
       <a

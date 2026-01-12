@@ -1,8 +1,10 @@
 // src/pages/FAQ.jsx
 import { useState, useMemo, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import SEO from "../components/SEO";
 import seoConfig from "../config/Seo";
 import faqData from "../config/faqData";
+import config from "../config";
 import "../css/FAQ.css";
 
 // Map categories to emojis/icons
@@ -27,14 +29,17 @@ export default function FAQ() {
 
   const normalizedSearch = searchTerm.trim().toLowerCase();
 
+  const sitePhone = config?.site?.phone || "(209) 202-3221";
+  const siteEmail = config?.site?.email || "nashville3dprinting@gmail.com";
+
   const filteredData = useMemo(() => {
     if (!normalizedSearch) return faqData;
 
     return faqData
       .map((section) => {
         const filteredItems = section.items.filter((item) => {
-          const q = item.question.toLowerCase();
-          const a = item.answer.toLowerCase();
+          const q = String(item.question || "").toLowerCase();
+          const a = String(item.answer || "").toLowerCase();
           return q.includes(normalizedSearch) || a.includes(normalizedSearch);
         });
         return { ...section, items: filteredItems };
@@ -52,39 +57,32 @@ export default function FAQ() {
     );
     if (!section) return;
 
-    setOpenCategories([section.category]); // open that category
-    setOpenQuestionId(hash);              // open that question
+    setOpenCategories([section.category]);
+    setOpenQuestionId(hash);
 
-    // Scroll to the question after it renders
     setTimeout(() => {
       const el = document.getElementById(hash);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 0);
   }, []);
 
-  // Accordion: only one category open at a time
   const toggleCategory = (categoryName) => {
     setOpenCategories((prev) =>
       prev.includes(categoryName) ? [] : [categoryName]
     );
   };
 
-  // Toggle question open/closed and update URL hash
   const toggleQuestion = (id) => {
     setOpenQuestionId((prev) => {
       const next = prev === id ? null : id;
 
       if (next) {
-        // Keep pathname/search, update hash
         window.history.replaceState(
           null,
           "",
           `${window.location.pathname}${window.location.search}#${next}`
         );
       } else {
-        // Clear hash
         window.history.replaceState(
           null,
           "",
@@ -100,18 +98,25 @@ export default function FAQ() {
     filteredData.length > 0 &&
     filteredData.some((section) => section.items.length > 0);
 
+  const renderAnswerHtml = (html) => {
+    const safe = String(html || "")
+      .replaceAll("{{PHONE}}", sitePhone)
+      .replaceAll("{{EMAIL}}", siteEmail);
+
+    return <div className="faq-answer" dangerouslySetInnerHTML={{ __html: safe }} />;
+  };
+
   return (
     <main className="faq-page">
-        <SEO
-          title="FAQ — MySite"
-          description="FAQ — Description"
-          keywords={seoConfig.keywords} // or change for each page
-        />
+      <SEO
+        title={`FAQ — ${config?.site?.name || "MySite"}`}
+        description="FAQ — Answers to common questions about quotes, materials, size limits, shipping, and turnaround."
+        keywords={seoConfig.keywords}
+      />
+
       <header className="faq-header">
         <h1>Frequently Asked Questions</h1>
-        <p>
-          Browse by category, or use the search bar to quickly find answers.
-        </p>
+        <p>Browse by category, or use the search bar to quickly find answers.</p>
 
         <div className="faq-search-wrapper">
           <input
@@ -155,11 +160,7 @@ export default function FAQ() {
                   {section.items.length === 1 ? "question" : "questions"}
                 </span>
 
-                <span
-                  className={`faq-section-chevron ${
-                    isOpen ? "open" : "closed"
-                  }`}
-                >
+                <span className={`faq-section-chevron ${isOpen ? "open" : "closed"}`}>
                   ▾
                 </span>
               </button>
@@ -170,31 +171,31 @@ export default function FAQ() {
                     const isQuestionOpen = openQuestionId === item.id;
 
                     return (
-                      <div
-                        key={item.id}
-                        className="faq-item"
-                        id={item.id} // for deep linking / scrolling
-                      >
+                      <div key={item.id} className="faq-item" id={item.id}>
                         <button
                           className="faq-question"
                           onClick={() => toggleQuestion(item.id)}
                           aria-expanded={isQuestionOpen}
                         >
                           <span>{item.question}</span>
-                          <span
-                            className={`faq-question-chevron ${
-                              isQuestionOpen ? "open" : "closed"
-                            }`}
-                          >
+                          <span className={`faq-question-chevron ${isQuestionOpen ? "open" : "closed"}`}>
                             ▾
                           </span>
                         </button>
 
                         {isQuestionOpen && (
-                          <div
-                            className="faq-answer"
-                            dangerouslySetInnerHTML={{ __html: item.answer }}
-                          ></div>
+                          <div>
+                            {renderAnswerHtml(item.answer)}
+
+                            {/* Special CTA for "How do I get a quote?" */}
+                            {item.id === "gen-get-quote" && (
+                              <div className="faq-answer-actions">
+                                <NavLink className="faq-cta" to="/contact">
+                                  Get a Quote
+                                </NavLink>
+                              </div>
+                            )}
+                          </div>
                         )}
                       </div>
                     );
@@ -209,18 +210,12 @@ export default function FAQ() {
       <section className="faq-contact">
         <h2>Still need help?</h2>
         <p>
-          You can link this section to a contact form or support email, so
-          visitors can reach out if their question isn&apos;t answered here.
+          If you’re not sure what to pick, just send what you have (photo + rough dimensions)
+          and we’ll guide you.
         </p>
-        <button
-          type="button"
-          className="faq-contact-button"
-          onClick={() => {
-            // Hook this up to your routing or contact form later
-          }}
-        >
-          Contact Support
-        </button>
+        <NavLink className="faq-contact-button" to="/contact">
+          Contact Us
+        </NavLink>
       </section>
     </main>
   );

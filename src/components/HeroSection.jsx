@@ -41,7 +41,7 @@ function DefaultOverlay() {
           <Button className="btn" href={primaryCtaHref} ariaLabel={primaryCtaText}>
             {primaryCtaText}
           </Button>
-
+          
           <a className="hero__link" href={secondaryCtaHref}>
             {secondaryCtaText}
           </a>

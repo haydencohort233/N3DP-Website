@@ -86,7 +86,7 @@
   position: absolute;
   top: calc(100% + 6px);
   left: 0;
-  min-width: 360px;          /* was 400px; still good for 2 cols on desktop */
+  min-width: 360px;
   max-height: 260px;
   background: var(--surface);
   border-radius: var(--radius);
@@ -101,19 +101,18 @@
 
 @media (max-width: 600px) {
   .gallery-filter-popover {
-    min-width: 0;                          /* remove desktop min-width */
-    width: calc(100vw - 32px);             /* full width minus side padding */
-    left: 100%;                             /* center it under the button */
+    min-width: 0;
+    width: calc(100vw - 32px);
+    left: 100%;
     transform: translateX(-50%);
   }
 
   .gallery-filter-list {
-    grid-template-columns: repeat(2, 1fr); /* still 2 columns, just narrower */
+    grid-template-columns: repeat(2, 1fr);
     max-height: 220px;
   }
 }
 
-/* If the screen is *really* tiny, drop to 1 column */
 @media (max-width: 380px) {
   .gallery-filter-list {
     grid-template-columns: 1fr;
@@ -277,7 +276,6 @@
   color: var(--text);
 }
 
-/* Pagination */
 .gallery-pagination {
   margin-top: 20px;
   text-align: center;
@@ -321,7 +319,7 @@
   max-width: 900px;
   width: 100%;
   max-height: 90vh;
-  overflow: hidden; /* IMPORTANT: never scroll inside */
+  overflow: hidden; /* No scrollbar */
   box-shadow: var(--shadow);
   text-align: left;
   border: 1px solid var(--nav-border);
@@ -412,7 +410,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  max-height: 54px;   /* about 2 rows */
+  max-height: 54px;
   overflow: hidden;
 }
 
