@@ -12,13 +12,13 @@ const config = {
       timezone: "America/Chicago",          // Sites timezone
       closingSoonMinutes: 60,               // How many minutes away from closing until it shows "Closing Soon"
       weekly: {
-        mon: { open: "10:00", close: "24:00" },
-        tue: { open: "10:00", close: "24:00" },
+        mon: { open: "10:00", close: "22:00" },
+        tue: { open: "10:00", close: "22:00" },
         wed: { open: "10:00", close: "22:00" },
         thu: { open: "10:00", close: "22:00" },
         fri: { open: "10:00", close: "22:00" },
         sat: { open: "10:00", close: "22:00" },
-        sun: { open: "10:00", close: "24:00" },
+        sun: { open: "10:00", close: "22:00" },
       },
     },
   },

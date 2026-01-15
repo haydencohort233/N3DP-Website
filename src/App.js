@@ -7,6 +7,7 @@ import Layout from "./components/Layout";
 import ScrollToTop from "./components/ScrollToTop";
 import NotFound from "./pages/NotFound";
 import HeroSection from "./components/HeroSection";
+import useGaPageViews from "./hooks/useGAPageViews";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -14,14 +15,15 @@ const Gallery = lazy(() => import("./pages/Gallery"));
 const FAQ = lazy(() => import("./pages/FAQ"));
 const Contact = lazy(() => import("./pages/Contact"));
 
-export default function App() {
+function AppRoutes() {
+  useGaPageViews(); // ✅ now inside Router
+
   return (
-    <BrowserRouter>
+    <>
       <ScrollToTop />
       <NavBar />
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
-          {/* Full-bleed hero only on Home */}
           <Route
             path="/"
             element={
@@ -33,7 +35,6 @@ export default function App() {
               </>
             }
           />
-          {/* Other pages stay within Layout */}
           <Route
             path="/about"
             element={
@@ -77,6 +78,14 @@ export default function App() {
         </Routes>
       </Suspense>
       <Footer />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
     </BrowserRouter>
   );
 }

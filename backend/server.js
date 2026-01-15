@@ -29,6 +29,43 @@ const pool = mysql.createPool({
   queueLimit: 0,
 });
 
+/**
+ * Cloudflare Turnstile verification
+ * - Requires env: TURNSTILE_SECRET
+ * - Frontend must send: turnstileToken (string)
+ */
+async function verifyTurnstile(token, ip) {
+  const secret = process.env.TURNSTILE_SECRET;
+
+  if (!secret) return { ok: false, reason: "Missing TURNSTILE_SECRET" };
+  if (!token) return { ok: false, reason: "Missing token" };
+
+  const form = new URLSearchParams();
+  form.append("secret", secret);
+  form.append("response", token);
+  if (ip) form.append("remoteip", ip);
+
+  const resp = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: form.toString(),
+    }
+  );
+
+  const data = await resp.json().catch(() => null);
+
+  if (!data?.success) {
+    const codes = Array.isArray(data?.["error-codes"])
+      ? data["error-codes"].join(",")
+      : "failed";
+    return { ok: false, reason: codes };
+  }
+
+  return { ok: true };
+}
+
 // Health (process)
 app.get("/api/health", (req, res) => {
   res.json({ ok: true });
@@ -58,7 +95,28 @@ app.post("/api/quotes", async (req, res) => {
     ref_id = "",
     ref_name = "",
     ref_src = "",
+
+    // NEW: Cloudflare Turnstile token from frontend
+    turnstileToken = "",
   } = req.body || {};
+
+  // NEW: Verify Turnstile (block bots)
+  // Pull best-effort client IP (Cloudflare + proxies + direct)
+  const ip =
+    req.headers["cf-connecting-ip"] ||
+    (typeof req.headers["x-forwarded-for"] === "string"
+      ? req.headers["x-forwarded-for"].split(",")[0]?.trim()
+      : "") ||
+    req.socket?.remoteAddress;
+
+  try {
+    const t = await verifyTurnstile(String(turnstileToken || ""), ip);
+    if (!t.ok) {
+      return res.status(400).json({ ok: false, error: `Captcha failed: ${t.reason || "unknown"}` });
+    }
+  } catch (e) {
+    return res.status(500).json({ ok: false, error: "Captcha verification error" });
+  }
 
   if (!name || String(name).trim().length < 2) {
     return res.status(400).json({ ok: false, error: "Name is required" });

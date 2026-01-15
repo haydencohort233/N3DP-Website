@@ -1,5 +1,5 @@
 // src/pages/Contact.jsx
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { API_BASE } from "../config/api";
 import SEO from "../components/SEO";
@@ -37,6 +37,64 @@ export default function Contact() {
 
   const [refExpanded, setRefExpanded] = useState(false);
 
+  // --- Turnstile (Cloudflare Captcha) ---
+  const TURNSTILE_SITE_KEY = process.env.REACT_APP_TURNSTILE_SITE_KEY || "";
+  const turnstileElRef = useRef(null);
+  const turnstileWidgetIdRef = useRef(null);
+
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileError, setTurnstileError] = useState("");
+
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY) return;
+    if (!turnstileElRef.current) return;
+
+    let cancelled = false;
+
+    const tryRender = () => {
+      if (cancelled) return false;
+      if (!window.turnstile) return false;
+
+      // Render once
+      if (turnstileWidgetIdRef.current == null) {
+        turnstileWidgetIdRef.current = window.turnstile.render(turnstileElRef.current, {
+          sitekey: TURNSTILE_SITE_KEY,
+          callback: (token) => {
+            setTurnstileToken(token || "");
+            setTurnstileError("");
+          },
+          "expired-callback": () => {
+            setTurnstileToken("");
+            setTurnstileError("");
+          },
+          "error-callback": () => {
+            setTurnstileToken("");
+            setTurnstileError("Captcha failed");
+          },
+        });
+      }
+      return true;
+    };
+
+    // Try now, otherwise poll until script loads
+    if (tryRender()) return;
+
+    const id = setInterval(() => {
+      if (tryRender()) clearInterval(id);
+    }, 200);
+
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+      try {
+        if (window.turnstile && turnstileWidgetIdRef.current != null) {
+          window.turnstile.remove(turnstileWidgetIdRef.current);
+          turnstileWidgetIdRef.current = null;
+        }
+      } catch {}
+    };
+  }, [TURNSTILE_SITE_KEY]);
+
   const [form, setForm] = useState(() => ({
     name: "",
     email: "",
@@ -65,12 +123,12 @@ export default function Contact() {
   const qtyParsed = useMemo(() => parseQty1to99(form.quantity), [form.quantity]);
   const qtyRequiredOk = ref.hasRef ? qtyParsed !== null : true;
 
-  const canSubmit =
-    form.name.trim().length >= 2 &&
-    isValidEmail(form.email) &&
-    form.message.trim().length >= 10 &&
-    qtyRequiredOk &&
-    status.state !== "sending";
+const canSubmit =
+  form.name.trim().length >= 2 &&
+  isValidEmail(form.email) &&
+  form.message.trim().length >= 10 &&
+  qtyRequiredOk &&
+  status.state !== "sending";
 
   const bumpQty = (delta) => {
     const cur = parseQty1to99(form.quantity);
@@ -95,7 +153,10 @@ export default function Contact() {
     e.preventDefault();
 
     if (form.company.trim()) return;
-
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setStatus({ state: "error", message: "Please complete the captcha to submit.", quoteId: null });
+      return;
+    }
     if (!canSubmit) {
       let msg = "Please complete the required fields.";
       if (ref.hasRef && qtyParsed === null) msg = "Please choose a quantity (1–99).";
@@ -123,6 +184,9 @@ export default function Contact() {
       ref_id: ref.refId || null,
       ref_name: ref.refName || null,
       ref_src: ref.refSrc || null,
+
+      // NEW: Turnstile token for backend verification
+      turnstileToken,
     };
 
     const url = API_BASE ? `${API_BASE}/api/quotes` : "/api/quotes";
@@ -350,10 +414,35 @@ export default function Contact() {
             </label>
           </div>
 
+{/* Actions / Captcha / Submit / Status */}
           <div className="contact-actions">
+            {/* Turnstile: hide as much as possible (hide after it succeeds, and hide on success submit) */}
+            {!TURNSTILE_SITE_KEY ? (
+              <div className="contact-status contact-status--error" role="alert">
+                Missing REACT_APP_TURNSTILE_SITE_KEY in frontend .env
+              </div>
+            ) : status.state !== "success" && !turnstileToken ? (
+              <div className="contact-turnstile" aria-label="Spam protection">
+                <div ref={turnstileElRef} />
+              </div>
+            ) : null}
+
             <button className="contact-submit" type="submit" disabled={!canSubmit}>
-              {status.state === "sending" ? "Sending…" : "Submit Quote Request"}
+              {status.state === "sending"
+                ? "Sending…"
+                : !TURNSTILE_SITE_KEY
+                ? "Submit Quote Request"
+                : !turnstileToken
+                ? "Complete Captcha to Submit"
+                : "Submit Quote Request"}
             </button>
+
+            {/* Only show the hint when captcha is required and incomplete */}
+            {TURNSTILE_SITE_KEY && status.state !== "sending" && status.state !== "success" && !turnstileToken && (
+              <div className="contact-status" role="status">
+                Please complete the captcha above to submit.
+              </div>
+            )}
 
             {status.state !== "idle" && (
               <div

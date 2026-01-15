@@ -1,5 +1,5 @@
 // src/pages/Gallery.jsx
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import galleryData from "../config/galleryData";
 import SEO from "../components/SEO";
 import seoConfig from "../config/Seo";
@@ -9,99 +9,83 @@ import "../css/Gallery.css";
 export default function Gallery() {
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const [currentPage, setCurrentPage] = useState(1);
+
+  // PhotoViewer uses this
   const [lightboxIndex, setLightboxIndex] = useState(null);
+
   const [selectedCategories, setSelectedCategories] = useState([]); // [] = All
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("newest"); // "newest" | "oldest" | "title-asc" | "title-desc"
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterRef = useRef(null);
-  const handleTagClick = (tag) => {
-  setSearchTerm(tag);
-  setSelectedCategories([]);   // show all categories, but filtered by tag
-  setCurrentPage(1);
-  setLightboxIndex(null);      // close lightbox so they see filtered grid
-};
 
+  const handleTagClick = (tag) => {
+    setSearchTerm(tag);
+    setSelectedCategories([]); // show all categories, but filtered by tag
+    setCurrentPage(1);
+    setLightboxIndex(null); // close viewer so they see filtered grid
+  };
 
   // Build category counts from full data
-  const categoryCounts = galleryData.reduce((acc, item) => {
-    const cat = item.category || "Uncategorized";
-    acc[cat] = (acc[cat] || 0) + 1;
-    return acc;
-  }, {});
+  const categoryCounts = useMemo(() => {
+    return galleryData.reduce((acc, item) => {
+      const cat = item.category || "Uncategorized";
+      acc[cat] = (acc[cat] || 0) + 1;
+      return acc;
+    }, {});
+  }, []);
 
   // 1) Filter by category ([] = all)
-  const categoryFiltered =
-    selectedCategories.length === 0
+  const categoryFiltered = useMemo(() => {
+    return selectedCategories.length === 0
       ? galleryData
       : galleryData.filter((img) =>
           selectedCategories.includes(img.category || "Uncategorized")
         );
+  }, [selectedCategories]);
 
-  // 2) Filter by search (title, category, tags, description)
-// Search filter (title, category, tags only)
-const normalizedSearch = searchTerm.trim().toLowerCase();
-const searchFiltered = !normalizedSearch
-  ? categoryFiltered
-  : categoryFiltered.filter((img) => {
+  // 2) Filter by search (title, category, tags only)
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const searchFiltered = useMemo(() => {
+    if (!normalizedSearch) return categoryFiltered;
+
+    return categoryFiltered.filter((img) => {
       const title = img.title || "";
       const category = img.category || "";
       const tags = (img.tags || []).join(" ");
       const haystack = `${title} ${category} ${tags}`.toLowerCase();
       return haystack.includes(normalizedSearch);
     });
-
+  }, [categoryFiltered, normalizedSearch]);
 
   // 3) Sort
-  const filteredImages = [...searchFiltered].sort((a, b) => {
-    if (sortOption === "newest" || sortOption === "oldest") {
-      const da = new Date(a.date || 0).getTime();
-      const db = new Date(b.date || 0).getTime();
-      if (isNaN(da) || isNaN(db)) return 0;
-      return sortOption === "newest" ? db - da : da - db;
-    }
+  const filteredImages = useMemo(() => {
+    return [...searchFiltered].sort((a, b) => {
+      if (sortOption === "newest" || sortOption === "oldest") {
+        const da = new Date(a.date || 0).getTime();
+        const db = new Date(b.date || 0).getTime();
+        if (Number.isNaN(da) || Number.isNaN(db)) return 0;
+        return sortOption === "newest" ? db - da : da - db;
+      }
 
-    const ta = (a.title || "").toLowerCase();
-    const tb = (b.title || "").toLowerCase();
-    if (sortOption === "title-asc") return ta.localeCompare(tb);
-    if (sortOption === "title-desc") return tb.localeCompare(ta);
-    return 0;
-  });
+      const ta = (a.title || "").toLowerCase();
+      const tb = (b.title || "").toLowerCase();
+      if (sortOption === "title-asc") return ta.localeCompare(tb);
+      if (sortOption === "title-desc") return tb.localeCompare(ta);
+      return 0;
+    });
+  }, [searchFiltered, sortOption]);
 
   const totalPages = Math.ceil(filteredImages.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const visibleImages = filteredImages.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
+  const visibleImages = filteredImages.slice(startIndex, startIndex + itemsPerPage);
 
   const allSelected = selectedCategories.length === 0;
 
-// Close lightbox whenever the visible set can change
-useEffect(() => {
-  setLightboxIndex(null);
-}, [selectedCategories, searchTerm, sortOption, itemsPerPage, currentPage]);
-
-
-  // Keyboard navigation within filteredImages
+  // Close viewer whenever the underlying set could change
   useEffect(() => {
-    const handleKey = (e) => {
-      if (lightboxIndex === null) return;
-
-      if (e.key === "ArrowRight" && lightboxIndex < filteredImages.length - 1) {
-        setLightboxIndex((prev) => prev + 1);
-      }
-      if (e.key === "ArrowLeft" && lightboxIndex > 0) {
-        setLightboxIndex((prev) => prev - 1);
-      }
-      if (e.key === "Escape") {
-        setLightboxIndex(null);
-      }
-    };
-
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [lightboxIndex, filteredImages.length]);
+    setLightboxIndex(null);
+  }, [selectedCategories, searchTerm, sortOption, itemsPerPage, currentPage]);
 
   // Close filter popover when clicking outside
   useEffect(() => {
@@ -117,29 +101,9 @@ useEffect(() => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isFilterOpen]);
 
-  const openLightbox = (idx) => setLightboxIndex(idx);
-  const closeLightbox = () => setLightboxIndex(null);
-
-  const nextImage = () => {
-    setLightboxIndex((prev) => {
-      if (prev === null || prev >= filteredImages.length - 1) return prev;
-      return prev + 1;
-    });
-  };
-
-  const prevImage = () => {
-    setLightboxIndex((prev) => {
-      if (prev === null || prev <= 0) return prev;
-      return prev - 1;
-    });
-  };
-
   const toggleCategory = (cat) => {
     setSelectedCategories((prev) => {
-      if (prev.includes(cat)) {
-        const next = prev.filter((c) => c !== cat);
-        return next;
-      }
+      if (prev.includes(cat)) return prev.filter((c) => c !== cat);
       return [...prev, cat];
     });
     setCurrentPage(1);
@@ -150,12 +114,14 @@ useEffect(() => {
     setCurrentPage(1);
   };
 
+  const openViewer = (absoluteIndex) => setLightboxIndex(absoluteIndex);
+
   return (
     <main className="gallery-page">
       <SEO
         title="Gallery — MySite"
         description="Gallery — Description"
-        keywords={seoConfig.keywords} // or change for each page
+        keywords={seoConfig.keywords}
       />
       <h1>Gallery</h1>
 
@@ -170,9 +136,7 @@ useEffect(() => {
             <span className="gallery-filter-icon">⚙</span>
             <span>Filter</span>
             <span className="gallery-filter-summary">
-              {allSelected
-                ? "All"
-                : `${selectedCategories.length} selected`}
+              {allSelected ? "All" : `${selectedCategories.length} selected`}
             </span>
             <span className="gallery-filter-caret">▾</span>
           </button>
@@ -196,9 +160,7 @@ useEffect(() => {
                     type="checkbox"
                     checked={allSelected}
                     onChange={(e) => {
-                      if (e.target.checked) {
-                        clearCategories();
-                      }
+                      if (e.target.checked) clearCategories();
                     }}
                   />
                   <span>All categories ({galleryData.length})</span>
@@ -219,10 +181,7 @@ useEffect(() => {
               </div>
 
               <div className="gallery-filter-footer">
-                <button
-                  className="gallery-filter-clear"
-                  onClick={clearCategories}
-                >
+                <button className="gallery-filter-clear" onClick={clearCategories}>
                   Clear
                 </button>
                 <button
@@ -292,7 +251,7 @@ useEffect(() => {
           <div
             key={img.id}
             className="gallery-item"
-            onClick={() => openLightbox(startIndex + idx)}
+            onClick={() => openViewer(startIndex + idx)}
           >
             <div className="gallery-image-wrapper">
               <img src={img.src} alt={img.title} loading="lazy" />
@@ -315,76 +274,17 @@ useEffect(() => {
         ))}
       </div>
 
-      {/* Lightbox */}
-      {lightboxIndex !== null && filteredImages[lightboxIndex] && (
-        <div className="lightbox" onClick={closeLightbox}>
-          <div
-            className="lightbox-content"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Counter */}
-            <div className="lightbox-counter">
-              Photo {lightboxIndex + 1} of {filteredImages.length}
-            </div>
-
-            <img src={filteredImages[lightboxIndex].src} alt="" loading="lazy" />
-            <h2>{filteredImages[lightboxIndex].title}</h2>
-
-            <div className="lightbox-info">
-              <div className="lightbox-info-left">
-                <p>
-                  <span className="label">Date:</span>{" "}
-                  {filteredImages[lightboxIndex].date}
-                </p>
-                <p>
-                  <span className="label">Category:</span>{" "}
-                  {filteredImages[lightboxIndex].category}
-                </p>
-{filteredImages[lightboxIndex].tags?.length > 0 && (
-  <div className="tags">
-    {filteredImages[lightboxIndex].tags.map((tag) => (
-      <span
-        key={tag}
-        className="tag-chip tag-chip-clickable"
-        onClick={(e) => {
-          e.stopPropagation(); // don't close lightbox from background
-          handleTagClick(tag);
-        }}
-      >
-        {tag}
-      </span>
-    ))}
-  </div>
-)}
-
-              </div>
-
-              <div className="lightbox-info-right">
-                <h3>Description</h3>
-                <div className="lightbox-description">
-                  {filteredImages[lightboxIndex].description}
-                </div>
-              </div>
-            </div>
-
-            {lightboxIndex > 0 && (
-              <button className="lightbox-prev" onClick={prevImage}>
-                ⟵
-              </button>
-            )}
-
-            {lightboxIndex < filteredImages.length - 1 && (
-              <button className="lightbox-next" onClick={nextImage}>
-                ⟶
-              </button>
-            )}
-
-            <button className="lightbox-close" onClick={closeLightbox}>
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
+      {/* PhotoViewer (replaces old Lightbox) */}
+      <PhotoViewer
+        images={filteredImages}
+        index={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        onIndexChange={(i) => setLightboxIndex(i)}
+        allowTagClick
+        onTagClick={handleTagClick}
+        quoteTo="/contact"
+        quoteButtonLabel="Get Quote"
+      />
     </main>
   );
 }
