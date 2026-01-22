@@ -1,7 +1,6 @@
 /* src/css/Home.css */
 
 .home {
-  font-family: system-ui, sans-serif;
   line-height: 1.7;
   color: var(--text);
 }

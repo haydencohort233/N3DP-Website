@@ -5,14 +5,105 @@ import { API_BASE } from "../config/api";
 import SEO from "../components/SEO";
 import seoConfig from "../config/Seo";
 import config from "../config";
+import galleryData from "../config/galleryData";
 import "../css/Contact.css";
+
+function clamp(n, min, max) {
+  return Math.max(min, Math.min(max, n));
+}
+
+function normalizePhotos(item) {
+  if (!item) return [];
+
+  // Preferred: photos[]
+  if (Array.isArray(item.photos) && item.photos.length) {
+    return item.photos
+      .filter((p) => p && p.src)
+      .map((p) => ({
+        src: p.src,
+        label: p.label || "",
+        title: p.title || "",
+        description: p.description || "",
+        tags: Array.isArray(p.tags) ? p.tags : [],
+      }));
+  }
+
+  // Legacy: images[]
+  if (Array.isArray(item.images) && item.images.length) {
+    return item.images
+      .map((im) => (typeof im === "string" ? { src: im } : im))
+      .filter((p) => p && p.src)
+      .map((p) => ({
+        src: p.src,
+        label: p.label || "",
+        title: p.title || "",
+        description: p.description || "",
+        tags: Array.isArray(p.tags) ? p.tags : [],
+      }));
+  }
+
+  // Fallback: src only
+  if (item.src) {
+    return [{ src: item.src, label: "", title: "", description: "", tags: [] }];
+  }
+
+  return [];
+}
 
 function getRefFromParams(params) {
   const refId = params.get("refId") || "";
-  const refName = params.get("refName") || "";
-  const refSrc = params.get("refSrc") || "";
-  const hasRef = !!(refId || refName || refSrc);
-  return { hasRef, refId, refName, refSrc };
+  const rawIndex = params.get("refPhotoIndex");
+  const refPhotoIndex = Number.isFinite(Number(rawIndex)) ? Number(rawIndex) : 0;
+
+  if (!refId) {
+    return {
+      hasRef: false,
+      refId: "",
+      refPhotoIndex: 0,
+      refName: "",
+      refSrc: "",
+      refPhotoLabel: "",
+      refTags: [],
+    };
+  }
+
+  const item = galleryData.find((x) => String(x.id) === String(refId));
+  if (!item) {
+    // keep hasRef so you can show "unknown item" if desired
+    return {
+      hasRef: true,
+      refId,
+      refPhotoIndex: 0,
+      refName: "",
+      refSrc: "",
+      refPhotoLabel: "",
+      refTags: [],
+    };
+  }
+
+  const photos = normalizePhotos(item);
+  const idx = clamp(refPhotoIndex, 0, Math.max(0, photos.length - 1));
+  const p = photos[idx] || null;
+
+  const refName = (p?.title?.trim() || item.title || "");
+  const refSrc = (p?.src || item.src || "");
+  const refPhotoLabel = (p?.label || "");
+
+  const refTags = [
+    ...(Array.isArray(item.tags) ? item.tags : []),
+    ...(Array.isArray(p?.tags) ? p.tags : []),
+    ...(p?.label ? [p.label] : []),
+  ];
+
+  return {
+    hasRef: true,
+    refId,
+    refPhotoIndex: idx,
+    refName,
+    refSrc,
+    refPhotoLabel,
+    refTags,
+  };
 }
 
 function isValidEmail(v) {
@@ -29,10 +120,36 @@ function parseQty1to99(v) {
   return Math.min(99, i);
 }
 
+function findRefByIdAndPhoto(refId, refPhotoIndex) {
+  const item = galleryData.find((x) => String(x.id) === String(refId));
+  if (!item) return null;
+
+  const photos = Array.isArray(item.photos) && item.photos.length
+    ? item.photos
+    : item.src
+    ? [{ src: item.src }]
+    : [];
+
+  const i = Number.isFinite(refPhotoIndex) ? refPhotoIndex : 0;
+  const p = photos[Math.max(0, Math.min(i, photos.length - 1))] || null;
+
+  return {
+    refName: (p?.title?.trim() || item.title || ""),
+    refSrc: (p?.src || item.src || ""),
+    refPhotoLabel: (p?.label || ""),
+    refTags: [
+      ...(Array.isArray(item.tags) ? item.tags : []),
+      ...(Array.isArray(p?.tags) ? p.tags : []),
+      ...(p?.label ? [p.label] : []),
+    ],
+  };
+}
+
+
 export default function Contact() {
   const { site } = config;
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const ref = useMemo(() => getRefFromParams(searchParams), [searchParams]);
 
   const [refExpanded, setRefExpanded] = useState(false);
@@ -101,13 +218,14 @@ export default function Contact() {
     phone: "",
     preferredContact: "email",
 
-    // IMPORTANT: blank by default, but required when ref exists
-    quantity: "",
+    // If coming from "Get Quote" (ref exists), default to 1
+    quantity: ref.hasRef ? "1" : "",
 
+    // KEEP the textarea; you're just not auto-filling it anymore
+    message: "",
+
+    // keeping for later features
     deadline: "",
-    message: ref.hasRef
-      ? `I’d like a quote for: ${ref.refName || "this item"} (Ref ID: ${ref.refId || "n/a"}).\n\n`
-      : "",
     company: "",
   }));
 
@@ -130,24 +248,34 @@ const canSubmit =
   qtyRequiredOk &&
   status.state !== "sending";
 
-  const bumpQty = (delta) => {
-    const cur = parseQty1to99(form.quantity);
-    if (delta > 0) {
-      // If blank, start at 1. Otherwise increment.
-      const next = cur === null ? 1 : Math.min(99, cur + 1);
-      setField("quantity", String(next));
-      return;
-    }
+const bumpQty = (delta) => {
+  const cur = parseQty1to99(form.quantity);
 
-    // delta < 0
-    if (cur === null) return; // blank stays blank
-    if (cur <= 1) {
-      // allow clearing back to blank (still required for submission)
+  if (delta > 0) {
+    const next = cur === null ? 1 : Math.min(99, cur + 1);
+    setField("quantity", String(next));
+    return;
+  }
+
+  // delta < 0
+  if (cur === null) {
+    // if ref exists and they hit "-", keep it at 1
+    if (ref.hasRef) setField("quantity", "1");
+    return;
+  }
+
+  if (cur <= 1) {
+    // If ref exists, do NOT allow clearing (always keep >=1)
+    if (ref.hasRef) {
+      setField("quantity", "1");
+    } else {
       setField("quantity", "");
-      return;
     }
-    setField("quantity", String(cur - 1));
-  };
+    return;
+  }
+
+  setField("quantity", String(cur - 1));
+};
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -173,10 +301,7 @@ const canSubmit =
       email: form.email.trim(),
       phone: form.phone.trim() || null,
       preferred_contact: form.preferredContact === "phone" ? "phone" : "email",
-
-      // Only include quantity if we have a valid one; required for ref anyway
       quantity: qtyParsed,
-
       deadline,
       message: form.message.trim(),
 
@@ -185,7 +310,9 @@ const canSubmit =
       ref_name: ref.refName || null,
       ref_src: ref.refSrc || null,
 
-      // NEW: Turnstile token for backend verification
+      ref_variant_label: ref.refVariantLabel || null,
+      ref_options: ref.refOptions || null,
+
       turnstileToken,
     };
 
@@ -224,6 +351,29 @@ const canSubmit =
     }
   }
 
+  const clearReference = () => {
+    setRefExpanded(false);
+
+    // quantity no longer required once reference is removed
+    setForm((p) => ({ ...p, quantity: "" }));
+
+    // Remove ONLY ref-related params (leave other params intact)
+    const next = new URLSearchParams(searchParams);
+
+    next.delete("refId");
+    next.delete("refPhotoIndex");
+
+    // Optional cleanup if any older params might exist:
+    next.delete("refName");
+    next.delete("refSrc");
+    next.delete("refPhotoLabel");
+    next.delete("refTags");
+    next.delete("refVariantLabel");
+    next.delete("refOptions");
+
+    setSearchParams(next, { replace: true });
+  };
+
   return (
     <main className="contact-page">
       <SEO
@@ -256,12 +406,7 @@ const canSubmit =
                 <div className="contact-ref-thumb contact-ref-thumb--empty" aria-hidden="true" />
               )}
 
-              <div className="contact-ref-meta">
-                <div className="contact-ref-kicker">Reorder / Reference</div>
-                <div className="contact-ref-name">{ref.refName || "Referenced item"}</div>
-                {ref.refId ? <div className="contact-ref-id">ID: {ref.refId}</div> : null}
-              </div>
-
+              {/* Controls: Expand, Qty, Remove */}
               <div className="contact-ref-controls">
                 {ref.refSrc ? (
                   <button
@@ -269,11 +414,10 @@ const canSubmit =
                     className="contact-ref-toggle"
                     onClick={() => setRefExpanded((v) => !v)}
                   >
-                    {refExpanded ? "Minimize" : "Expand"}
+                    {refExpanded ? "Minimize Image" : "Expand Image"}
                   </button>
                 ) : null}
 
-                {/* Quantity stepper (required) */}
                 <div className={`contact-qty ${qtyParsed === null ? "is-empty" : ""}`}>
                   <button
                     type="button"
@@ -290,13 +434,10 @@ const canSubmit =
                     placeholder="Qty"
                     value={form.quantity}
                     onChange={(e) => {
-                      // allow blank; clamp on submit + +/- buttons
                       const raw = e.target.value.replace(/[^\d]/g, "");
-                      // hard cap length 2 digits
-                      const trimmed = raw.slice(0, 2);
-                      setField("quantity", trimmed);
+                      setField("quantity", raw.slice(0, 2));
                     }}
-                    aria-label="Quantity (required)"
+                    aria-label="Quantity"
                   />
 
                   <button
@@ -308,6 +449,17 @@ const canSubmit =
                     +
                   </button>
                 </div>
+
+                {/* Remove ref (clears URL params + form message + qty) */}
+                <button
+                  type="button"
+                  className="contact-ref-remove contact-ref-remove--danger"
+                  aria-label="Remove item"
+                  title="Remove item"
+                  onClick={clearReference}
+                >
+                  ×
+                </button>
               </div>
             </div>
 
@@ -318,7 +470,23 @@ const canSubmit =
             )}
 
             <div className="contact-ref-note">
-              This will include the referenced photo information so we can quote it faster.
+              <div className="contact-ref-note-title">
+                {ref.refName || "Referenced item"}
+              </div>
+
+              {ref.refId ? <div className="contact-ref-note-sub">ID: {ref.refId}</div> : null}
+
+              {ref.refVariantLabel ? (
+                <div className="contact-ref-note-sub">Variant: {ref.refVariantLabel}</div>
+              ) : null}
+
+              {ref.refOptions ? (
+                <div className="contact-ref-note-sub">
+                  {Object.entries(ref.refOptions)
+                    .map(([k, v]) => `${k}: ${v}`)
+                    .join(" • ")}
+                </div>
+              ) : null}
             </div>
           </aside>
         )}
@@ -383,19 +551,10 @@ const canSubmit =
               </label>
             )}
 
-            <label className="contact-field">
-              <span className="contact-label">Deadline (optional)</span>
-              <input
-                value={form.deadline}
-                onChange={(e) => setField("deadline", e.target.value)}
-                type="date"
-              />
-            </label>
-
             <label className="contact-field contact-field--full">
               <span className="contact-label">Project details *</span>
               <textarea
-                value={form.message}
+                value={form.message ?? ""}
                 onChange={(e) => setField("message", e.target.value)}
                 rows={7}
                 placeholder="Include dimensions, material (PLA/PETG/ABS/etc.), color, and any fit/tolerance notes."
@@ -414,7 +573,7 @@ const canSubmit =
             </label>
           </div>
 
-{/* Actions / Captcha / Submit / Status */}
+        {/* Actions / Captcha / Submit / Status */}
           <div className="contact-actions">
             {/* Turnstile: hide as much as possible (hide after it succeeds, and hide on success submit) */}
             {!TURNSTILE_SITE_KEY ? (

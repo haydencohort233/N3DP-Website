@@ -156,9 +156,41 @@
   top: -9999px;
 }
 
+/* pinned X button */
+.contact-ref-remove--pin {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 5;
+
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+
+  border: 1px solid var(--nav-border);
+  background: color-mix(in oklab, var(--surface) 92%, black);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 900;
+  line-height: 1;
+
+  display: grid;
+  place-items: center;
+}
+
+.contact-ref-remove--pin:hover {
+  background: var(--surface-2);
+}
+
+.contact-ref-remove--pin:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
 /* ===== Reference card (compact bar on mobile) ===== */
 .contact-ref {
   border: 1px solid var(--nav-border);
+  position: relative;
   background: var(--surface-2);
   border-radius: var(--radius);
   padding: 12px;
@@ -255,6 +287,30 @@
   font-size: 0.92rem;
 }
 
+.contact-ref-note-title {
+  font-weight: 900;
+  color: var(--text);
+  font-size: 1.02rem;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.contact-ref-note-sub {
+  color: var(--muted);
+  font-weight: 650;
+  font-size: 0.9rem;
+  line-height: 1.25;
+  margin-top: 2px;
+}
+
+.contact-ref-note-help {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+
 /* ===== Reference controls column ===== */
 .contact-ref-controls {
   grid-area: controls;
@@ -308,6 +364,45 @@
   color: var(--muted);
   font-weight: 750;
 }
+
+/* Kicker row + remove button should work on ALL sizes */
+.contact-ref-kicker-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.contact-ref-remove--danger {
+  border-color: color-mix(in oklab, #e11d48 70%, var(--nav-border));
+  background: color-mix(in oklab, #e11d48 18%, var(--surface));
+  color: #fff;
+}
+
+.contact-ref-remove--danger:hover {
+  background: color-mix(in oklab, #e11d48 28%, var(--surface));
+  border-color: #e11d48;
+}
+
+.contact-ref-remove--danger:active {
+  transform: translateY(1px);
+}
+
+.contact-ref-remove--danger:focus-visible {
+  outline: 2px solid #e11d48;
+  outline-offset: 2px;
+}
+
+
+
+@media (max-width: 420px) {
+  .contact-ref-toggle {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+}
+
+
+
 
 /* ===== Reference bar: redesigned desktop layout ===== */
 

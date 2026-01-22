@@ -16,7 +16,7 @@ const FAQ = lazy(() => import("./pages/FAQ"));
 const Contact = lazy(() => import("./pages/Contact"));
 
 function AppRoutes() {
-  useGaPageViews(); // ✅ now inside Router
+  useGaPageViews();
 
   return (
     <>
@@ -36,10 +36,10 @@ function AppRoutes() {
             }
           />
           <Route
-            path="/about"
+            path="/contact"
             element={
               <Layout>
-                <About />
+                <Contact />
               </Layout>
             }
           />
@@ -60,10 +60,10 @@ function AppRoutes() {
             }
           />
           <Route
-            path="/contact"
+            path="/about"
             element={
               <Layout>
-                <Contact />
+                <About />
               </Layout>
             }
           />

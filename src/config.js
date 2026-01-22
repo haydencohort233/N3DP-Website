@@ -25,10 +25,10 @@ const config = {
   nav: {
     links: [
       { to: "/", label: "Home", end: true },
-      { to: "/about", label: "About" },
       { to: "/contact", label: "Contact" },
-      { to: "/faq", label: "FAQ" },
       { to: "/gallery", label: "Gallery" },
+      { to: "/faq", label: "FAQ" },
+      { to: "/about", label: "About" },
     ],
   },
   social: { 

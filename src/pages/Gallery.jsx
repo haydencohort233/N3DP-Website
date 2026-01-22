@@ -4,14 +4,15 @@ import galleryData from "../config/galleryData";
 import SEO from "../components/SEO";
 import seoConfig from "../config/Seo";
 import PhotoViewer from "../components/PhotoViewer";
-import "../css/Gallery.css";
+import "../css/PhotoViewer.css";
+
 
 export default function Gallery() {
-  const [itemsPerPage, setItemsPerPage] = useState(12);
+  const [itemsPerPage, setItemsPerPage] = useState(24);
   const [currentPage, setCurrentPage] = useState(1);
 
   // PhotoViewer uses this
-  const [lightboxIndex, setLightboxIndex] = useState(null);
+  const [lightboxEntry, setLightboxEntry] = useState(null); // { itemIndex, photoIndex, ... }
 
   const [selectedCategories, setSelectedCategories] = useState([]); // [] = All
   const [searchTerm, setSearchTerm] = useState("");
@@ -21,9 +22,9 @@ export default function Gallery() {
 
   const handleTagClick = (tag) => {
     setSearchTerm(tag);
-    setSelectedCategories([]); // show all categories, but filtered by tag
+    setSelectedCategories([]);
     setCurrentPage(1);
-    setLightboxIndex(null); // close viewer so they see filtered grid
+    setLightboxEntry(null);
   };
 
   // Build category counts from full data
@@ -45,46 +46,141 @@ export default function Gallery() {
   }, [selectedCategories]);
 
   // 2) Filter by search (title, category, tags only)
-  const normalizedSearch = searchTerm.trim().toLowerCase();
-  const searchFiltered = useMemo(() => {
-    if (!normalizedSearch) return categoryFiltered;
+function buildSearchText(item) {
+  const parts = [];
 
-    return categoryFiltered.filter((img) => {
-      const title = img.title || "";
-      const category = img.category || "";
-      const tags = (img.tags || []).join(" ");
-      const haystack = `${title} ${category} ${tags}`.toLowerCase();
-      return haystack.includes(normalizedSearch);
+  // top-level fields
+  parts.push(item.title || "");
+  parts.push(item.category || "");
+  parts.push(item.description || "");
+  if (Array.isArray(item.tags)) parts.push(item.tags.join(" "));
+
+  // per-photo fields (your new system)
+  if (Array.isArray(item.photos)) {
+    for (const p of item.photos) {
+      if (!p) continue;
+      parts.push(p.label || "");
+      parts.push(p.title || "");
+      parts.push(p.description || "");
+      if (Array.isArray(p.tags)) parts.push(p.tags.join(" "));
+    }
+  }
+
+  // optional legacy support: images array (strings/objects)
+  if (Array.isArray(item.images)) {
+    for (const im of item.images) {
+      if (!im) continue;
+      if (typeof im === "string") continue;
+      parts.push(im.label || "");
+      parts.push(im.title || "");
+      parts.push(im.description || "");
+      if (Array.isArray(im.tags)) parts.push(im.tags.join(" "));
+    }
+  }
+
+  return parts.join(" ").toLowerCase();
+}
+
+function normalizePhotosForSearch(item) {
+  if (Array.isArray(item.photos) && item.photos.length) {
+    return item.photos
+      .filter((p) => p && p.src)
+      .map((p) => ({
+        src: p.src,
+        title: p.title || "",
+        description: p.description || "",
+        tags: Array.isArray(p.tags) ? p.tags : [],
+        label: p.label || "",
+      }));
+  }
+
+  if (Array.isArray(item.images) && item.images.length) {
+    return item.images
+      .map((im) => (typeof im === "string" ? { src: im } : im))
+      .filter((p) => p && p.src)
+      .map((p) => ({
+        src: p.src,
+        title: p.title || "",
+        description: p.description || "",
+        tags: Array.isArray(p.tags) ? p.tags : [],
+        label: p.label || "",
+      }));
+  }
+
+  return item?.src ? [{ src: item.src, title: "", description: "", tags: [], label: "" }] : [];
+}
+
+function buildSearchEntries(items) {
+  const entries = [];
+  items.forEach((item, itemIndex) => {
+    const photos = normalizePhotosForSearch(item);
+
+    photos.forEach((p, photoIndex) => {
+      const displayTitle = (p.title && p.title.trim()) ? p.title : (item.title || "");
+      const searchText = [
+        displayTitle,
+        item.category || "",
+        item.description || "",
+        (Array.isArray(item.tags) ? item.tags.join(" ") : ""),
+        p.label || "",
+        p.title || "",
+        p.description || "",
+        (Array.isArray(p.tags) ? p.tags.join(" ") : ""),
+      ].join(" ").toLowerCase();
+
+      entries.push({
+        key: `${item.id || itemIndex}-${photoIndex}-${p.src}`,
+        itemIndex,
+        photoIndex,
+        displaySrc: p.src,
+        displayTitle,
+        date: item.date || "",
+        category: item.category || "Uncategorized",
+        searchText,
+      });
     });
-  }, [categoryFiltered, normalizedSearch]);
+  });
+  return entries;
+}
 
-  // 3) Sort
-  const filteredImages = useMemo(() => {
-    return [...searchFiltered].sort((a, b) => {
-      if (sortOption === "newest" || sortOption === "oldest") {
-        const da = new Date(a.date || 0).getTime();
-        const db = new Date(b.date || 0).getTime();
-        if (Number.isNaN(da) || Number.isNaN(db)) return 0;
-        return sortOption === "newest" ? db - da : da - db;
-      }
+const normalizedSearch = searchTerm.trim().toLowerCase();
 
-      const ta = (a.title || "").toLowerCase();
-      const tb = (b.title || "").toLowerCase();
-      if (sortOption === "title-asc") return ta.localeCompare(tb);
-      if (sortOption === "title-desc") return tb.localeCompare(ta);
-      return 0;
-    });
-  }, [searchFiltered, sortOption]);
+const entriesAll = useMemo(
+  () => buildSearchEntries(categoryFiltered),
+  [categoryFiltered]
+);
 
-  const totalPages = Math.ceil(filteredImages.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const visibleImages = filteredImages.slice(startIndex, startIndex + itemsPerPage);
+const searchEntries = useMemo(() => {
+  if (!normalizedSearch) return entriesAll;
+  return entriesAll.filter((e) => e.searchText.includes(normalizedSearch));
+}, [entriesAll, normalizedSearch]);
+
+const filteredEntries = useMemo(() => {
+  return [...searchEntries].sort((a, b) => {
+    if (sortOption === "newest" || sortOption === "oldest") {
+      const da = new Date(a.date || 0).getTime();
+      const db = new Date(b.date || 0).getTime();
+      if (Number.isNaN(da) || Number.isNaN(db)) return 0;
+      return sortOption === "newest" ? db - da : da - db;
+    }
+
+    const ta = (a.displayTitle || "").toLowerCase();
+    const tb = (b.displayTitle || "").toLowerCase();
+    if (sortOption === "title-asc") return ta.localeCompare(tb);
+    if (sortOption === "title-desc") return tb.localeCompare(ta);
+    return 0;
+  });
+}, [searchEntries, sortOption]);
+
+const totalPages = Math.ceil(filteredEntries.length / itemsPerPage);
+const startIndex = (currentPage - 1) * itemsPerPage;
+const visibleEntries = filteredEntries.slice(startIndex, startIndex + itemsPerPage);
 
   const allSelected = selectedCategories.length === 0;
 
   // Close viewer whenever the underlying set could change
   useEffect(() => {
-    setLightboxIndex(null);
+    setLightboxEntry(null);
   }, [selectedCategories, searchTerm, sortOption, itemsPerPage, currentPage]);
 
   // Close filter popover when clicking outside
@@ -114,13 +210,11 @@ export default function Gallery() {
     setCurrentPage(1);
   };
 
-  const openViewer = (absoluteIndex) => setLightboxIndex(absoluteIndex);
-
   return (
     <main className="gallery-page">
       <SEO
-        title="Gallery — MySite"
-        description="Gallery — Description"
+        title="Gallery — Nashville3DPrints"
+        description="Gallery — View our catalog"
         keywords={seoConfig.keywords}
       />
       <h1>Gallery</h1>
@@ -225,6 +319,21 @@ export default function Gallery() {
               setCurrentPage(1);
             }}
           />
+
+          {searchTerm.trim() !== "" && (
+            <button
+              type="button"
+              className="gallery-search-clear"
+              onClick={() => {
+                setSearchTerm("");
+                setCurrentPage(1);
+              }}
+              aria-label="Clear search"
+              title="Clear"
+            >
+              ✕
+            </button>
+          )}
         </div>
 
         <div className="gallery-sort">
@@ -246,20 +355,20 @@ export default function Gallery() {
       </div>
 
       {/* Grid */}
-      <div className="gallery-grid">
-        {visibleImages.map((img, idx) => (
-          <div
-            key={img.id}
-            className="gallery-item"
-            onClick={() => openViewer(startIndex + idx)}
-          >
-            <div className="gallery-image-wrapper">
-              <img src={img.src} alt={img.title} loading="lazy" />
-            </div>
-            <div className="gallery-title">{img.title}</div>
+    <div className="gallery-grid">
+      {visibleEntries.map((e) => (
+        <div
+          key={e.key}
+          className="gallery-item"
+          onClick={() => setLightboxEntry(e)} // store entry object
+        >
+          <div className="gallery-image-wrapper">
+            <img src={e.displaySrc} alt={e.displayTitle} loading="lazy" />
           </div>
-        ))}
-      </div>
+          <div className="gallery-title">{e.displayTitle}</div>
+        </div>
+      ))}
+    </div>
 
       {/* Pagination */}
       <div className="gallery-pagination">
@@ -274,17 +383,20 @@ export default function Gallery() {
         ))}
       </div>
 
-      {/* PhotoViewer (replaces old Lightbox) */}
-      <PhotoViewer
-        images={filteredImages}
-        index={lightboxIndex}
-        onClose={() => setLightboxIndex(null)}
-        onIndexChange={(i) => setLightboxIndex(i)}
-        allowTagClick
-        onTagClick={handleTagClick}
-        quoteTo="/contact"
-        quoteButtonLabel="Get Quote"
-      />
+<PhotoViewer
+  images={categoryFiltered}
+  index={lightboxEntry?.itemIndex ?? null}
+  initialPhotoIndex={lightboxEntry?.photoIndex ?? 0}
+  onClose={() => setLightboxEntry(null)}
+  onIndexChange={(newItemIndex) => {
+    // when they arrow next/prev item, start on the first photo
+    setLightboxEntry({ itemIndex: newItemIndex, photoIndex: 0 });
+  }}
+  allowTagClick
+  onTagClick={handleTagClick}
+  quoteTo="/contact"
+  quoteButtonLabel="Get Quote"
+/>
     </main>
   );
 }
