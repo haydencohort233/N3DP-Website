@@ -1,8 +1,8 @@
 // src/components/PhotoViewer.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../css/Gallery.css";      // keeps your existing lightbox styles
-import "../css/PhotoViewer.css";  // thumb strip styles
+import "../css/Gallery.css";
+import "../css/PhotoViewer.css";
 
 function clampIndex(i, len) {
   if (len <= 0) return null;
@@ -155,7 +155,7 @@ export default function PhotoViewer({
         </div>
 
         <div className="lightbox-media">
-          <img src={activeSrc} alt={displayTitle} loading="lazy" />
+          <img src={activeSrc} alt={displayTitle} decoding="async" />
           <button
             type="button"
             className="lightbox-cta lightbox-cta--overlay"
@@ -191,7 +191,7 @@ export default function PhotoViewer({
 
             {date ? (
               <p style={{ margin: "4px 0" }}>
-                <span className="label">Date:</span> {date}
+                <span className="label">Upload Date:</span> {date}
               </p>
             ) : null}
 
@@ -202,18 +202,20 @@ export default function PhotoViewer({
             {displayTags.length > 0 && (
               <div className="tags">
                 {displayTags.map((tag) => (
-                  <span
-                    key={tag}
-                    className={`tag-chip ${allowTagClick ? "tag-chip-clickable" : ""}`}
-                    onClick={(e) => {
-                      if (!allowTagClick) return;
-                      e.stopPropagation();
-                      onTagClick?.(tag);
-                      close();
-                    }}
-                  >
-                    {tag}
-                  </span>
+                <button
+                  type="button"
+                  key={tag}
+                  className={`tag-chip ${allowTagClick ? "tag-chip-clickable" : ""}`}
+                  onClick={(e) => {
+                    if (!allowTagClick) return;
+                    e.stopPropagation();
+                    onTagClick?.(tag);
+                    close();
+                  }}
+                  disabled={!allowTagClick}
+                >
+                  {tag}
+                </button>
                 ))}
               </div>
             )}

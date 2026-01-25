@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import galleryData from "../config/galleryData";
 import SEO from "../components/SEO";
-import seoConfig from "../config/Seo";
+import config from "../config";
 import PhotoViewer from "../components/PhotoViewer";
 import "../css/PhotoViewer.css";
 
@@ -11,7 +11,7 @@ export default function Gallery() {
   const [itemsPerPage, setItemsPerPage] = useState(24);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // PhotoViewer uses this
+  // PhotoViewer
   const [lightboxEntry, setLightboxEntry] = useState(null); // { itemIndex, photoIndex, ... }
 
   const [selectedCategories, setSelectedCategories] = useState([]); // [] = All
@@ -212,12 +212,11 @@ const visibleEntries = filteredEntries.slice(startIndex, startIndex + itemsPerPa
 
   return (
     <main className="gallery-page">
-      <SEO
-        title="Gallery — Nashville3DPrints"
-        description="Gallery — View our catalog"
-        keywords={seoConfig.keywords}
-      />
-      <h1>Gallery</h1>
+    <SEO
+      title={`Gallery — ${config.site.name}`}
+      description="Browse recent 3D prints and prototypes from our Nashville shop to explore materials, finishes, and example parts."
+    />
+    <h1>Gallery</h1>
 
       {/* Row 1: Filters + Display-per-page */}
       <div className="gallery-header">

@@ -41,7 +41,7 @@ function DefaultOverlay() {
           <Button className="btn" href={primaryCtaHref} ariaLabel={primaryCtaText}>
             {primaryCtaText}
           </Button>
-          
+
           <a className="hero__link" href={secondaryCtaHref}>
             {secondaryCtaText}
           </a>
@@ -75,15 +75,28 @@ export default function HeroSection({
   const intervalRef = useRef(null);
   const heroRef = useRef(null);
 
-  // simple mobile-only flag for the scroll arrow
   const showScroll = isMobile;
 
+  // ✅ Efficient preload: only preload the NEXT image (instead of preloading ALL)
   useEffect(() => {
-    images.forEach((src) => {
-      const i = new Image();
-      i.src = src;
-    });
-  }, [images]);
+    if (!images?.length || images.length <= 1) return;
+
+    const nextIndex = (index + 1) % images.length;
+    const src = images[nextIndex];
+    if (!src) return;
+
+    const preload = () => {
+      const img = new Image();
+      img.src = src;
+    };
+
+    // Defer a bit so the first hero image isn't competing with preloads
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(preload, { timeout: 1200 });
+    } else {
+      setTimeout(preload, 250);
+    }
+  }, [images, index]);
 
   useEffect(() => {
     const k = isMobile ? "m" : "d";
@@ -96,14 +109,18 @@ export default function HeroSection({
   useEffect(() => {
     clearInterval(intervalRef.current);
     if (images.length <= 1) return;
+
     const period = Math.max(1000, (cycleSeconds || 6) * 1000);
     const tick = () => setIndex((i) => (i + 1) % images.length);
+
     intervalRef.current = setInterval(tick, period);
+
     const vis = () => {
       const hidden = document.visibilityState !== "visible";
       clearInterval(intervalRef.current);
       if (!hidden) intervalRef.current = setInterval(tick, period);
     };
+
     document.addEventListener("visibilitychange", vis);
     return () => {
       clearInterval(intervalRef.current);
@@ -161,6 +178,7 @@ export default function HeroSection({
             className={`hero__img ${i === index ? "is-visible" : ""}`}
             loading={i === 0 ? "eager" : "lazy"}
             decoding="async"
+            fetchpriority={i === 0 ? "high" : "auto"}
           />
         ))}
       </div>
@@ -169,7 +187,6 @@ export default function HeroSection({
         {children ?? <DefaultOverlay />}
       </div>
 
-      {/* Scroll arrow + hint (mobile only) */}
       {showScroll && (
         <div className="hero__scroll" aria-hidden="false">
           <a

@@ -442,14 +442,35 @@
   overflow: hidden;
 }
 
+/* Tag chips (supports <button> or <span>) */
 .tag-chip {
   padding: 3px 8px;
   border-radius: 999px;
-  background: var(--surface);
+
+  /* Better contrast across themes */
+  background: var(--surface-2);
   border: 1px solid var(--nav-border);
-  font-size: 0.78rem;
-  line-height: 1.1;
+  color: var(--text);
+
+
+
 }
+
+.tag-chip.tag-chip-clickable:not(:disabled) {
+  cursor: pointer;
+}
+
+.tag-chip.tag-chip-clickable:not(:disabled):hover {
+  background: var(--brand);
+  color: var(--brand-contrast);
+  border-color: var(--brand);
+}
+
+.tag-chip:disabled {
+  opacity: 0.85;
+}
+
+
 
 .lightbox-info-left p {
   margin: 4px 0;

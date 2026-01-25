@@ -35,8 +35,7 @@ const galleryData = [
     tags: ["Halloween", "Books", "Custom"],
     src: "/assets/gallery/photo2a-1.png",
     photos: [
-      { src: "/assets/gallery/photo2a-1.png", label: "Photo 1" },
-      { src: "/assets/gallery/photo2a-2.png", label: "Photo 2" },
+      { src: "/assets/gallery/photo2a-1.png", label: "Photo 1" }, // All bookmarks photo
     ],
   },
 
@@ -201,8 +200,7 @@ const galleryData = [
     category: "Halloween",
     tags: ["Custom", "Halloween", "Keurig", "Coffee", "Black"],
     src: "/assets/gallery/photo15.png",
-    photos: [{ src: "/assets/gallery/photo15.png", label: "Photo 1" }],
-        photos: [
+    photos: [
       {
         src: "/assets/gallery/photo15.png", // Coffin Facing Forward
         date: "2023-02-05",
@@ -352,7 +350,7 @@ const galleryData = [
       },
       {
         src: "/assets/gallery/photo23-1.png", // Valentine's Bowl Set
-        title: "Miniature Blue Forklift",
+        title: "Heart Ash Tray with Bowl Holder & Weed Shovel",
         tags: ["Blue"],
         date: "2023-02-05",
       },
@@ -418,7 +416,7 @@ const galleryData = [
     category: "Miscellaneous",
     tags: ["Gift", "Business Cards", "Card Holder"],
     src: "/assets/gallery/photo28.png",
-    photos: [{ src: "/assets/gallery/photo28.png" }],
+    photos: [{ src: "/assets/gallery/photo28.png", label: "Photo 1" }],
   },
 ];
 

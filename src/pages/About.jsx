@@ -4,19 +4,17 @@ import config from "../config";
 import "../css/About.css";
 
 export default function About() {
-  const siteName = config?.site?.name || "Nashville 3D Prints";
   const { site } = config;
 
-  // Placeholder (you said use this for now)
+  // Placeholder 
   const highlightImg = "/assets/gallery/photo5.png";
   const highlightImg2 = "/assets/gallery/photo10.png";
 
   return (
     <main className="about-page">
       <SEO
-        title={`About — ${siteName}`}
-        description="A little background on Nashville3DPrints and the kind of projects we take on."
-        keywords={seoConfig.keywords}
+        title={`About — ${config.site.name}`}
+        description="Learn about our Nashville-based 3D printing and CAD/design services, what we specialize in, and the types of projects we take on."
       />
 
       <header className="about-hero">

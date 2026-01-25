@@ -377,9 +377,8 @@ const bumpQty = (delta) => {
   return (
     <main className="contact-page">
       <SEO
-        title={`Get a Quote — ${site.name}`}
-        description="Request a quote for 3D printing or CAD/design."
-        keywords={seoConfig.keywords}
+        title={`Get a Quote — ${site.name}`} // Has to match the <h1> for better readability
+        description="Request a 3D printing or CAD/design quote in Nashville. Share dimensions, material, quantity, and timeline—we’ll reply with pricing and options."
       />
 
       <header className="contact-hero">

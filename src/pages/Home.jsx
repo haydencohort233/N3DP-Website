@@ -1,6 +1,4 @@
-// src/pages/Home.jsx
 import SEO from "../components/SEO";
-import seoConfig from "../config/Seo";
 import config from "../config";
 import PhotoGallery from "../components/PhotoGallery";
 import "../css/Home.css";
@@ -11,12 +9,11 @@ export default function Home() {
   return (
     <main className="home" id="about">
       <SEO
-        title={`Home — ${site.name}`}
+        title={site.name}
         description="3D printing and CAD/design services for prototypes and custom parts in Nashville."
-        keywords={seoConfig.keywords}
+        image="/assets/logo.png"
       />
 
-      {/* Featured gallery */}
       <PhotoGallery
         title="Featured Prints"
         subtitle="Latest from the shop"

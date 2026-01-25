@@ -109,9 +109,8 @@ export default function FAQ() {
   return (
     <main className="faq-page">
       <SEO
-        title={`FAQ — ${config?.site?.name || "MySite"}`}
-        description="FAQ — Answers to common questions about quotes, materials, size limits, shipping, and turnaround."
-        keywords={seoConfig.keywords}
+        title={`Frequently Asked Questions — ${config.site.name}`}
+        description="Answers to common questions about quotes, materials, size limits, turnaround times, and shipping for our Nashville 3D printing services."
       />
 
       <header className="faq-header">
