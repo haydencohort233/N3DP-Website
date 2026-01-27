@@ -153,6 +153,8 @@ export default function Contact() {
   const ref = useMemo(() => getRefFromParams(searchParams), [searchParams]);
 
   const [refExpanded, setRefExpanded] = useState(false);
+  const [files, setFiles] = useState([]);
+  const fileInputRef = useRef(null);
 
   // --- Turnstile (Cloudflare Captcha) ---
   const TURNSTILE_SITE_KEY = process.env.REACT_APP_TURNSTILE_SITE_KEY || "";
@@ -278,78 +280,159 @@ const bumpQty = (delta) => {
 };
 
   async function onSubmit(e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (form.company.trim()) return;
-    if (TURNSTILE_SITE_KEY && !turnstileToken) {
-      setStatus({ state: "error", message: "Please complete the captcha to submit.", quoteId: null });
-      return;
-    }
-    if (!canSubmit) {
-      let msg = "Please complete the required fields.";
-      if (ref.hasRef && qtyParsed === null) msg = "Please choose a quantity (1–99).";
-      setStatus({ state: "error", message: msg, quoteId: null });
-      return;
-    }
+  if (form.company.trim()) return;
 
-    setStatus({ state: "sending", message: "Submitting…", quoteId: null });
+  if (TURNSTILE_SITE_KEY && !turnstileToken) {
+    setStatus({
+      state: "error",
+      message: "Please complete the captcha to submit.",
+      quoteId: null,
+    });
+    return;
+  }
 
-    const deadline = String(form.deadline || "").trim() || null;
+  if (!canSubmit) {
+    let msg = "Please complete the required fields.";
+    if (ref.hasRef && qtyParsed === null) msg = "Please choose a quantity (1–99).";
+    setStatus({ state: "error", message: msg, quoteId: null });
+    return;
+  }
 
-    const payload = {
-      name: form.name.trim(),
-      email: form.email.trim(),
-      phone: form.phone.trim() || null,
-      preferred_contact: form.preferredContact === "phone" ? "phone" : "email",
-      quantity: qtyParsed,
-      deadline,
-      message: form.message.trim(),
+  setStatus({ state: "sending", message: "Submitting…", quoteId: null });
 
-      ref_type: ref.hasRef ? "gallery" : null,
-      ref_id: ref.refId || null,
-      ref_name: ref.refName || null,
-      ref_src: ref.refSrc || null,
+  const deadline = String(form.deadline || "").trim() || null;
 
-      ref_variant_label: ref.refVariantLabel || null,
-      ref_options: ref.refOptions || null,
+  const payload = {
+    name: form.name.trim(),
+    email: form.email.trim(),
+    phone: form.phone.trim() || null,
+    preferred_contact: form.preferredContact === "phone" ? "phone" : "email",
+    quantity: qtyParsed,
+    deadline,
+    message: form.message.trim(),
 
-      turnstileToken,
-    };
+    ref_type: ref.hasRef ? "gallery" : null,
+    ref_id: ref.refId || null,
+    ref_name: ref.refName || null,
+    ref_src: ref.refSrc || null,
 
-    const url = API_BASE ? `${API_BASE}/api/quotes` : "/api/quotes";
+    // keep these if you plan to store them later; harmless otherwise
+    ref_variant_label: ref.refVariantLabel || null,
+    ref_options: ref.refOptions || null,
 
-    try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+    turnstileToken,
+  };
 
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data?.error || "Quote submission failed.");
+  const url = API_BASE ? `${API_BASE}/api/quotes` : "/api/quotes";
 
+  try {
+    // 1) Create quote
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data?.error || "Quote submission failed.");
+
+    const quoteId = data?.id ?? null;
+
+    // 2) Upload files (optional; does not block quote success)
+    if (quoteId && Array.isArray(files) && files.length) {
+      const fd = new FormData();
+      for (const f of files.slice(0, 5)) fd.append("files", f);
+
+      const uploadUrl = API_BASE
+        ? `${API_BASE}/api/quotes/${quoteId}/files`
+        : `/api/quotes/${quoteId}/files`;
+
+      try {
+        const upRes = await fetch(uploadUrl, { method: "POST", body: fd });
+
+        // read as text first (works for JSON or HTML)
+        const upText = await upRes.text();
+        let upData = {};
+        try { upData = JSON.parse(upText); } catch {}
+
+        if (!upRes.ok) {
+          const msg =
+            upData?.error ||
+            upRes.statusText ||
+            (upText ? upText.slice(0, 140) : "Upload failed.");
+          setStatus({
+            state: "success",
+            message: `Quote request sent. (Files upload failed: ${msg})`,
+            quoteId,
+          });
+        } else {
+          setStatus({
+            state: "success",
+            message: "Quote request sent. We’ll contact you soon.",
+            quoteId,
+          });
+        }
+
+        if (!upRes.ok) {
+          setStatus({
+            state: "success",
+            message: `Quote request sent. (Files upload failed: ${upData?.error || "unknown"})`,
+            quoteId,
+          });
+        } else {
+          setStatus({
+            state: "success",
+            message: "Quote request sent. We’ll contact you soon.",
+            quoteId,
+          });
+        }
+      } catch (e) {
+        setStatus({
+          state: "success",
+          message: "Quote request sent. (Files upload failed.)",
+          quoteId,
+        });
+      }
+    } else {
       setStatus({
         state: "success",
         message: "Quote request sent. We’ll contact you soon.",
-        quoteId: data?.id ?? null,
-      });
-
-      setForm((p) => ({
-        ...p,
-        deadline: "",
-        message: "",
-        company: "",
-        // keep quantity so they can submit another reorder quickly (optional)
-        // quantity: "",
-      }));
-    } catch (err) {
-      setStatus({
-        state: "error",
-        message: err?.message || "Something went wrong. Please try again.",
-        quoteId: null,
+        quoteId,
       });
     }
+
+    // Clear form fields (keep quantity optional)
+    setForm((p) => ({
+      ...p,
+      deadline: "",
+      message: "",
+      company: "",
+    }));
+
+    // Clear captcha token (forces re-check next time)
+    if (TURNSTILE_SITE_KEY) {
+      setTurnstileToken("");
+      setTurnstileError("");
+      try {
+        if (window.turnstile && turnstileWidgetIdRef.current != null) {
+          window.turnstile.reset(turnstileWidgetIdRef.current);
+        }
+      } catch {}
+    }
+
+    // Clear selected files
+    setFiles([]);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  } catch (err) {
+    setStatus({
+      state: "error",
+      message: err?.message || "Something went wrong. Please try again.",
+      quoteId: null,
+    });
   }
+}
 
   const clearReference = () => {
     setRefExpanded(false);
@@ -523,6 +606,17 @@ const bumpQty = (delta) => {
                 type="tel"
                 autoComplete="tel"
                 placeholder="(###) ###-####"
+              />
+            </label>
+
+            <label className="contact-field contact-field--full">
+              <span className="contact-label">Files (optional)</span>
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept=".stl,.3mf,.step,.stp,.obj,.zip,.png,.jpg,.jpeg,.webp"
+                onChange={(e) => setFiles(Array.from(e.target.files || []).slice(0, 5))}
               />
             </label>
 
