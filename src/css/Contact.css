@@ -808,3 +808,280 @@
     overflow: hidden;
   }
 }
+
+/* =========================
+   Advanced Options (Accordion)
+========================= */
+
+.contact-adv {
+  margin-top: 10px;
+  border-top: 1px dashed var(--nav-border);
+  padding-top: 10px;
+}
+
+.contact-adv-toggle {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border: 1px solid var(--nav-border);
+  background: var(--surface);
+  color: var(--text);
+
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-weight: 850;
+  cursor: pointer;
+
+  transition: filter 120ms ease, background 120ms ease, transform 120ms ease;
+}
+
+.contact-adv-toggle:hover {
+  filter: brightness(1.03);
+}
+
+.contact-adv-toggle:active {
+  transform: translateY(1px);
+}
+
+.contact-adv-toggle:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.contact-adv-panel {
+  margin-top: 10px;
+  border: 1px solid var(--nav-border);
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 12px;
+  display: grid;
+  gap: 12px;
+}
+
+.contact-adv-hint {
+  color: var(--muted);
+  font-weight: 650;
+  font-size: 0.9rem;
+}
+
+.contact-adv-row {
+  display: grid;
+  gap: 8px;
+}
+
+.contact-adv-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.contact-adv-info {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+
+  border: 1px solid var(--nav-border);
+  background: var(--surface-2);
+  color: var(--text);
+
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-weight: 900;
+  line-height: 1;
+
+  transition: filter 120ms ease, background 120ms ease;
+}
+
+.contact-adv-info:hover {
+  filter: brightness(1.05);
+}
+
+.contact-adv-info:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.contact-adv-help {
+  border: 1px solid var(--nav-border);
+  background: var(--surface-2);
+  color: var(--muted);
+  border-radius: 12px;
+  padding: 10px 12px;
+
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+@media (min-width: 768px) {
+  /* make the advanced panel a 2-col grid on desktop */
+  .contact-adv-panel {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+
+  .contact-adv-hint {
+    grid-column: 1 / -1;
+  }
+
+  .contact-adv-row {
+    grid-column: auto;
+  }
+}
+
+/* ===== Advanced Options: info popover (no layout shift) ===== */
+
+.contact-adv-label {
+  position: relative; /* anchor for popover */
+}
+
+.contact-adv-info {
+  position: relative;
+}
+
+.contact-adv-popover {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+
+  width: min(420px, 82vw);
+  z-index: 50;
+
+  border: 1px solid var(--nav-border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 10px 12px;
+
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+/* little arrow */
+.contact-adv-popover::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: 14px;
+  width: 14px;
+  height: 14px;
+  transform: rotate(45deg);
+  background: var(--surface);
+  border-left: 1px solid var(--nav-border);
+  border-top: 1px solid var(--nav-border);
+}
+
+/* =========================
+   Contact: Success Screen
+========================= */
+
+.contact-success-card {
+  border: 1px solid var(--nav-border);
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+}
+
+.contact-success-id {
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.contact-success-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.contact-success-btn {
+  border: 1px solid var(--nav-border);
+  background: var(--brand);
+  color: var(--brand-contrast);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.contact-success-btn--secondary {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.contact-success-btn:hover {
+  filter: brightness(1.03);
+}
+
+.contact-success-contact {
+  margin: 10px auto 14px;
+  padding: 12px;
+  border: 1px solid var(--nav-border);
+  background: var(--surface-2);
+  border-radius: var(--radius);
+  max-width: 520px;
+}
+
+.contact-success-contact-title {
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+.contact-success-link {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--nav-border);
+  background: var(--surface);
+  color: var(--link);
+  font-weight: 800;
+  text-decoration: none;
+  margin-top: 8px;
+}
+
+.contact-success-link:hover {
+  filter: brightness(1.03);
+}
+
+/* ===== Fix mobile horizontal shift when reference card is present ===== */
+@media (max-width: 520px) {
+  /* hard stop any accidental horizontal overflow */
+  html, body {
+    overflow-x: hidden;
+  }
+
+  /* ref row becomes 2-row layout so controls can't widen the page */
+  .contact-ref-row {
+    grid-template-columns: 56px minmax(0, 1fr);
+    grid-template-areas:
+      "thumb meta"
+      "controls controls";
+    align-items: start;
+  }
+
+  .contact-ref-controls {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    white-space: normal; /* override desktop nowrap */
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  /* allow the toggle button to wrap instead of forcing width */
+  .contact-ref-toggle {
+    white-space: normal;
+  }
+
+  /* prevent qty group from forcing width */
+  .contact-qty {
+    max-width: 100%;
+  }
+}

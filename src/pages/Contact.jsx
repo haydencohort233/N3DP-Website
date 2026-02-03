@@ -1,6 +1,6 @@
 // src/pages/Contact.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { API_BASE } from "../config/api";
 import SEO from "../components/SEO";
 import seoConfig from "../config/Seo";
@@ -148,6 +148,7 @@ function findRefByIdAndPhoto(refId, refPhotoIndex) {
 
 export default function Contact() {
   const { site } = config;
+const navigate = useNavigate();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const ref = useMemo(() => getRefFromParams(searchParams), [searchParams]);
@@ -155,6 +156,47 @@ export default function Contact() {
   const [refExpanded, setRefExpanded] = useState(false);
   const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
+  const [advOpen, setAdvOpen] = useState(false);
+  const [advHelp, setAdvHelp] = useState({
+    material: false,
+    strength: false,
+    quality: false,
+    deadline: false,
+  });
+
+  useEffect(() => {
+    const anyOpen = Object.values(advHelp).some(Boolean);
+    if (!anyOpen) return;
+
+    const onDown = (e) => {
+      // if click is inside an info button or popover, ignore
+      const el = e.target;
+      if (el?.closest?.(".contact-adv-info")) return;
+      if (el?.closest?.(".contact-adv-popover")) return;
+
+      setAdvHelp({ material: false, strength: false, quality: false, deadline: false });
+    };
+
+    const onKey = (e) => {
+      if (e.key === "Escape") {
+        setAdvHelp({ material: false, strength: false, quality: false, deadline: false });
+      }
+    };
+
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [advHelp]);
+
+  useEffect(() => {
+    if (!ref.hasRef) return;
+    setFiles([]);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ref.hasRef]);
 
   // --- Turnstile (Cloudflare Captcha) ---
   const TURNSTILE_SITE_KEY = process.env.REACT_APP_TURNSTILE_SITE_KEY || "";
@@ -226,8 +268,13 @@ export default function Contact() {
     // KEEP the textarea; you're just not auto-filling it anymore
     message: "",
 
-    // keeping for later features
+    // Advanced options (all optional)
+    material: "PLA (Default)",
+    strength: "15% (Default)",
+    quality: "0.20mm (Default)",
     deadline: "",
+
+    // spam trap
     company: "",
   }));
 
@@ -304,6 +351,19 @@ const bumpQty = (delta) => {
 
   const deadline = String(form.deadline || "").trim() || null;
 
+  // Build optional advanced block (only include if user changed from defaults or set a deadline)
+  const advLines = [];
+  if (form.material && form.material !== "PLA (Default)") advLines.push(`Material: ${form.material}`);
+  if (form.strength && form.strength !== "15% (Default)") advLines.push(`Strength: ${form.strength}`);
+  if (form.quality && form.quality !== "0.20mm (Default)") advLines.push(`Quality: ${form.quality}`);
+  if (deadline) advLines.push(`Deadline: ${deadline}`);
+
+  const baseMsg = String(form.message || "").trim();
+  const finalMsg =
+    advLines.length > 0
+      ? `${baseMsg}\n\n[Advanced Options]\n${advLines.join("\n")}`
+      : baseMsg;
+
   const payload = {
     name: form.name.trim(),
     email: form.email.trim(),
@@ -311,14 +371,14 @@ const bumpQty = (delta) => {
     preferred_contact: form.preferredContact === "phone" ? "phone" : "email",
     quantity: qtyParsed,
     deadline,
-    message: form.message.trim(),
+    message: finalMsg,
 
     ref_type: ref.hasRef ? "gallery" : null,
     ref_id: ref.refId || null,
     ref_name: ref.refName || null,
     ref_src: ref.refSrc || null,
 
-    // keep these if you plan to store them later; harmless otherwise
+    // keep these if using later
     ref_variant_label: ref.refVariantLabel || null,
     ref_options: ref.refOptions || null,
 
@@ -340,7 +400,7 @@ const bumpQty = (delta) => {
 
     const quoteId = data?.id ?? null;
 
-    // 2) Upload files (optional; does not block quote success)
+    // 2) Upload files
     if (quoteId && Array.isArray(files) && files.length) {
       const fd = new FormData();
       for (const f of files.slice(0, 5)) fd.append("files", f);
@@ -375,19 +435,6 @@ const bumpQty = (delta) => {
           });
         }
 
-        if (!upRes.ok) {
-          setStatus({
-            state: "success",
-            message: `Quote request sent. (Files upload failed: ${upData?.error || "unknown"})`,
-            quoteId,
-          });
-        } else {
-          setStatus({
-            state: "success",
-            message: "Quote request sent. We’ll contact you soon.",
-            quoteId,
-          });
-        }
       } catch (e) {
         setStatus({
           state: "success",
@@ -403,10 +450,12 @@ const bumpQty = (delta) => {
       });
     }
 
-    // Clear form fields (keep quantity optional)
     setForm((p) => ({
       ...p,
       deadline: "",
+      material: "PLA (Default)",
+      strength: "15% (Default)",
+      quality: "0.20mm (Default)",
       message: "",
       company: "",
     }));
@@ -457,6 +506,74 @@ const bumpQty = (delta) => {
     setSearchParams(next, { replace: true });
   };
 
+if (status.state === "success") {
+  const contactEmail =
+    site?.contactEmail || seoConfig?.business?.email || seoConfig?.contactEmail || "";
+  const contactPhone =
+    site?.contactPhone || seoConfig?.business?.telephone || seoConfig?.contactPhone || "";
+
+  const phoneHref = contactPhone
+    ? `tel:${String(contactPhone).replace(/[^\d+]/g, "")}`
+    : "";
+
+  return (
+    <main className="contact-page">
+      <SEO title={`Quote Sent — ${site.name}`} description="Quote successfully sent." />
+
+      <header className="contact-hero">
+        <h1 className="contact-title">Quote successfully sent!</h1>
+        <p className="contact-subtitle">
+          We&apos;ll get back to you within 24 hours via your preferred contact method.
+        </p>
+      </header>
+
+      <section className="contact-shell">
+        <div className="contact-success-card" role="status" aria-live="polite">
+          {status.quoteId ? (
+            <div className="contact-success-id">Quote ID: #{status.quoteId}</div>
+          ) : null}
+
+          {(contactEmail || contactPhone) && (
+            <div className="contact-success-contact">
+              <div className="contact-success-contact-title">Need us sooner?</div>
+
+              {contactEmail ? (
+                <a className="contact-success-link" href={`mailto:${contactEmail}`}>
+                  {contactEmail}
+                </a>
+              ) : null}
+
+              {contactPhone ? (
+                <a className="contact-success-link" href={phoneHref}>
+                  {contactPhone}
+                </a>
+              ) : null}
+            </div>
+          )}
+
+          <div className="contact-success-actions">
+            <button
+              type="button"
+              className="contact-success-btn"
+              onClick={() => navigate("/")}
+            >
+              Back to Home
+            </button>
+
+            <button
+              type="button"
+              className="contact-success-btn contact-success-btn--secondary"
+              onClick={() => navigate("/gallery")}
+            >
+              Gallery
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
   return (
     <main className="contact-page">
       <SEO
@@ -467,7 +584,7 @@ const bumpQty = (delta) => {
       <header className="contact-hero">
         <h1 className="contact-title">Get a Quote</h1>
         <p className="contact-subtitle">
-          Share dimensions, material preference, quantity, and timeline. We’ll respond with pricing and options.
+          Gather basic information or more for advanced projects. Response in 24-72 hours.
         </p>
       </header>
 
@@ -609,16 +726,18 @@ const bumpQty = (delta) => {
               />
             </label>
 
-            <label className="contact-field contact-field--full">
-              <span className="contact-label">Files (optional)</span>
-              <input
-                ref={fileInputRef}
-                type="file"
-                multiple
-                accept=".stl,.3mf,.step,.stp,.obj,.zip,.png,.jpg,.jpeg,.webp"
-                onChange={(e) => setFiles(Array.from(e.target.files || []).slice(0, 5))}
-              />
-            </label>
+            {!ref.hasRef && (
+              <label className="contact-field contact-field--full">
+                <span className="contact-label">Files (optional)</span>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  accept=".stl,.3mf,.step,.stp,.obj,.zip,.png,.jpg,.jpeg,.webp"
+                  onChange={(e) => setFiles(Array.from(e.target.files || []).slice(0, 5))}
+                />
+              </label>
+            )}
 
             <label className="contact-field">
               <span className="contact-label">Preferred contact</span>
@@ -653,6 +772,189 @@ const bumpQty = (delta) => {
                 placeholder="Include dimensions, material (PLA/PETG/ABS/etc.), color, and any fit/tolerance notes."
                 required
               />
+
+            {/* Advanced Options accordion (optional) */}
+            <div className="contact-adv">
+              <button
+                type="button"
+                className="contact-adv-toggle"
+                onClick={() => setAdvOpen((v) => !v)}
+                aria-expanded={advOpen}
+              >
+                Advanced Options {advOpen ? "▴" : "▾"}
+              </button>
+
+              {advOpen && (
+                <div className="contact-adv-panel" role="region" aria-label="Advanced options">
+                  <div className="contact-adv-hint">
+                    Optional — leave defaults if you’re unsure.
+                  </div>
+
+                  {/* Material */}
+                  <div className="contact-adv-row">
+                    <div className="contact-adv-label">
+                      <span>Material</span>
+
+                      <div className="contact-adv-info-wrap">
+                        <button
+                          type="button"
+                          className="contact-adv-info"
+                          aria-label="Material info"
+                          aria-expanded={advHelp.material}
+                          onClick={() =>
+                            setAdvHelp({
+                              material: !advHelp.material,
+                              strength: false,
+                              quality: false,
+                              deadline: false,
+                            })
+                          }
+                        >
+                          ⓘ
+                        </button>
+
+                        {advHelp.material && (
+                          <div className="contact-adv-popover" role="dialog">
+                            PLA = most common. PETG = tougher. ABS/ASA = heat resistant. TPU = flexible.
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <select
+                      value={form.material}
+                      onChange={(e) => setField("material", e.target.value)}
+                    >
+                      <option value="PLA">PLA (Default)</option>
+                      <option value="PETG">PETG</option>
+                      <option value="ABS/ASA">ABS/ASA</option>
+                      <option value="TPU">TPU</option>
+                      <option value="Resin">Resin</option>
+                    </select>
+                  </div>
+
+                  {/* Strength */}
+                  <div className="contact-adv-row">
+                    <div className="contact-adv-label">
+                      <span>Strength</span>
+
+                      <div className="contact-adv-info-wrap">
+                        <button
+                          type="button"
+                          className="contact-adv-info"
+                          aria-label="Strength info"
+                          aria-expanded={advHelp.strength}
+                          onClick={() =>
+                            setAdvHelp({
+                              material: false,
+                              strength: !advHelp.strength,
+                              quality: false,
+                              deadline: false,
+                            })
+                          }
+                        >
+                          ⓘ
+                        </button>
+
+                        {advHelp.strength && (
+                          <div className="contact-adv-popover" role="dialog">
+                            Default is Triangle Infill. Strong is Gyroid Infill.
+                            Default will handle most situations. Strong is for industrial, small or fragile pieces.
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <select
+                      value={form.strength}
+                      onChange={(e) => setField("strength", e.target.value)}
+                    >
+                      <option value="15% (Default)">15% (Default)</option>
+                      <option value="Strong (30%)">Strong (30%)</option>
+                    </select>
+                  </div>
+
+                  {/* Quality */}
+                  <div className="contact-adv-row">
+                    <div className="contact-adv-label">
+                      <span>Quality</span>
+
+                      <div className="contact-adv-info-wrap">
+                        <button
+                          type="button"
+                          className="contact-adv-info"
+                          aria-label="Quality info"
+                          aria-expanded={advHelp.quality}
+                          onClick={() =>
+                            setAdvHelp({
+                              material: false,
+                              strength: false,
+                              quality: !advHelp.quality,
+                              deadline: false,
+                            })
+                          }
+                        >
+                          ⓘ
+                        </button>
+
+                        {advHelp.quality && (
+                          <div className="contact-adv-popover" role="dialog">
+                            0.40mm - Prototyping, 0.20mm - Default, 0.10mm - High Detail & Figurines
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <select
+                      value={form.quality}
+                      onChange={(e) => setField("quality", e.target.value)}
+                    >
+                      <option value="0.20mm (Default)">0.20mm (Default)</option>
+                      <option value="0.40mm (Prototype)">0.40mm (Prototype)</option>
+                      <option value="0.10mm (Figurines)">0.10mm (Figurines)</option>
+                    </select>
+                  </div>
+
+                  {/* Deadline */}
+                  <div className="contact-adv-row">
+                    <div className="contact-adv-label">
+                      <span>Deadline</span>
+
+                      <div className="contact-adv-info-wrap">
+                        <button
+                          type="button"
+                          className="contact-adv-info"
+                          aria-label="Deadline info"
+                          aria-expanded={advHelp.deadline}
+                          onClick={() =>
+                            setAdvHelp({
+                              material: false,
+                              strength: false,
+                              quality: false,
+                              deadline: !advHelp.deadline,
+                            })
+                          }
+                        >
+                          ⓘ
+                        </button>
+
+                        {advHelp.deadline && (
+                          <div className="contact-adv-popover" role="dialog">
+                            Optional. Rush deadlines cost more. Details will be discussed.
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <input
+                      type="date"
+                      value={form.deadline}
+                      onChange={(e) => setField("deadline", e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
             </label>
 
             <label className="contact-field contact-hp" aria-hidden="true">
@@ -666,7 +968,7 @@ const bumpQty = (delta) => {
             </label>
           </div>
 
-        {/* Actions / Captcha / Submit / Status */}
+        {/* Captcha / Submit / Status */}
           <div className="contact-actions">
             {/* Turnstile: hide as much as possible (hide after it succeeds, and hide on success submit) */}
             {!TURNSTILE_SITE_KEY ? (

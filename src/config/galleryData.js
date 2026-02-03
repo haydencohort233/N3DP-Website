@@ -7,15 +7,15 @@ const galleryData = [
     date: "2026-01-12",
     category: "Kitchen",
     tags: ["Custom", "Disney", "Mickey", "K-Cup", "Coffee", "Halloween"],
-    src: "/assets/gallery/photo1-1.png",
+    src: "/assets/gallery/photo1.png",
     photos: [
       {
-        src: "/assets/gallery/photo1-1.png",
+        src: "/assets/gallery/photo1.png",
         label: "Black",
         tags: ["Black"],
       },
       {
-        src: "/assets/gallery/photo1-2.png",
+        src: "/assets/gallery/photo1-1.png",
         label: "Red",
         tags: ["Red", "Bow", "Minnie"],
         title: "Minnie Mouse Keurig Coffee Cup Holder",
@@ -29,13 +29,13 @@ const galleryData = [
     id: "halloween-bookmarks",
     legacyId: 2,
     title: "Halloween Bookmarks",
-    description: "Five custom bookmarks...",
+    description: "Adorable bookmarks for reading! These come in so many styles - or request something similar!",
     date: "2024-02-05",
     category: "Halloween",
     tags: ["Halloween", "Books", "Custom"],
-    src: "/assets/gallery/photo2a-1.png",
+    src: "/assets/gallery/photo2.png",
     photos: [
-      { src: "/assets/gallery/photo2a-1.png", label: "Photo 1" }, // All bookmarks photo
+      { src: "/assets/gallery/photo2.png" },
     ],
   },
 
@@ -49,19 +49,19 @@ const galleryData = [
     category: "Household",
     tags: ["Custom", "Smoker", "Weed"],
     src: "/assets/gallery/photo3.png",
-    photos: [{ src: "/assets/gallery/photo3.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo3.png" }],
   },
 
   {
     id: "christmas-ornaments",
     legacyId: 4,
-    title: "Christmas Ornaments",
-    description: "Mid-century modern wooden chair.",
+    title: "Personalized Christmas Ornaments",
+    description: "Beautiful Christmas Ornaments that can be customized to anyone's name to be more personal",
     date: "2024-02-05",
     category: "Christmas",
     tags: ["Christmas", "Ornament", "Gifts"],
     src: "/assets/gallery/photo4.png",
-    photos: [{ src: "/assets/gallery/photo4.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo4.png" }],
   },
 
   {
@@ -70,11 +70,11 @@ const galleryData = [
     title: "Mechanical Gear",
     description:
       "A replacement gear for a discontinued part from Germany. Requested by a Museum to repair their carousel.",
-    date: "2024-02-05",
+    date: "2023-02-05",
     category: "Mechanical",
     tags: ["Custom", "Gears", "Resin"],
     src: "/assets/gallery/photo5.png",
-    photos: [{ src: "/assets/gallery/photo5.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo5.png" }],
   },
 
   {
@@ -83,11 +83,11 @@ const galleryData = [
     title: "Money Maze",
     description:
       "A puzzle with a gift inside! Solve the maze by twisting and turning. Once finished it comes apart revealing what's inside.",
-    date: "2024-02-05",
+    date: "2023-12-23",
     category: "Christmas",
     tags: ["Christmas", "Gift", "Puzzle"],
     src: "/assets/gallery/photo6.png",
-    photos: [{ src: "/assets/gallery/photo6.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo6.png" }],
   },
 
   {
@@ -95,11 +95,11 @@ const galleryData = [
     legacyId: 7,
     title: "Zelda Master Sword",
     description: "A sword prop from The Legend of Zelda.",
-    date: "2024-02-05",
+    date: "2022-08-15",
     category: "Video Games",
-    tags: ["Zelda", "Sword", "Props", "Multicolor"],
+    tags: ["Zelda", "Sword", "Props"],
     src: "/assets/gallery/photo7.png",
-    photos: [{ src: "/assets/gallery/photo7.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo7.png" }],
   },
 
   {
@@ -107,11 +107,11 @@ const galleryData = [
     legacyId: 8,
     title: "Hello Kitty Bead Tray",
     description: "A custom bead tray in the shape of Hello Kitty.",
-    date: "2024-02-05",
+    date: "2024-03-11",
     category: "Arts & Crafts",
     tags: ["Custom", "Crafts", "Hello Kitty", "Multicolor"],
     src: "/assets/gallery/photo8.png",
-    photos: [{ src: "/assets/gallery/photo8.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo8.png" }],
   },
 
   {
@@ -120,23 +120,23 @@ const galleryData = [
     title: "Glow-in-the-Dark Figurines",
     description:
       "100 figurines made in glow-in-the-dark resin using a resin printer. Requested by CakeHoarder for their Twitch community.",
-    date: "2024-02-05",
+    date: "2023-06-05",
     category: "Figurines",
     tags: ["Custom", "Figurines", "Commission", "Resin", "Glow"],
     src: "/assets/gallery/photo9.png",
-    photos: [{ src: "/assets/gallery/photo9.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo9.png" }],
   },
 
   {
     id: "candle-wick-holders",
     legacyId: 10,
     title: "Candle Wick Holders",
-    description: "Mid-century modern wooden chair.",
+    description: "Used for pouring candle wax and making candles, holds your candle wick in place while pouring to have a clean candle.",
     date: "2024-02-05",
-    category: "Arts & Crafts",
-    tags: ["Custom", "Candles", "Commission"],
+    category: "Businesses",
+    tags: ["Custom", "Candles", "Request"],
     src: "/assets/gallery/photo10.png",
-    photos: [{ src: "/assets/gallery/photo10.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo10.png" }],
   },
 
   {
@@ -145,11 +145,11 @@ const galleryData = [
     title: "Heart Shaped Ring Bowl",
     description:
       "A heart-shaped bowl made for holding rings or jewelry. Great gift idea.",
-    date: "2024-02-05",
+    date: "2024-02-12",
     category: "Valentine's Day",
     tags: ["Gift", "Valentine's Day", "Heart"],
     src: "/assets/gallery/photo11.png",
-    photos: [{ src: "/assets/gallery/photo11.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo11.png" }],
   },
 
   {
@@ -158,11 +158,11 @@ const galleryData = [
     title: "Easter Fidget Toys",
     description:
       "Flexible fidget toys for Easter (bunny + peep). Fun to flex and wiggle around.",
-    date: "2024-02-05",
+    date: "2022-04-19",
     category: "Easter",
     tags: ["Easter", "Gift", "Fidget"],
     src: "/assets/gallery/photo12.png",
-    photos: [{ src: "/assets/gallery/photo12.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo12.png" }],
   },
 
   {
@@ -175,11 +175,11 @@ const galleryData = [
     category: "Gifts",
     tags: ["Gifts", "SpongeBob", "Figurines"],
     src: "/assets/gallery/photo13.png",
-    photos: [{ src: "/assets/gallery/photo13.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo13.png" }],
   },
 
   {
-    id: "sidewalk-miniatures",
+    id: "sidewalk-miniatures", // REPLACE ME WITH SOMETHING ELSE
     legacyId: 14,
     title: "Sidewalk Miniatures",
     description: "A",
@@ -187,13 +187,13 @@ const galleryData = [
     category: "Miniatures",
     tags: ["Miniatures", "Gift"],
     src: "/assets/gallery/photo14.png",
-    photos: [{ src: "/assets/gallery/photo14.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo14.png" }],
   },
 
   {
     id: "coffin-kcup-holder",
     legacyId: 15,
-    title: "Coffin K-Cup Holder",
+    title: "Blood Oozing Coffin Keurig Cup Holder",
     description:
       "A coffin-themed K-Cup holder—perfect for spooky season coffee setups.",
     date: "2025-10-30",
@@ -202,7 +202,7 @@ const galleryData = [
     src: "/assets/gallery/photo15.png",
     photos: [
       {
-        src: "/assets/gallery/photo15.png", // Coffin Facing Forward
+        src: "/assets/gallery/photo15.png",
         date: "2023-02-05",
       },
     ],
@@ -214,7 +214,7 @@ const galleryData = [
     title: "Ligogram Company Logo",
     description: "A ligogram lets lights through to show an image. This can be done with family photos, company logos and so much more.",
     date: "2024-02-05",
-    category: "Miscellaneous",
+    category: "Businesses",
     tags: ["Custom", "Ligogram", "Lightbox", "Logo"],
     src: "/assets/gallery/photo16.png",
     photos: [{ src: "/assets/gallery/photo16.png" }],
@@ -240,7 +240,7 @@ const galleryData = [
     description: "A forklift for your desk or shelves, it even includes a pallet for your sticky notes.",
     date: "2024-02-05",
     category: "Gifts",
-    tags: ["Gift"],
+    tags: ["Gift", "Desktop", "Father's Day"],
     src: "/assets/gallery/photo18.png",
     photos: [
       {
@@ -263,10 +263,10 @@ const galleryData = [
     description:
       "Custom business card holders styled in the shape of a company logo.",
     date: "2024-02-05",
-    category: "Miscellaneous",
-    tags: ["Custom"],
+    category: "Businesses",
+    tags: ["Custom", "Business Card"],
     src: "/assets/gallery/photo19.png",
-    photos: [{ src: "/assets/gallery/photo19.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo19.png" }],
   },
 
   {
@@ -275,11 +275,11 @@ const galleryData = [
     title: "Cat Head Succulent Pot",
     description:
       "A succulent pot for cat lovers with a drain hole on the bottom.",
-    date: "2024-02-05",
+    date: "2023-07-05",
     category: "Gifts",
     tags: ["Gift"],
     src: "/assets/gallery/photo20.png",
-    photos: [{ src: "/assets/gallery/photo20.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo20.png" }],
   },
 
   {
@@ -340,19 +340,33 @@ const galleryData = [
       "An ash tray with a poker—great for cleaning bowls and keeping things tidy.",
     date: "2024-02-05",
     category: "Valentine's Day",
-    tags: ["Custom", "Gift", "Valentine's Day", "Heart"],
+    tags: ["Custom", "Gift", "Valentine's Day", "Heart", "Pink"],
     src: "/assets/gallery/photo23.png",
     photos: [
       {
         src: "/assets/gallery/photo23.png", // Tray Only
-        tags: ["Yellow"],
+        tags: ["Ash Tray"],
         date: "2023-02-05",
       },
       {
         src: "/assets/gallery/photo23-1.png", // Valentine's Bowl Set
         title: "Heart Ash Tray with Bowl Holder & Weed Shovel",
-        tags: ["Blue"],
         date: "2023-02-05",
+        description: "The complete Heart Ash Tray Colleciton - Tray, Shovel, Bowl Holder",
+      },
+      {
+        src: "/assets/gallery/photo23-2.png", // Valentine's Shovel
+        title: "Heart-Shaped Weed Shovel",
+        tags: ["Shovel"],
+        date: "2023-02-05",
+        description: "A heart-shaped weed shovel, can also be a keychain or hang from a lanyard.",
+      },
+      {
+        src: "/assets/gallery/photo23-3.png", // Valentine's Bowl Holder
+        title: "Heart-Shaped Bong Bowl Holder",
+        tags: ["Weed"],
+        date: "2023-02-05",
+        description: "Simple -- It holds your bowl while you pack it for your next smoke!",
       },
     ],
   },
@@ -366,19 +380,19 @@ const galleryData = [
     category: "Miniatures",
     tags: ["Miniatures", "Gift"],
     src: "/assets/gallery/photo24.png",
-    photos: [{ src: "/assets/gallery/photo24.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo24.png" }],
   },
 
   {
     id: "wind-conduit-mounts",
     legacyId: 25,
     title: "Wind Conduit Mounts",
-    description: "A",
+    description: "Requested mounts for wind conduits for a farm in Stanislaus County.",
     date: "2024-02-05",
-    category: "Miscellaneous",
-    tags: ["Gift"],
+    category: "Businesses",
+    tags: ["Custom", "Request"],
     src: "/assets/gallery/photo25.png",
-    photos: [{ src: "/assets/gallery/photo25.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo25.png" }],
   },
 
   {
@@ -390,7 +404,7 @@ const galleryData = [
     category: "Miniatures",
     tags: ["Commission"],
     src: "/assets/gallery/photo26.png",
-    photos: [{ src: "/assets/gallery/photo26.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo26.png" }],
   },
 
   {
@@ -399,11 +413,11 @@ const galleryData = [
     title: "Lighter Sleeves",
     description:
       "A sleeve for your lighter to customize it further or attach to a lanyard/keychain.",
-    date: "2024-02-05",
+    date: "2024-01-16",
     category: "Miscellaneous",
     tags: ["Gift", "Smoker", "Sleeve"],
     src: "/assets/gallery/photo27.png",
-    photos: [{ src: "/assets/gallery/photo27.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo27.png" }],
   },
 
   {
@@ -413,10 +427,200 @@ const galleryData = [
     description:
       "A business card holders for Realtors, place your cards in the 'For Sale' area, feels official and brightens up your desk.",
     date: "2025-12-15",
-    category: "Miscellaneous",
+    category: "Businesses",
     tags: ["Gift", "Business Cards", "Card Holder"],
     src: "/assets/gallery/photo28.png",
-    photos: [{ src: "/assets/gallery/photo28.png", label: "Photo 1" }],
+    photos: [{ src: "/assets/gallery/photo28.png" }],
+  },
+
+  {
+    id: "business-logo-maximum-sports",
+    legacyId: 29,
+    title: "3D Business Logo",
+    description:
+      "You can get your favorite logo printed in 3D! It can be your business, or even a Chic-fil-a logo!",
+    date: "2023-6-08",
+    category: "Businesses",
+    tags: ["Logo", "Business"],
+    src: "/assets/gallery/photo29.png",
+    photos: [{ src: "/assets/gallery/photo29.png", label: "Business 3D Logo" }],
+  },
+
+  {
+    id: "winged-skull-hat",
+    legacyId: 30,
+    title: "Skull with Wings and Hat",
+    description:
+      "A giant scary skull with a pair of wings and a cool hat. Customer request.",
+    date: "2025-12-15",
+    category: "Miscellaneous",
+    tags: ["Custom", "Request", "Skull"],
+    src: "/assets/gallery/photo30.png",
+    photos: [{ src: "/assets/gallery/photo30.png", label: "Winged Skull" }],
+  },
+
+  {
+    id: "heart-shape-tealight-candle-holders",
+    legacyId: 31,
+    title: "Heart-Shaped Tealight Candle Holders",
+    description:
+      "Cute tealight holders shaped like hearts, perfect for a romantic evening, or a Valentine's Day surprise.",
+    date: "2025-12-15",
+    category: "Valentine's Day",
+    tags: ["Heart", "Valentine's Day", "Candle", "Cute"],
+    src: "/assets/gallery/photo31.png",
+    photos: [
+      {
+        src: "/assets/gallery/photo31.png",
+        title: "Red Heart Tealight Holder",
+        label: "Red",
+        tags: ["Red"],
+      },
+      {
+        src: "/assets/gallery/photo31-1.png",
+        label: "Red",
+        tags: ["Purple"],
+        title: "Purple Heart Tealight Holder",
+        description:
+          "A Minnie Mouse Keurig Coffee Holder, featuring a cute bow and her famous polka dots.",
+      },
+      ],  
+    },
+
+    {
+    id: "mini-ice-cooler-soda",
+    legacyId: 32,
+    title: "Miniature Ice Coolers",
+    description:
+      "These are miniature ice coolers perfect to hold a single can of soda. So cute!",
+    date: "2025-12-15",
+    category: "Miscellaneous",
+    tags: ["Gift", "Business Cards", "Card Holder"],
+    src: "/assets/gallery/photo32.png",
+    photos: [{ src: "/assets/gallery/photo32.png" }],
+  },
+
+  {
+    id: "stranger-things-demagorgon-statue-bust",
+    legacyId: 33,
+    title: "Stranger Things Demagorgon Bust",
+    description:
+      "An awesome bust of the Demagorgon from Stranger Things.",
+    date: "2023-10-15",
+    category: "Miscellaneous",
+    tags: ["Gift", "Stranger Things", "Halloween"],
+    src: "/assets/gallery/photo33.png",
+    photos: [{ src: "/assets/gallery/photo33.png" }],
+  },
+
+  {
+    id: "kcup-coffee-holder-christmas-tree",
+    legacyId: 34,
+    title: "Christmas Tree Keurig Cup Holder",
+    description:
+      "A Christmas themed K-Cup Holder as a Christmas tree with a Garland, part of our K-Cup Collection",
+    date: "2025-12-20",
+    category: "Christmas",
+    tags: ["Gift", "Christmas", "K-Cup Holder", "Coffee", "Kitchen"],
+    src: "/assets/gallery/photo34.png",
+    photos: [{ src: "/assets/gallery/photo34.png" }],
+  },
+
+  {
+    id: "designer-straw-toppers",
+    legacyId: 35,
+    title: "Chanel Straw Toppers",
+    description:
+      "Designer logo shaped Straw Toppers. We have Coach, Louis Vuitton, Fendi, Gucci and any others on request.",
+    date: "2024-4-10",
+    category: "Kitchen",
+    tags: ["Gift", "Kitchen", "Straw Topper", "Designer"],
+    src: "/assets/gallery/photo35.png",
+    photos: [
+      { 
+        src: "/assets/gallery/photo35.png", 
+        title: "Chanel Straw Toppers",
+        label: "Chanel Straw Toppers",
+        tags: ["Chanel"]
+      },
+      { 
+        src: "/assets/gallery/photo35-1.png", 
+        title: "Louis Vuitton Straw Toppers",
+        label: "Louis Vuitton Straw Toppers",
+        tags: ["Louis Vuitton"] 
+      },
+      { 
+        src: "/assets/gallery/photo35-2.png", 
+        title: "Fendi Straw Toppers",
+        label: "Fendi Straw Toppers",
+        tags: ["Fendi"] 
+      }
+    ],
+  },
+
+    {
+    id: "skull-guitar-pick-holder",
+    legacyId: 36,
+    title: "Skull Guitar Pick Holder",
+    description:
+      "A fun small skull to hold several guitar picks to look like he has mohawk!",
+    date: "2024-11-20",
+    category: "Gifts",
+    tags: ["Gift", "Music", "Guitar"],
+    src: "/assets/gallery/photo36.png",
+    photos: [{ src: "/assets/gallery/photo36.png" }],
+  },
+
+  {
+    id: "pumpkin-minnie-straw-topper",
+    legacyId: 37,
+    title: "Pumpkin Minnie Straw Toppers",
+    description:
+      "Straw Topper shaped like a Pumpkin Minnie with colored bow, or a Mickey Mouse version.",
+    date: "2024-10-21",
+    category: "Kitchen",
+    tags: ["Gift", "Music", "Guitar"],
+    src: "/assets/gallery/photo37.png",
+    photos: [{ src: "/assets/gallery/photo37.png" }],
+  },
+
+  {
+    id: "candy-corn-kcup-holder",
+    legacyId: 38,
+    title: "Candy Corn K-Cup Holder",
+    description:
+      "A keurig holder in the shape of a Candy Corn. Part of our Keurig Holder Collection for every month of the year.",
+    date: "2024-10-25",
+    category: "Halloween",
+    tags: ["Gift", "Halloween", "K-Cup", "Coffee", "Keurig"],
+    src: "/assets/gallery/photo38.png",
+    photos: [{ src: "/assets/gallery/photo38.png" }],
+  },
+
+  {
+    id: "donkey-kong-barrel-cupholder",
+    legacyId: 39,
+    title: "Donkey Kong Pencil Holder",
+    description:
+      "An awesome barrel from Donkey Kong, this will hold all your pens and pencils!",
+    date: "2026-2-1",
+    category: "Gifts",
+    tags: ["Gift", "Nintendo", "Donkey Kong", "Mario", "Desktop"],
+    src: "/assets/gallery/photo39.png",
+    photos: [{ src: "/assets/gallery/photo39.png" }],
+  },
+
+  {
+    id: "hearts-kcup-holder",
+    legacyId: 39,
+    title: "Double Hearts K-Cup Holder",
+    description:
+      "Another Keurig Pod Holder, this theme is for Valentine's Day or anything love. It holds up to 9 cups.",
+    date: "2026-2-3",
+    category: "Valentine's Day",
+    tags: ["Gift", "Valentine's Day", "Love", "Keurig", "Coffee", "Kitchen"],
+    src: "/assets/gallery/photo40.png",
+    photos: [{ src: "/assets/gallery/photo40.png" }],
   },
 ];
 
