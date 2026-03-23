@@ -584,7 +584,7 @@ if (status.state === "success") {
       <header className="contact-hero">
         <h1 className="contact-title">Get a Quote</h1>
         <p className="contact-subtitle">
-          Gather basic information or more for advanced projects. Response in 24-72 hours.
+          Gather quick information or detailed for advanced projects. Response in 24-72 hours.
         </p>
       </header>
 
@@ -985,10 +985,10 @@ if (status.state === "success") {
               {status.state === "sending"
                 ? "Sending…"
                 : !TURNSTILE_SITE_KEY
-                ? "Submit Quote Request"
+                ? "Submit Quote"
                 : !turnstileToken
                 ? "Complete Captcha to Submit"
-                : "Submit Quote Request"}
+                : "Submit Quote"}
             </button>
 
             {/* Only show the hint when captcha is required and incomplete */}

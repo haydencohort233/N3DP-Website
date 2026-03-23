@@ -1,12 +1,12 @@
 const config = {
   site: {
-    name: "Nashville 3D Prints",
-    description: "Starter template for future sites.",
+    name: "Nashville3DPrints",
+    description: "3D Printing Service, request a quote.",
     year: 2026,                             // Year in Footer
     email: "nashville3dprinting@gmail.com", // Company Email Address
     phone: "(209) 202-3221",                // Company Phone Number
     logoSrc: "/assets/logo.png",            // Logo on Navbar
-    logoAlt: "Nashville3DPrinting logo",    // Alt-text when hovering over Logo
+    logoAlt: "Nashville3DPrints logo",      // Alt-text when hovering over Logo
     logoLinkTo: "/",                        // Where clicking the logo redirects you to
       hours: {
       timezone: "America/Chicago",          // Sites timezone
@@ -24,8 +24,8 @@ const config = {
   },
   nav: {
     links: [
+      { to: "/quote", label: "Quotes" },
       { to: "/", label: "Home", end: true },
-      { to: "/contact", label: "Contact" },
       { to: "/gallery", label: "Gallery" },
       { to: "/faq", label: "FAQ" },
       { to: "/about", label: "About" },
@@ -34,7 +34,7 @@ const config = {
   social: { 
     facebook: "nashville3dprints", 
     instagram: "nashville3dprints", 
-    etsy: "valley3dprints.etsy.com" 
+    etsy: "nashville3dprints.etsy.com" 
   },
   theme: { default: "dark" },
 };

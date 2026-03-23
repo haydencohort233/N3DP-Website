@@ -60,7 +60,7 @@ export default function PhotoViewer({
   onIndexChange,
   allowTagClick = false,
   onTagClick,
-  quoteTo = "/contact",
+  quoteTo = "/quote",
   quoteButtonLabel = "Get Quote",
 }) {
   const navigate = useNavigate();

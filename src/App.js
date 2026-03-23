@@ -36,7 +36,7 @@ function AppRoutes() {
             }
           />
           <Route
-            path="/contact"
+            path="/quote"
             element={
               <Layout>
                 <Contact />

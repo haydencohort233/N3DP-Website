@@ -11,10 +11,10 @@ const heroConfig = {
     title: null,
 
     subtitle:
-      "Local and Quality prints for Music City. Get started by requesting a quote below or giving us a call! Got lots of questions? Try our FAQ below.",
+      "Quality 3D Prints. Get started by requesting a quote below or giving us a call! Questions? Try our FAQ below.",
 
     primaryCtaText: "Get a Quote",
-    primaryCtaHref: "/contact", // Where clicking the text will redirect you
+    primaryCtaHref: "/quote", // Where clicking the text will redirect you
 
     secondaryCtaText: "FAQ",
     secondaryCtaHref: "/faq", // Where clicking the text will redirect you

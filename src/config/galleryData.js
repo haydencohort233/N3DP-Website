@@ -605,14 +605,14 @@ const galleryData = [
       "An awesome barrel from Donkey Kong, this will hold all your pens and pencils!",
     date: "2026-2-1",
     category: "Gifts",
-    tags: ["Gift", "Nintendo", "Donkey Kong", "Mario", "Desktop"],
+    tags: ["Nintendo", "Donkey Kong", "Mario", "Desktop"],
     src: "/assets/gallery/photo39.png",
     photos: [{ src: "/assets/gallery/photo39.png" }],
   },
 
   {
     id: "hearts-kcup-holder",
-    legacyId: 39,
+    legacyId: 40,
     title: "Double Hearts K-Cup Holder",
     description:
       "Another Keurig Pod Holder, this theme is for Valentine's Day or anything love. It holds up to 9 cups.",
@@ -621,6 +621,58 @@ const galleryData = [
     tags: ["Gift", "Valentine's Day", "Love", "Keurig", "Coffee", "Kitchen"],
     src: "/assets/gallery/photo40.png",
     photos: [{ src: "/assets/gallery/photo40.png" }],
+  },
+
+  {
+    id: "innout-sauce-holders",
+    legacyId: 41,
+    title: "In-N-Out Sauce Holders",
+    description:
+      "A set of In-N-Out sauce holders (for their sauce paper cups) designed to go around your straw. Slide it down and insert your paper cups and get dipping!",
+    date: "2026-2-8",
+    category: "Gift",
+    tags: ["Food", "Kitchen", "In-N-Out", "Kitchen"],
+    src: "/assets/gallery/photo41.jpg",
+    photos: [{ src: "/assets/gallery/photo41.jpg" }],
+  },
+
+  {
+    id: "lego-brick-flower-vase",
+    legacyId: 42,
+    title: "Lego Brick Flower Vase",
+    description:
+      "A 4x4 LEGO Brick for a vase! Now that's awesome. Put your real or fake flowers in here as a stunning decoration.",
+    date: "2026-2-11",
+    category: "Gift",
+    tags: ["LEGO", "Valentine's Day", "Flowers"],
+    src: "/assets/gallery/photo42.png",
+    photos: [{ src: "/assets/gallery/photo42.png" }],
+  },
+
+  {
+    id: "mario-airpods-case",
+    legacyId: 43,
+    title: "Mario AirPods Mystery Block Case",
+    description:
+      "A mystery block case for your AirPods Pro - No glue or screws required. Perfect for any Mario fan.",
+    date: "2026-3-10",
+    category: "Gift",
+    tags: ["Mario", "Nintendo"],
+    src: "/assets/gallery/photo43.png",
+    photos: [{ src: "/assets/gallery/photo43.png" }],
+  },
+
+  {
+    id: "mario-mushroom-piggybank",
+    legacyId: 44,
+    title: "Mario Piggy Bank",
+    description:
+      "A Mario Mushroom that works as a piggy bank, the head unscrews off when it's full! These come small or large.",
+    date: "2026-3-05",
+    category: "Gift",
+    tags: ["Mario", "Nintendo", "Mushroom"],
+    src: "/assets/gallery/photo44.png",
+    photos: [{ src: "/assets/gallery/photo44.png" }],
   },
 ];
 

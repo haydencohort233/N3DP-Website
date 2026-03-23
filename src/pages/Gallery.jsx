@@ -393,7 +393,7 @@ const visibleEntries = filteredEntries.slice(startIndex, startIndex + itemsPerPa
   }}
   allowTagClick
   onTagClick={handleTagClick}
-  quoteTo="/contact"
+  quoteTo="/quote"
   quoteButtonLabel="Get Quote"
 />
     </main>
