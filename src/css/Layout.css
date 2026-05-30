@@ -1,9 +1,8 @@
+/* layout.css */
 /* Centered readable column on desktop/tablet */
 .page-container {
   /* min: 680px, preferred: 70% viewport, max: 1100px (tweak as you like) */
-  max-width: clamp(680px, 70vw, 1100px);
-  margin: 40px auto;
-  padding: 0 20px;
+  width: 100%;
 }
 
 /* Mobile: use full width with small padding */

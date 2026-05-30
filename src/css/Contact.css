@@ -142,11 +142,11 @@
 }
 
 .contact-status--success {
-  border-color: color-mix(in oklab, #1fb56d 55%, var(--nav-border));
+  border-color: color-mix(in srgb, #1fb56d 55%, var(--nav-border));
 }
 
 .contact-status--error {
-  border-color: color-mix(in oklab, #e11d48 55%, var(--nav-border));
+  border-color: color-mix(in srgb, #e11d48 55%, var(--nav-border));
 }
 
 /* Honeypot hidden */
@@ -168,7 +168,7 @@
   border-radius: 999px;
 
   border: 1px solid var(--nav-border);
-  background: color-mix(in oklab, var(--surface) 92%, black);
+  background: color-mix(in srgb, var(--surface) 92%, black);
   color: var(--text);
   cursor: pointer;
   font-weight: 900;
@@ -333,7 +333,7 @@
 }
 
 .contact-qty.is-empty {
-  border-color: color-mix(in oklab, #e11d48 55%, var(--nav-border));
+  border-color: color-mix(in srgb, #e11d48 55%, var(--nav-border));
 }
 
 .contact-qty-btn {
@@ -373,13 +373,13 @@
   gap: 10px;
 }
 .contact-ref-remove--danger {
-  border-color: color-mix(in oklab, #e11d48 70%, var(--nav-border));
-  background: color-mix(in oklab, #e11d48 18%, var(--surface));
+  border-color: color-mix(in srgb, #e11d48 70%, var(--nav-border));
+  background: color-mix(in srgb, #e11d48 18%, var(--surface));
   color: #fff;
 }
 
 .contact-ref-remove--danger:hover {
-  background: color-mix(in oklab, #e11d48 28%, var(--surface));
+  background: color-mix(in srgb, #e11d48 28%, var(--surface));
   border-color: #e11d48;
 }
 
@@ -678,7 +678,7 @@
 }
 
 .cartbar--warn {
-  border-color: color-mix(in oklab, #e11d48 55%, var(--nav-border));
+  border-color: color-mix(in srgb, #e11d48 55%, var(--nav-border));
 }
 
 .cartbar-thumb {
@@ -1084,4 +1084,58 @@
   .contact-qty {
     max-width: 100%;
   }
+}
+
+/* Add to the END of Contact.css */
+
+/* ── Mode pill ── */
+.contact-mode-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+  letter-spacing: 0.02em;
+}
+
+.contact-mode-pill--customize {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.contact-mode-pill--quote {
+  background: color-mix(in srgb, var(--muted) 12%, transparent);
+  color: var(--muted);
+  border: 1px solid color-mix(in srgb, var(--muted) 25%, transparent);
+}
+
+/* ── Inline adv hint (customize mode, collapsed) ── */
+.contact-adv-hint--inline {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin: 6px 0 0;
+  line-height: 1.5;
+}
+
+/* ── Shop nudge (quote mode only) ── */
+.contact-shop-nudge {
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-align: center;
+  margin: 0 0 4px;
+  line-height: 1.5;
+}
+
+.contact-shop-nudge a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.contact-shop-nudge a:hover {
+  text-decoration: underline;
 }

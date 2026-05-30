@@ -24,8 +24,9 @@ const config = {
   },
   nav: {
     links: [
-      { to: "/quote", label: "Quotes" },
       { to: "/", label: "Home", end: true },
+      { to: "/shop", label: "Shop" },
+      { to: "/order", label: "Get Quote" },
       { to: "/gallery", label: "Gallery" },
       { to: "/faq", label: "FAQ" },
       { to: "/about", label: "About" },

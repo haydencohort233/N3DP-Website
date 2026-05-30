@@ -78,7 +78,7 @@
 
 
 .faq-section-header:hover {
-  background: color-mix(in oklab, var(--surface-2) 85%, var(--brand) 15%);
+  background: color-mix(in srgb, var(--surface-2) 85%, var(--brand) 15%);
 }
 
 .faq-section-title {
@@ -192,7 +192,7 @@
   margin-top: 8px;
   padding: 10px 12px;
   border-radius: calc(var(--radius) - 2px);
-  background: color-mix(in oklab, var(--surface-2) 85%, var(--brand) 8%);
+  background: color-mix(in srgb, var(--surface-2) 85%, var(--brand) 8%);
   border: 1px solid var(--nav-border);
   line-height: 1.5;
   color: var(--text);

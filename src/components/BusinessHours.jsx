@@ -1,16 +1,12 @@
+// src/components/BusinessHours.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import config from "../config";
 import "../css/BusinessHours.css";
 
 const DAY_KEYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 const DAY_LABELS = {
-  sun: "Sunday",
-  mon: "Monday",
-  tue: "Tuesday",
-  wed: "Wednesday",
-  thu: "Thursday",
-  fri: "Friday",
-  sat: "Saturday",
+  sun: "Sunday", mon: "Monday", tue: "Tuesday", wed: "Wednesday",
+  thu: "Thursday", fri: "Friday", sat: "Saturday",
 };
 
 function useMedia(q) {
@@ -36,56 +32,100 @@ function formatTime12h(t) {
   const hh = parseInt(hhStr, 10);
   const mm = parseInt(mmStr, 10);
   if (Number.isNaN(hh) || Number.isNaN(mm)) return t;
-
   const suffix = hh >= 12 ? "PM" : "AM";
   const h12 = ((hh + 11) % 12) + 1;
-  return `${h12}:${String(mm).padStart(2, "0")}${suffix}`;
+  // Drop :00 for clean display e.g. "10AM" instead of "10:00AM"
+  return mm === 0 ? `${h12}${suffix}` : `${h12}:${String(mm).padStart(2, "0")}${suffix}`;
 }
 
-function getStatus(now, daySchedule, closingSoonMinutes) {
+function getNextOpenDay(now, weekly) {
+  // Look ahead up to 7 days for the next open day
+  for (let i = 1; i <= 7; i++) {
+    const next = new Date(now);
+    next.setDate(next.getDate() + i);
+    const key = DAY_KEYS[next.getDay()];
+    const d = weekly[key];
+    if (d?.open && d?.close) {
+      const label = i === 1 ? "tomorrow" : DAY_LABELS[key];
+      return { label, time: formatTime12h(d.open) };
+    }
+  }
+  return null;
+}
+
+function getStatus(now, daySchedule, weekly, closingSoonMinutes) {
   if (!daySchedule?.open || !daySchedule?.close) {
-    return { label: "Hours unavailable", tone: "neutral" };
+    return { label: "Hours unavailable", shortLabel: "Hours unavailable", tone: "neutral" };
   }
 
-  const openMin = parseTimeToMinutes(daySchedule.open);
+  const openMin  = parseTimeToMinutes(daySchedule.open);
   const closeMin = parseTimeToMinutes(daySchedule.close);
   if (openMin == null || closeMin == null) {
-    return { label: "Hours unavailable", tone: "neutral" };
+    return { label: "Hours unavailable", shortLabel: "Hours unavailable", tone: "neutral" };
   }
 
   const minsNow = now.getHours() * 60 + now.getMinutes();
 
+  // Closed — show when we open next
   if (minsNow < openMin || minsNow >= closeMin) {
-    return { label: "Closed", tone: "closed" };
+    const openTime = formatTime12h(daySchedule.open);
+    if (minsNow < openMin) {
+      // Closed, opens later today
+      return {
+        label: `Opens at ${openTime}`,
+        shortLabel: `Opens ${openTime}`,
+        tone: "closed",
+      };
+    } else {
+      // Closed for the day — find next open day
+      const next = getNextOpenDay(now, weekly);
+      const nextStr = next ? ` ${next.label} ${next.time}` : "";
+      return {
+        label: `Closed${nextStr ? ` · Opens${nextStr}` : ""}`,
+        shortLabel: `Closed`,
+        tone: "closed",
+      };
+    }
   }
 
+  // Closing soon
   const minsLeft = closeMin - minsNow;
   if (minsLeft <= closingSoonMinutes) {
-    return { label: "Closing soon", tone: "soon" };
+    const closeTime = formatTime12h(daySchedule.close);
+    return {
+      label: `Closing Soon · ${closeTime}`,
+      shortLabel: `Closing ${closeTime}`,
+      tone: "soon",
+    };
   }
 
-  return { label: "Open", tone: "open" };
+  // Open — show closing time
+  const closeTime = formatTime12h(daySchedule.close);
+  return {
+    label: `Open · Closes ${closeTime}`,
+    shortLabel: `Open til ${closeTime}`,
+    tone: "open",
+  };
 }
 
 export default function BusinessHours({
-  variant = "inline", // "inline" | "bar"
+  variant = "inline",
   mobileOnly = false,
   desktopOnly = false,
   breakpointPx = 768,
 }) {
-  const isMobile = useMedia(`(max-width: ${breakpointPx}px)`);
+  const isMobile  = useMedia(`(max-width: ${breakpointPx}px)`);
   const isDesktop = !isMobile;
 
-  const shouldRender =
-    (!mobileOnly || isMobile) && (!desktopOnly || isDesktop);
+  const shouldRender = (!mobileOnly || isMobile) && (!desktopOnly || isDesktop);
 
-  const hours = config?.hours || config?.site?.hours;
-  const weekly = hours?.weekly || {};
+  const hours              = config?.hours || config?.site?.hours;
+  const weekly             = hours?.weekly || {};
   const closingSoonMinutes = hours?.closingSoonMinutes ?? 60;
 
   const [expanded, setExpanded] = useState(false);
-  const [now, setNow] = useState(() => new Date());
-  const wrapRef = useRef(null);
+  const [now, setNow]           = useState(() => new Date());
+  const wrapRef                 = useRef(null);
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 30_000);
@@ -97,9 +137,7 @@ export default function BusinessHours({
       if (!expanded) return;
       if (!wrapRef.current?.contains(e.target)) setExpanded(false);
     }
-    function onEsc(e) {
-      if (e.key === "Escape") setExpanded(false);
-    }
+    function onEsc(e) { if (e.key === "Escape") setExpanded(false); }
     document.addEventListener("mousedown", onDoc);
     document.addEventListener("keydown", onEsc);
     return () => {
@@ -109,11 +147,11 @@ export default function BusinessHours({
   }, [expanded]);
 
   const todayKey = DAY_KEYS[now.getDay()];
-  const today = weekly[todayKey];
+  const today    = weekly[todayKey];
 
   const status = useMemo(
-    () => getStatus(now, today, closingSoonMinutes),
-    [now, today, closingSoonMinutes]
+    () => getStatus(now, today, weekly, closingSoonMinutes),
+    [now, today, weekly, closingSoonMinutes]
   );
 
   const todayHours =
@@ -124,14 +162,11 @@ export default function BusinessHours({
   const missingConfig = !hours || Object.keys(weekly).length === 0;
 
   const rootClass = `bh bh--${variant} bh--${status.tone}`;
-  const panelId = `bh-panel-${variant}`;
+  const panelId   = `bh-panel-${variant}`;
 
-  const label =
-    variant === "inline"
-      ? `${status.label} ${todayHours.replace(" – ", "–")}`
-      : `${status.label} ${todayHours}`;
+  // Use shortLabel on inline (compact), full label on bar
+  const displayLabel = variant === "inline" ? status.shortLabel : status.label;
 
-  // Now it's safe to skip rendering
   if (!shouldRender) return null;
 
   return (
@@ -147,7 +182,7 @@ export default function BusinessHours({
         <span className="bh__main">
           <span className="bh__dot" aria-hidden="true" />
           <span className="bh__text">
-            {missingConfig ? "Business hours: not configured" : label}
+            {missingConfig ? "Hours not configured" : displayLabel}
           </span>
         </span>
         <span className="bh__chev" aria-hidden="true">
@@ -172,27 +207,20 @@ export default function BusinessHours({
                   d?.open && d?.close
                     ? `${formatTime12h(d.open)} – ${formatTime12h(d.close)}`
                     : "Closed";
-
                 return (
-                  <div
-                    key={k}
-                    className={`bh__row ${k === todayKey ? "is-today" : ""}`}
-                  >
+                  <div key={k} className={`bh__row ${k === todayKey ? "is-today" : ""}`}>
                     <span className="bh__day">{DAY_LABELS[k]}</span>
                     <span className="bh__time">{hoursText}</span>
                   </div>
                 );
               })}
             </div>
-
             {config?.site?.phone && (
               <div className="bh__contact">
                 <a className="bh__email" href={`mailto:${config.site.email}`}>
                   {config.site.email}
                 </a>
-                <a className="bh__phone">
-                  {config.site.phone}
-                </a>
+                <a className="bh__phone">{config.site.phone}</a>
               </div>
             )}
           </>

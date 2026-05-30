@@ -1,0 +1,132 @@
+/* src/css/Shop.css */
+
+.shop-page {
+  min-height: 60vh;
+}
+
+/* ── Header ── */
+.shop-hero {
+  padding: 48px 24px 32px;
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.shop-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+}
+
+.shop-subtitle {
+  font-size: 1rem;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.shop-subtitle a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.shop-subtitle a:hover {
+  text-decoration: underline;
+}
+
+/* ── Grid ── */
+.shop-grid-wrap {
+  padding: 0 24px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.shop-grid {
+  display: grid;
+  gap: 20px;
+
+  /* Responsive columns via CSS vars set inline */
+  grid-template-columns: repeat(var(--shop-cols-desktop, 4), 1fr);
+}
+
+@media (max-width: 1023px) {
+  .shop-grid {
+    grid-template-columns: repeat(var(--shop-cols-tablet, 3), 1fr);
+  }
+}
+
+@media (max-width: 479px) {
+  .shop-grid {
+    grid-template-columns: repeat(var(--shop-cols-mobile, 2), 1fr);
+    gap: 12px;
+  }
+}
+
+/* ── Empty state ── */
+.shop-empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 48px 0;
+  font-size: 1rem;
+}
+
+/* ── Bottom CTA ── */
+.shop-cta {
+  background: var(--surface);
+  border-top: 1px solid var(--surface-2);
+  padding: 48px 24px;
+}
+
+.shop-cta-inner {
+  max-width: 540px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.shop-cta-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.shop-cta-sub {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.shop-cta-btn {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 12px 28px;
+  background: var(--accent);
+  color: var(--brand-contrast);
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.shop-cta-btn:hover {
+  opacity: 0.88;
+  color: var(--brand-contrast);
+}
+
+@media (max-width: 480px) {
+  .shop-hero {
+    padding: 32px 16px 24px;
+  }
+  .shop-grid-wrap {
+    padding: 0 16px 32px;
+  }
+}

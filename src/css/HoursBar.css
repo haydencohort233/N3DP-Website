@@ -33,7 +33,7 @@
   height: 10px;
   border-radius: 999px;
   flex: 0 0 auto;
-  box-shadow: 0 0 0 2px color-mix(in oklab, var(--nav-bg) 75%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--nav-bg) 75%, transparent);
 }
 
 .hoursbar__text {
@@ -83,7 +83,7 @@
 }
 
 .hoursbar__row.is-today {
-  outline: 2px solid color-mix(in oklab, var(--accent) 45%, transparent);
+  outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 .hoursbar__day {
@@ -116,21 +116,21 @@
    Use gentle tint so it looks professional on both themes.
 */
 .hoursbar--open .hoursbar__toggle {
-  background: color-mix(in oklab, #1fb56d 22%, var(--nav-bg));
+  background: color-mix(in srgb, #1fb56d 22%, var(--nav-bg));
 }
 .hoursbar--open .hoursbar__dot {
   background: #1fb56d;
 }
 
 .hoursbar--soon .hoursbar__toggle {
-  background: color-mix(in oklab, #f5b301 22%, var(--nav-bg));
+  background: color-mix(in srgb, #f5b301 22%, var(--nav-bg));
 }
 .hoursbar--soon .hoursbar__dot {
   background: #f5b301;
 }
 
 .hoursbar--closed .hoursbar__toggle {
-  background: color-mix(in oklab, #e84d4d 22%, var(--nav-bg));
+  background: color-mix(in srgb, #e84d4d 22%, var(--nav-bg));
 }
 .hoursbar--closed .hoursbar__dot {
   background: #e84d4d;

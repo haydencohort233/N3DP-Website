@@ -641,7 +641,7 @@ const galleryData = [
     legacyId: 42,
     title: "Lego Brick Flower Vase",
     description:
-      "A 4x4 LEGO Brick for a vase! Now that's awesome. Put your real or fake flowers in here as a stunning decoration.",
+      "A 2x4 LEGO Brick for a vase! Now that's awesome. Put your real or fake flowers in here as a stunning decoration.",
     date: "2026-2-11",
     category: "Gift",
     tags: ["LEGO", "Valentine's Day", "Flowers"],
@@ -655,11 +655,12 @@ const galleryData = [
     title: "Mario AirPods Mystery Block Case",
     description:
       "A mystery block case for your AirPods Pro - No glue or screws required. Perfect for any Mario fan.",
-    date: "2026-3-10",
+    date: "2026-3-5",
     category: "Gift",
     tags: ["Mario", "Nintendo"],
     src: "/assets/gallery/photo43.png",
     photos: [{ src: "/assets/gallery/photo43.png" }],
+    quotable: false,
   },
 
   {
@@ -668,11 +669,154 @@ const galleryData = [
     title: "Mario Piggy Bank",
     description:
       "A Mario Mushroom that works as a piggy bank, the head unscrews off when it's full! These come small or large.",
-    date: "2026-3-05",
+    date: "2026-3-10",
     category: "Gift",
     tags: ["Mario", "Nintendo", "Mushroom"],
     src: "/assets/gallery/photo44.png",
     photos: [{ src: "/assets/gallery/photo44.png" }],
+  },
+
+  {
+    id: "easter-peeps-keychain",
+    legacyId: 45,
+    title: "Keychain Peeps",
+    description:
+      "A Mario Mushroom that works as a piggy bank, the head unscrews off when it's full! These come small or large.",
+    date: "2026-3-20",
+    category: "Easter",
+    tags: ["Easter", "Peeps", "Bunny"],
+    src: "/assets/gallery/photo45.png",
+    photos: [{ src: "/assets/gallery/photo45.png" }],
+  },
+  
+  {
+    id: "dragon-dagger-prop",
+    legacyId: 46,
+    title: "RuneScape Dragon Dagger (p++)",
+    description:
+      "A Mario Mushroom that works as a piggy bank, the head unscrews off when it's full! These come small or large.",
+    date: "2026-3-30",
+    category: "Props",
+    tags: ["Video Games", "RuneScape", "Dagger"],
+    src: "/assets/gallery/photo46.png",
+    photos: [{ src: "/assets/gallery/photo46.png" }],
+  },
+    
+  {
+    id: "gag-screwdrivers",
+    legacyId: 47,
+    title: "Prank Double Screwdrivers",
+    description:
+      "A Mario Mushroom that works as a piggy bank, the head unscrews off when it's full! These come small or large.",
+    date: "2026-4-01",
+    category: "Props",
+    tags: ["Video Games", "RuneScape", "Dagger"],
+    src: "/assets/gallery/photo47.png",
+    photos: [{ src: "/assets/gallery/photo47.png" }],
+  },
+      
+  {
+    id: "bobomb-container",
+    legacyId: 48,
+    title: "Mario Bob-Omb Container",
+    description:
+      "An adorable Bob-Omb to sit on your shelf. Take off the cap and store anything you want inside, maybe jelly beans?",
+    date: "2026-4-10",
+    category: "Nintendo",
+    tags: ["Video Games", "Mario", "Household"],
+    src: "/assets/gallery/photo48.png",
+    photos: [{ src: "/assets/gallery/photo48.png" }],
+  },
+        
+  {
+    id: "gamecube-controller-stand",
+    legacyId: 49,
+    title: "GameCube Controller Stand",
+    description:
+      "Used to safely display your controllers. Very lightweight and simple design.",
+    date: "2026-4-15",
+    category: "Nintendo",
+    tags: ["Video Games", "GameCube", "Household"],
+    src: "/assets/gallery/photo49.png",
+    photos: [{ src: "/assets/gallery/photo49.png" }],
+  },
+        
+  {
+    id: "gamecube-game-stand",
+    legacyId: 50,
+    title: "GameCube Game Stand (Japanese)",
+    description:
+      "A custom GameCube Game Holder for Japanese GameCube games. Regular game holder can also be purchased upon request.",
+    date: "2026-4-22",
+    category: "Nintendo",
+    tags: ["Video Games", "GameCube", "Household"],
+    src: "/assets/gallery/photo50.png",
+    photos: [{ src: "/assets/gallery/photo50.png" }],
+  },
+          
+  {
+    id: "blockbuster-vhs-stand",
+    legacyId: 51,
+    title: "Blockbuster VHS Display Stand",
+    description:
+      "A display stand designed to show off your currently watching movie! VHS or DVDs or Blurays all work too.",
+    date: "2026-4-30",
+    category: "Retro",
+    tags: ["Movies", "Gifts", "Household"],
+    src: "/assets/gallery/photo51.png",
+    photos: [{ src: "/assets/gallery/photo51.png" }],
+  },
+            
+  {
+    id: "oreo-stash-container",
+    legacyId: 52,
+    title: "Oreo Stash Container",
+    description:
+      "Lifelike Oreo Cookie that you unscrew to put things inside of. Order it even bigger or exact Oreo size!",
+    date: "2026-5-10",
+    category: "Gifts",
+    tags: ["Gifts", "Food"],
+    src: "/assets/gallery/photo52.png",
+    photos: [{ src: "/assets/gallery/photo52.png" }],
+  },
+            
+  {
+    id: "soda-can-koozie",
+    legacyId: 53,
+    title: "Soda Can Koozie",
+    description:
+      "A cute Igloo Container designed to hold your 12oz soda cans! Keeps it cooler longer and you can put the lid on!",
+    date: "2026-5-15",
+    category: "Gifts",
+    tags: ["Gifts", "Household"],
+    src: "/assets/gallery/photo53.png",
+    photos: [{ src: "/assets/gallery/photo53.png" }],
+  },
+            
+  {
+    id: "little-tikes-sandbox",
+    legacyId: 54,
+    title: "Little Tike's Mini Sandbox",
+    description:
+      "Have your own piece of nostalgia at home with a Tike's Sandbox! Great for your desk or a Zen garden at home.",
+    date: "2026-5-20",
+    category: "Gifts",
+    tags: ["Gifts", "Retro", "Household"],
+    src: "/assets/gallery/photo54.png",
+    photos: [{ src: "/assets/gallery/photo54.png" }],
+  },
+            
+  {
+    id: "n64-display-tower",
+    legacyId: 55,
+    title: "Nintendo 64 Game Display",
+    description:
+      "A display stand designed to show off your currently watching movie! VHS or DVDs or Blurays all work too.",
+    date: "2026-5-25",
+    category: "Nintendo",
+    tags: ["Retro", "Gifts", "Video Games"],
+    src: "/assets/gallery/photo55.png",
+    photos: [{ src: "/assets/gallery/photo55.png" }],
   },
 ];
 

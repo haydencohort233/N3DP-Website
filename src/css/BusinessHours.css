@@ -24,7 +24,7 @@
   height: 10px;
   border-radius: 999px;
   flex: 0 0 auto;
-  box-shadow: 0 0 0 2px color-mix(in oklab, var(--nav-bg) 70%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--nav-bg) 70%, transparent);
 }
 
 .bh__text {
@@ -70,7 +70,19 @@
 }
 
 .bh__row.is-today {
-  outline: 2px solid color-mix(in oklab, var(--accent) 45%, transparent);
+  background: color-mix(in srgb, var(--accent) 15%, var(--surface-2));
+  border-color: var(--accent);
+  outline: none;
+}
+
+.bh__row.is-today .bh__day {
+  color: var(--accent);
+  font-weight: 750;
+}
+
+.bh__row.is-today .bh__time {
+  color: var(--text);
+  font-weight: 600;
 }
 
 .bh__day {
@@ -220,30 +232,30 @@
    - Dot matches status
 =========================== */
 .bh--open.bh--bar .bh__toggle {
-  background: color-mix(in oklab, #1fb56d 22%, var(--nav-bg));
+  background: color-mix(in srgb, #1fb56d 22%, var(--nav-bg));
 }
 .bh--open.bh--inline .bh__toggle {
-  background: color-mix(in oklab, #1fb56d 24%, var(--surface-2));
+  background: color-mix(in srgb, #1fb56d 24%, var(--surface-2));
 }
 .bh--open .bh__dot {
   background: #1fb56d;
 }
 
 .bh--soon.bh--bar .bh__toggle {
-  background: color-mix(in oklab, #f5b301 22%, var(--nav-bg));
+  background: color-mix(in srgb, #f5b301 22%, var(--nav-bg));
 }
 .bh--soon.bh--inline .bh__toggle {
-  background: color-mix(in oklab, #f5b301 24%, var(--surface-2));
+  background: color-mix(in srgb, #f5b301 24%, var(--surface-2));
 }
 .bh--soon .bh__dot {
   background: #f5b301;
 }
 
 .bh--closed.bh--bar .bh__toggle {
-  background: color-mix(in oklab, #e84d4d 22%, var(--nav-bg));
+  background: color-mix(in srgb, #e84d4d 22%, var(--nav-bg));
 }
 .bh--closed.bh--inline .bh__toggle {
-  background: color-mix(in oklab, #e84d4d 24%, var(--surface-2));
+  background: color-mix(in srgb, #e84d4d 24%, var(--surface-2));
 }
 .bh--closed .bh__dot {
   background: #e84d4d;

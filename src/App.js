@@ -14,6 +14,7 @@ const About = lazy(() => import("./pages/About"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const FAQ = lazy(() => import("./pages/FAQ"));
 const Contact = lazy(() => import("./pages/Contact"));
+const Shop = lazy(() => import("./pages/Shop"));
 
 function AppRoutes() {
   useGaPageViews();
@@ -36,7 +37,15 @@ function AppRoutes() {
             }
           />
           <Route
-            path="/quote"
+            path="/shop"
+            element={
+              <Layout>
+                <Shop />
+              </Layout>
+            }
+          />
+          <Route
+            path="/order"
             element={
               <Layout>
                 <Contact />

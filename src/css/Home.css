@@ -134,3 +134,173 @@
     width: 100%;
   }
 }
+
+/* src/css/Home.css — replace or merge with existing */
+
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Shared section header ── */
+.home-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+.home-section-title {
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+
+.home-section-sub {
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.home-viewall {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 6px 0;
+  transition: opacity 0.15s;
+}
+
+.home-viewall:hover {
+  opacity: 0.75;
+  color: var(--accent);
+}
+
+/* ── Shop section ── */
+.home-shop {
+  padding: 36px 24px 40px;
+  border-bottom: 1px solid var(--surface-2);
+}
+
+.home-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+/* ── Gallery section ── */
+.home-gallery {
+  padding: 36px 24px 48px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .home-shop,
+  .home-gallery {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .home-products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .home-products-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* src/css/Home.css */
+
+.home {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Shared section header ── */
+.home-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+.home-section-title {
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+
+.home-section-sub {
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.home-viewall {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 6px 0;
+  transition: opacity 0.15s;
+}
+
+.home-viewall:hover {
+  opacity: 0.75;
+  color: var(--accent);
+}
+
+/* ── Shop section ── */
+.home-shop {
+  padding: 36px 24px 40px;
+  border-bottom: 1px solid var(--surface-2);
+}
+
+/* Responsive grid via CSS vars */
+.home-products-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(var(--home-cols-desktop, 4), 1fr);
+}
+
+@media (max-width: 1023px) {
+  .home-products-grid {
+    grid-template-columns: repeat(var(--home-cols-tablet, 2), 1fr);
+  }
+}
+
+@media (max-width: 479px) {
+  .home-products-grid {
+    grid-template-columns: repeat(var(--home-cols-mobile, 2), 1fr);
+    gap: 12px;
+  }
+}
+
+/* ── Gallery section ── */
+.home-gallery {
+  padding: 36px 24px 48px;
+}
+
+/* ── Responsive padding ── */
+@media (max-width: 600px) {
+  .home-shop,
+  .home-gallery {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}

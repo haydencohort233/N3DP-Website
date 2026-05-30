@@ -1,27 +1,31 @@
-.nav { position: sticky; top: 0; z-index: 10000; background: var(--nav-bg); color: var(--text); border-bottom: 1px solid var(--nav-border); }
-.nav-inner { position: relative; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px; padding: 10px 16px; }
+/* src/css/NavBar.css — full replacement */
 
-/* Brand (left) */
-.nav-brand { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; }
-.brand-logo { width: 28px; height: 28px; background: var(--surface-2); border-radius: 6px; }
-.brand-text { font-weight: 700; letter-spacing: .3px; color: var(--text); }
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 10000;
+  background: var(--nav-bg);
+  color: var(--text);
+  border-bottom: 1px solid var(--nav-border);
+}
 
-/* Desktop centered links */
-.nav-links { position: absolute; left: 50%; transform: translateX(-50%); display: inline-flex; gap: 8px; }
-.nav-link { padding: 10px 14px; border-radius: 10px; color: var(--muted); text-decoration: none; font-weight: 500; -webkit-tap-highlight-color: transparent; }
-.nav-link:hover { background: var(--surface-2); color: var(--text); }
-.nav-link.active { background: var(--surface-2); color: var(--text); }
+/* ── Top row ── */
+.nav-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+}
 
-/* Mobile inline nav (right area) */
-.nav-links-mobile { display: none; gap: 8px; justify-self: end; align-items: center; }
-.more-toggle { width: 44px; height: 40px; border: 1px solid var(--nav-border); background: var(--surface-2); color: var(--text); border-radius: 10px; cursor: pointer; }
-
-/* Mobile dropdown (overflow) */
-.nav-dropdown { display: none; }
-
-/* Hidden measurement row (for width calc) */
-.nav-measure { position: absolute; visibility: hidden; height: 0; overflow: hidden; white-space: nowrap; }
-.nav-link-measure { display: inline-block; padding: 10px 14px; font-weight: 500; }
+/* ── Brand ── */
+.nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+}
 
 .brand-home {
   display: inline-flex;
@@ -35,32 +39,162 @@
   height: 34px;
   object-fit: contain;
   display: block;
+  flex-shrink: 0;
 }
 
+.brand-logo {
+  width: 28px;
+  height: 28px;
+  background: var(--surface-2);
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.brand-text {
+  font-weight: 700;
+  letter-spacing: .3px;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* Show full name by default, hide short */
+.brand-text--short { display: none; }
+.brand-text--full  { display: inline; }
+
+/* ── Desktop centered links ── */
+.nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  gap: 8px;
+}
+
+.nav-link {
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s, color 0.15s;
+}
+
+.nav-link:hover { background: var(--surface-2); color: var(--text); }
+.nav-link.active { background: var(--surface-2); color: var(--text); }
+
+/* ── Desktop right slot ── */
 .nav-right {
-  justify-self: end;
   display: flex;
   align-items: center;
   gap: 10px;
+  justify-self: end;
 }
 
-/* Hide right-side slot on mobile */
-@media (max-width: 868px) {
-  .nav-right { display: none; }
+/* ── Mobile tab bar — hidden on desktop ── */
+.nav-tabs {
+  display: none;
 }
 
-/* -------- Responsive -------- */
+/* ── Hidden measurement row ── */
+.nav-measure {
+  position: absolute;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.nav-link-measure {
+  display: inline-block;
+  padding: 10px 14px;
+  font-weight: 500;
+}
+
+/* ── Responsive ── */
 @media (max-width: 868px) {
-  .nav-inner { grid-template-columns: auto 1fr; }
-  .nav-links { display: none; }                 /* hide desktop center */
-  .nav-links-mobile { display: flex; }
-  .nav-dropdown {
-    display: grid; gap: 6px; padding: 8px 12px 12px;
-    border-top: 1px solid var(--nav-border); background: var(--nav-bg);
+  /* Top row: brand left, nothing right */
+  .nav-inner {
+    grid-template-columns: auto 1fr;
+    padding: 8px 12px;
   }
-  .nav-dropdown .nav-link { padding: 12px 14px; border-radius: 12px; background: var(--surface-2); color: var(--text); }
-  .nav-dropdown .nav-link.active { background: var(--surface); }
+
+  /* Hide desktop links */
+  .nav-links { display: none; }
+
+  /* Show hours in right slot on mobile — smaller */
+  .nav-right {
+    display: flex;
+    justify-self: end;
+  }
+
+  .nav-right .bh-inline {
+    font-size: 0.72rem;
+    padding: 3px 8px;
+  }
+
+  /* Show short brand name, hide full */
+  .brand-text--full  { display: none; }
+  .brand-text--short { display: inline; }
+
+  /* ── Tab bar ── */
+  .nav-tabs {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border-top: 1px solid var(--nav-border);
+    background: var(--nav-bg);
+  }
+
+  .nav-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: none;
+    text-align: center;
+    border-right: 1px solid var(--nav-border);
+    transition: background 0.15s, color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+  }
+
+  .nav-tab:last-child {
+    border-right: none;
+  }
+
+  .nav-tab:hover {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+
+  .nav-tab.active {
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    font-weight: 700;
+  }
+}
+
+/* Very small screens — allow 2 lines in tabs if needed */
+@media (max-width: 380px) {
+  .nav-tab {
+    font-size: 0.65rem;
+    padding: 8px 2px;
+  }
 }
 
 /* Touch polish */
-@media (hover: none) { .nav-link { -webkit-user-select: none; user-select: none; } }
+@media (hover: none) {
+  .nav-link,
+  .nav-tab {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}

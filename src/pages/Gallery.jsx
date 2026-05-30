@@ -4,8 +4,7 @@ import galleryData from "../config/galleryData";
 import SEO from "../components/SEO";
 import config from "../config";
 import PhotoViewer from "../components/PhotoViewer";
-import "../css/PhotoViewer.css";
-
+import "../css/Gallery.css";
 
 export default function Gallery() {
   const [itemsPerPage, setItemsPerPage] = useState(24);
@@ -382,20 +381,20 @@ const visibleEntries = filteredEntries.slice(startIndex, startIndex + itemsPerPa
         ))}
       </div>
 
-<PhotoViewer
-  images={categoryFiltered}
-  index={lightboxEntry?.itemIndex ?? null}
-  initialPhotoIndex={lightboxEntry?.photoIndex ?? 0}
-  onClose={() => setLightboxEntry(null)}
-  onIndexChange={(newItemIndex) => {
-    // when they arrow next/prev item, start on the first photo
-    setLightboxEntry({ itemIndex: newItemIndex, photoIndex: 0 });
-  }}
-  allowTagClick
-  onTagClick={handleTagClick}
-  quoteTo="/quote"
-  quoteButtonLabel="Get Quote"
-/>
+    <PhotoViewer
+      images={categoryFiltered}
+      index={lightboxEntry?.itemIndex ?? null}
+      initialPhotoIndex={lightboxEntry?.photoIndex ?? 0}
+      onClose={() => setLightboxEntry(null)}
+      onIndexChange={(newItemIndex) => {
+        // when they arrow next/prev item, start on the first photo
+        setLightboxEntry({ itemIndex: newItemIndex, photoIndex: 0 });
+      }}
+      allowTagClick
+      onTagClick={handleTagClick}
+      quoteTo="/order"
+      quoteButtonLabel="Order"
+    />
     </main>
   );
 }
