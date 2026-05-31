@@ -50,24 +50,15 @@ export default function GalleryModal({
   // Quote config
   quoteTo = "/order",
   quoteButtonLabel = "Request This",
+  quoteAction = null, // if set, opens this URL directly instead of quote form
 }) {
   const navigate = useNavigate();
   const closeBtnRef = useRef(null);
 
   const len = images.length;
-    const safeIndex = useMemo(() => {
-    if (typeof index !== "number") return null;
-    return clampIndex(index, len);
-    }, [index, len]);
-
-    const isOpen = safeIndex !== null && images[safeIndex];
+  const safeIndex = useMemo(() => clampIndex(index, len), [index, len]);
+  const isOpen = safeIndex !== null && images[safeIndex];
   const item = isOpen ? images[safeIndex] : null;
-
-  console.log("MODAL OPEN", {
-  safeIndex,
-  imagesLen: images.length,
-  item
-});
 
   const photos = useMemo(() => (item ? normalizePhotos(item) : []), [item]);
   const [photoIdx, setPhotoIdx] = useState(0);
@@ -106,6 +97,14 @@ export default function GalleryModal({
 
   const goToQuote = () => {
     if (!item || !isQuotable) return;
+    if (quoteAction) {
+      const a = document.createElement("a");
+      a.href = quoteAction;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.click();
+      return;
+    }
     const params = new URLSearchParams();
     params.set("refId", String(item.id));
     params.set("refPhotoIndex", String(safePhotoIdx));
@@ -118,7 +117,6 @@ export default function GalleryModal({
     if (!isOpen) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    try { closeBtnRef.current?.focus(); } catch {}
     const onKey = (e) => {
       if (e.key === "Escape") close();
       // Arrow keys navigate between gallery items (newest-first)

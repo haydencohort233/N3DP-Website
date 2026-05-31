@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import galleryData from "../config/galleryData";
-import PhotoViewer from "./PhotoViewer";
+import GalleryModal from "./GalleryModal";
 import "../css/PhotoGallery.css";
 
 function normalizeArr(v) {
@@ -192,13 +192,12 @@ export default function PhotoGallery({
 
       <div className="pg-grid" ref={gridRef}>
         {visible.map((img, idx) => (
-          <button
-            key={img.id || `${img.src}-${idx}`}
-            type="button"
-            className="pg-card"
-            onClick={() => openLightboxFromVisible(idx)}
-            aria-label={`Open photo: ${img.title || "Photo"}`}
-          >
+        <div
+          key={img.id || `${img.src}-${idx}`}
+          className="pg-card"
+          onClick={() => openLightboxFromVisible(idx)}
+          aria-label={`Open photo: ${img.title || "Photo"}`}
+        >
             <div className="pg-media">
               <img src={img.src} alt={img.title || ""} loading="lazy" />
             </div>
@@ -214,11 +213,11 @@ export default function PhotoGallery({
                 </div>
               )}
             </div>
-          </button>
+          </div>
         ))}
       </div>
       {enableLightbox && lbIndex !== null && (
-        <PhotoViewer
+        <GalleryModal
           images={filtered}
           index={lbIndex}
           onClose={() => setLbIndex(null)}

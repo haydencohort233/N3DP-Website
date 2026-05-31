@@ -14,7 +14,7 @@ export default function About() {
     <main className="about-page">
       <SEO
         title={`About — ${config.site.name}`}
-        description="Learn about our Nashville-based 3D printing and CAD/design services, what we specialize in, and the types of projects we take on."
+        description="Learn about our Nashville-based 3D printing and CAD design services, what we specialize in, and the types of projects we take on."
       />
 
       <header className="about-hero">

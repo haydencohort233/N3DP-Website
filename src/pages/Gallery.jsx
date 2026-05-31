@@ -1,9 +1,10 @@
 // src/pages/Gallery.jsx
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import galleryData from "../config/galleryData";
 import SEO from "../components/SEO";
 import config from "../config";
-import PhotoViewer from "../components/PhotoViewer";
+import GalleryModal from "../components/GalleryModal";
 import "../css/Gallery.css";
 
 export default function Gallery() {
@@ -12,8 +13,11 @@ export default function Gallery() {
 
   // PhotoViewer
   const [lightboxEntry, setLightboxEntry] = useState(null); // { itemIndex, photoIndex, ... }
-
-  const [selectedCategories, setSelectedCategories] = useState([]); // [] = All
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedCategories, setSelectedCategories] = useState(() => {
+  const category = searchParams.get("category");
+    return category ? [category] : [];
+  }); // [] = All
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("newest"); // "newest" | "oldest" | "title-asc" | "title-desc"
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -182,6 +186,16 @@ const visibleEntries = filteredEntries.slice(startIndex, startIndex + itemsPerPa
     setLightboxEntry(null);
   }, [selectedCategories, searchTerm, sortOption, itemsPerPage, currentPage]);
 
+  useEffect(() => {
+    if (selectedCategories.length === 1) {
+      setSearchParams({
+        category: selectedCategories[0],
+      });
+    } else {
+      setSearchParams({});
+    }
+  }, [selectedCategories, setSearchParams]);
+
   // Close filter popover when clicking outside
   useEffect(() => {
     if (!isFilterOpen) return;
@@ -212,8 +226,16 @@ const visibleEntries = filteredEntries.slice(startIndex, startIndex + itemsPerPa
   return (
     <main className="gallery-page">
     <SEO
-      title={`Gallery — ${config.site.name}`}
-      description="Browse recent 3D prints and prototypes from our Nashville shop to explore materials, finishes, and example parts."
+      title={
+        selectedCategories.length === 1
+          ? `${selectedCategories[0]} 3D Prints — ${config.site.name}`
+          : `Gallery — ${config.site.name}`
+      }
+      description={
+        selectedCategories.length === 1
+          ? `Browse our ${selectedCategories[0]} 3D printed creations and custom projects.`
+          : "Browse recent 3D prints and prototypes from our Nashville shop to explore materials, finishes, and example parts."
+      }
     />
     <h1>Gallery</h1>
 
@@ -310,7 +332,7 @@ const visibleEntries = filteredEntries.slice(startIndex, startIndex + itemsPerPa
         <div className="gallery-search">
           <input
             type="text"
-            placeholder="Search for images.."
+            placeholder="Search titles, tags, categories..."
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
@@ -381,9 +403,10 @@ const visibleEntries = filteredEntries.slice(startIndex, startIndex + itemsPerPa
         ))}
       </div>
 
-    <PhotoViewer
-      images={categoryFiltered}
-      index={lightboxEntry?.itemIndex ?? null}
+{lightboxEntry !== null && (
+  <GalleryModal
+    images={categoryFiltered}
+    index={lightboxEntry?.itemIndex ?? null}
       initialPhotoIndex={lightboxEntry?.photoIndex ?? 0}
       onClose={() => setLightboxEntry(null)}
       onIndexChange={(newItemIndex) => {
@@ -395,6 +418,7 @@ const visibleEntries = filteredEntries.slice(startIndex, startIndex + itemsPerPa
       quoteTo="/order"
       quoteButtonLabel="Order"
     />
+    )}
     </main>
   );
 }

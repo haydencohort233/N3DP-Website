@@ -18,7 +18,7 @@ const seoConfig = {
   // the SEO component should NOT render LocalBusiness JSON-LD.
   business: {
     name: "Nashville 3D Prints",
-    telephone: "", // e.g. "+1-615-555-5555"
+    telephone: "209-202-3221", // e.g. "+1-615-555-5555"
     address: {
       streetAddress: "", // "123 Main St"
       addressLocality: "Nashville",

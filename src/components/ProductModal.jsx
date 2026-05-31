@@ -12,18 +12,16 @@ function getPhotos(product) {
 
 export default function ProductModal({ product, onClose }) {
   const navigate = useNavigate();
-  const closeBtnRef = useRef(null);
   const photos = getPhotos(product);
   const [photoIdx, setPhotoIdx] = useState(0);
 
   const safeIdx = Math.max(0, Math.min(photoIdx, photos.length - 1));
   const activePhoto = photos[safeIdx] || { src: product.src, label: "" };
 
-  // Lock scroll, focus close button
+  // Lock scrolling
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    try { closeBtnRef.current?.focus(); } catch {}
     return () => { document.body.style.overflow = prev; };
   }, []);
 
@@ -63,7 +61,7 @@ export default function ProductModal({ product, onClose }) {
     >
       <div className="pm">
         {/* Close */}
-        <button ref={closeBtnRef} className="pm-close" onClick={onClose} aria-label="Close">
+        <button className="pm-close" onClick={onClose} aria-label="Close">
           ✕
         </button>
 

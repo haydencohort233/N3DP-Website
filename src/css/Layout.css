@@ -1,11 +1,10 @@
 /* layout.css */
 /* Centered readable column on desktop/tablet */
 .page-container {
-  /* min: 680px, preferred: 70% viewport, max: 1100px (tweak as you like) */
   width: 100%;
+  overflow-x: clip;
 }
 
-/* Mobile: use full width with small padding */
 @media (max-width: 768px) {
   .page-container {
     max-width: 100%;
