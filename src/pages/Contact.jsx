@@ -332,7 +332,13 @@ export default function Contact() {
         </header>
         <section className="contact-shell">
           <div className="contact-success-card" role="status" aria-live="polite">
-            {status.quoteId ? <div className="contact-success-id">Reference ID: #{status.quoteId}</div> : null}
+            {status.quoteId ? <div className="contact-success-id">Reference ID: #{status.quoteId}</div> 
+            : null
+            }
+              <p className="contact-success-email">
+                We'll reach out to <strong>{form.email}</strong> within{" "}
+                {isCustomize ? "24 hours" : "24–72 hours"}.
+              </p>
             {(contactEmail || contactPhone) && (
               <div className="contact-success-contact">
                 <div className="contact-success-contact-title">Need us sooner?</div>
@@ -354,7 +360,7 @@ export default function Contact() {
   const pageTitle    = isCustomize ? "Customize Your Order" : "Request a Quote";
   const pageSubtitle = isCustomize
     ? "Tell us any changes you'd like — color, size, material. We'll confirm and get started."
-    : "For detailed or technical prints. Describe dimensions, infill, layer height, and tolerances. We'll reply with pricing within 24–72 hours.";
+    : "Describe what you need and we'll reply with pricing within 24–72 hours. Not sure what to include? Just tell us what it's for.";
   const submitLabel  = isCustomize ? "Send Order Request" : "Submit Quote";
   const messagePlaceholder = isCustomize
     ? "Any changes from the original? Different color, size, or material? Leave blank if you want it as-is."

@@ -63,6 +63,8 @@ export default function GalleryModal({
   const photos = useMemo(() => (item ? normalizePhotos(item) : []), [item]);
   const [photoIdx, setPhotoIdx] = useState(0);
 
+  const [copied, setCopied] = useState(false);
+
   // Reset photo index when item changes
   useEffect(() => {
     if (!item) return;
@@ -111,6 +113,45 @@ export default function GalleryModal({
     close();
     navigate(`${quoteTo}?${params.toString()}`);
   };
+
+const handleShare = async () => {
+  const url = window.location.href;
+  const shareData = {
+    title: displayTitle,
+    text: `Check out this item on Nashville3DPrints!`,
+    url,
+  };
+
+  if (navigator.share && navigator.canShare?.(shareData)) {
+    try {
+      await navigator.share(shareData);
+    } catch (err) {
+      if (err.name !== "AbortError") copyToClipboard(url);
+    }
+  } else {
+    copyToClipboard(url);
+  }
+};
+
+const copyToClipboard = (url) => {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  } else {
+    const el = document.createElement("textarea");
+    el.value = url;
+    el.style.position = "fixed";
+    el.style.opacity = "0";
+    document.body.appendChild(el);
+    el.select();                  // ← removed el.focus()
+    document.execCommand("copy");
+    document.body.removeChild(el);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+};
 
   // Lock scroll + keyboard
   useEffect(() => {
@@ -217,7 +258,7 @@ export default function GalleryModal({
             <h2 className="pm-title">{displayTitle}</h2>
           </div>
 
-          <div className="pm-category">{category}</div>
+          <div className="pm-category">Category: {category}</div>
 
           {activePhoto?.label && (
             <div className="pm-photo-label">Viewing: {activePhoto.label}</div>
@@ -256,19 +297,23 @@ export default function GalleryModal({
             </div>
           )}
 
-          <div className="pm-actions">
-            <button
-              className={`pm-btn pm-btn--buy${!isQuotable ? " pm-btn--disabled" : ""}`}
-              onClick={goToQuote}
-              disabled={!isQuotable}
-            >
-              {isQuotable ? quoteButtonLabel : "Unavailable"}
-            </button>
-          </div>
+        <div className="pm-actions">
+        <button
+            className={`pm-btn pm-btn--buy${!isQuotable ? " pm-btn--disabled" : ""}`}
+            onClick={goToQuote}
+            disabled={!isQuotable}
+        >
+            {isQuotable ? quoteButtonLabel : "Unavailable"}
+        </button>
+
+        <button className="pm-btn pm-btn--share" onClick={handleShare}>
+            {copied ? "✓ Copied" : "⬆ Share"}
+        </button>
+        </div>
 
           {isQuotable && (
             <p className="pm-note">
-              We'll confirm details and pricing within 24 hours.
+              Items arrive in 3-5 Business Days once shipped.
             </p>
           )}
         </div>

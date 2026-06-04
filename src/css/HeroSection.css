@@ -8,24 +8,18 @@
   isolation: isolate;
 }
 
-/* Mobile: keep full width, fixed height from config */
 .hero--mobile {
-  height: min(var(--hero-mobile-h), 70vh);
-  min-height: 240px;
+  height: min(var(--hero-mobile-h), 52vh);  /* was 70vh */
+  min-height: 200px;                         /* was 240px */
 }
 
-/* Desktop: constrain to the same width as your page container */
 .hero--desktop {
   aspect-ratio: var(--hero-desktop-aspect);
   min-height: var(--hero-desktop-min);
   max-height: var(--hero-desktop-max);
-
-  /* 👇 match Layout.css clamp(680px, 70vw, 1100px) */
   max-width: clamp(680px, 82vw, 1100px);
   margin-inline: auto;
-
-  /* Optional: rounded edges to visually align with content cards */
-  overflow: hidden; /* ensure rounded corners clip the image stack */
+  overflow: hidden;
 }
 
 /* ============================

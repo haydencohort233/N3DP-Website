@@ -1,8 +1,7 @@
-/* layout.css */
-/* Centered readable column on desktop/tablet */
 .page-container {
   width: 100%;
   overflow-x: clip;
+  box-sizing: border-box;
 }
 
 @media (max-width: 768px) {
@@ -10,5 +9,6 @@
     max-width: 100%;
     margin: 20px auto;
     padding: 0 16px;
+    box-sizing: border-box;
   }
 }

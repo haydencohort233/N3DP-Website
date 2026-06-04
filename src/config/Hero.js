@@ -10,14 +10,13 @@ const heroConfig = {
     // If left null, the site name from config.site.name will be used
     title: null,
 
-    subtitle:
-      "Quality 3D Prints. Get started by requesting a quote below or giving us a call! Questions? Try our FAQ below.",
+    subtitle: "Welcome to Nashville3DPrints — buy popular items or request your own below.",
 
-    primaryCtaText: "Get a Quote",
-    primaryCtaHref: "/quote", // Where clicking the text will redirect you
+    primaryCtaText: "Browse Shop",
+    primaryCtaHref: "/shop", // Where clicking the text will redirect you
 
-    secondaryCtaText: "FAQ",
-    secondaryCtaHref: "/faq", // Where clicking the text will redirect you
+    secondaryCtaText: "Get Quote",
+    secondaryCtaHref: "/quote", // Where clicking the text will redirect you
   },
 
   // -----------------------------
@@ -36,12 +35,14 @@ const heroConfig = {
   // Layout / sizing
   // -----------------------------
   // Mobile height (navbar height is subtracted via CSS variable)
-  mobileHeight: "calc(100vh - var(--nav-h, 56px))",
+  mobileHeight: "45vh",          // was: calc(100vh - var(--nav-h, 56px))
+  desktopMinHeight: 360,         // was: 320  — slightly taller floor
+  desktopMaxHeight: 700,         // was: 640  — a little more room on wide screens
 
   // Desktop banner sizing
   desktopAspectRatio: "21 / 9",
   desktopMinHeight: 320,
-  desktopMaxHeight: 640,
+  desktopMaxHeight: 340,
 
   // -----------------------------
   // Image sources

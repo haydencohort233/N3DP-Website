@@ -1,6 +1,7 @@
 // src/pages/Gallery.jsx
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
+import { toSlug } from "./Shop";
 import galleryData from "../config/galleryData";
 import SEO from "../components/SEO";
 import config from "../config";
@@ -12,7 +13,8 @@ export default function Gallery() {
   const [currentPage, setCurrentPage] = useState(1);
 
   // PhotoViewer
-  const [lightboxEntry, setLightboxEntry] = useState(null); // { itemIndex, photoIndex, ... }
+  const [lightboxEntry, setLightboxEntry] = useState(null);
+  const [photoNotFound, setPhotoNotFound] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategories, setSelectedCategories] = useState(() => {
   const category = searchParams.get("category");
@@ -49,8 +51,8 @@ export default function Gallery() {
   }, [selectedCategories]);
 
   // 2) Filter by search (title, category, tags only)
-function buildSearchText(item) {
-  const parts = [];
+  function buildSearchText(item) {
+    const parts = [];
 
   // top-level fields
   parts.push(item.title || "");
@@ -182,19 +184,27 @@ const visibleEntries = filteredEntries.slice(startIndex, startIndex + itemsPerPa
   const allSelected = selectedCategories.length === 0;
 
   // Close viewer whenever the underlying set could change
+  const hasMounted = useRef(false);
+
   useEffect(() => {
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      return;
+    }
     setLightboxEntry(null);
   }, [selectedCategories, searchTerm, sortOption, itemsPerPage, currentPage]);
 
-  useEffect(() => {
+useEffect(() => {
+  setSearchParams(prev => {
+    const next = new URLSearchParams(prev);
     if (selectedCategories.length === 1) {
-      setSearchParams({
-        category: selectedCategories[0],
-      });
+      next.set("category", selectedCategories[0]);
     } else {
-      setSearchParams({});
+      next.delete("category");
     }
-  }, [selectedCategories, setSearchParams]);
+    return next; // preserves ?photo= if present
+  }, { replace: true });
+}, [selectedCategories, setSearchParams]);
 
   // Close filter popover when clicking outside
   useEffect(() => {
@@ -209,6 +219,44 @@ const visibleEntries = filteredEntries.slice(startIndex, startIndex + itemsPerPa
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isFilterOpen]);
+
+useEffect(() => {
+  const photoParam = searchParams.get("photo");
+  if (!photoParam || !galleryData.length) return;
+
+  const match = galleryData.find(item => toSlug(item.title) === toSlug(photoParam));
+  if (match) {
+    const itemIndex = galleryData.indexOf(match);
+    setLightboxEntry({ itemIndex, photoIndex: 0 });
+  } else {
+    setPhotoNotFound(true);
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      next.delete("photo");
+      return next;
+    }, { replace: true });
+  }
+}, []); // ← empty array, runs once on mount only
+
+// Add this effect to keep URL in sync:
+useEffect(() => {
+  if (lightboxEntry !== null) {
+    const item = galleryData[lightboxEntry.itemIndex];
+    if (item) {
+      setSearchParams(prev => {
+        const next = new URLSearchParams(prev); // preserve ?category=
+        next.set("photo", toSlug(item.title));
+        return next;
+      }, { replace: true });
+    }
+  } else {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      next.delete("photo");
+      return next;
+    }, { replace: true });
+  }
+}, [lightboxEntry]);
 
   const toggleCategory = (cat) => {
     setSelectedCategories((prev) => {
@@ -227,17 +275,32 @@ const visibleEntries = filteredEntries.slice(startIndex, startIndex + itemsPerPa
     <main className="gallery-page">
     <SEO
       title={
-        selectedCategories.length === 1
-          ? `${selectedCategories[0]} 3D Prints — ${config.site.name}`
-          : `Gallery — ${config.site.name}`
+        lightboxEntry !== null && galleryData[lightboxEntry.itemIndex]
+          ? `${galleryData[lightboxEntry.itemIndex].title} — ${config.site.name}`
+          : selectedCategories.length === 1
+            ? `${selectedCategories[0]} 3D Prints — ${config.site.name}`
+            : `Gallery — ${config.site.name}`
       }
       description={
-        selectedCategories.length === 1
-          ? `Browse our ${selectedCategories[0]} 3D printed creations and custom projects.`
-          : "Browse recent 3D prints and prototypes from our Nashville shop to explore materials, finishes, and example parts."
+        lightboxEntry !== null && galleryData[lightboxEntry.itemIndex]
+          ? galleryData[lightboxEntry.itemIndex].description
+          : selectedCategories.length === 1
+            ? `Browse our ${selectedCategories[0]} 3D printed creations.`
+            : "Browse recent 3D prints and prototypes from our Nashville shop."
+      }
+      image={
+        lightboxEntry !== null && galleryData[lightboxEntry.itemIndex]
+          ? galleryData[lightboxEntry.itemIndex].src
+          : undefined
       }
     />
     <h1>Gallery</h1>
+    {photoNotFound && (
+      <div className="gallery-not-found">
+        <span>That photo wasn't found — it may have been removed or renamed.</span>
+        <button onClick={() => setPhotoNotFound(false)}>✕</button>
+      </div>
+    )}
 
       {/* Row 1: Filters + Display-per-page */}
       <div className="gallery-header">
@@ -380,7 +443,10 @@ const visibleEntries = filteredEntries.slice(startIndex, startIndex + itemsPerPa
         <div
           key={e.key}
           className="gallery-item"
-          onClick={() => setLightboxEntry(e)} // store entry object
+          onClick={() => {
+            setLightboxEntry(e);
+            setPhotoNotFound(false);
+          }}
         >
           <div className="gallery-image-wrapper">
             <img src={e.displaySrc} alt={e.displayTitle} loading="lazy" />

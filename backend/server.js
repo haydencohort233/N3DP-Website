@@ -236,7 +236,9 @@ app.post("/api/quotes", async (req, res) => {
   if (!email || !String(email).includes("@")) {
     return res.status(400).json({ ok: false, error: "Valid email is required" });
   }
-  if (!message || String(message).trim().length < 10) {
+  
+  const isCustomize = !!(ref_type || ref_id);
+  if (!isCustomize && (!message || String(message).trim().length < 10)) {
     return res.status(400).json({ ok: false, error: "Message is too short" });
   }
 

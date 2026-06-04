@@ -1,18 +1,38 @@
 // src/components/ProductCard.jsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GalleryModal from "./GalleryModal";
 import "../css/ProductCard.css";
 
 const DEFAULT_DESC_LINES = { mobile: 0, tablet: 2, desktop: 3 };
 
-export default function ProductCard({ product, descLines = DEFAULT_DESC_LINES }) {
+export default function ProductCard({
+  product,
+  descLines = DEFAULT_DESC_LINES,
+  forceOpen = false,
+  onModalClose,
+  onModalOpen,
+}) {
   const [modalOpen, setModalOpen] = useState(false);
   const { title, description, price, buyUrl, src, badge, inStock = true } = product;
   const lines = { ...DEFAULT_DESC_LINES, ...descLines };
   const descStyle = {
     "--desc-lines-tablet":  String(lines.tablet),
     "--desc-lines-desktop": String(lines.desktop),
+  };
+
+    useEffect(() => {
+    if (forceOpen) setModalOpen(true);
+  }, [forceOpen]);
+
+  const handleOpen = () => {
+    setModalOpen(true);
+    onModalOpen?.();
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+    onModalClose?.();
   };
 
   // Shape product into gallery item format
@@ -36,7 +56,7 @@ export default function ProductCard({ product, descLines = DEFAULT_DESC_LINES })
     <>
         <article
         className={`pc${!inStock ? " pc--oos" : ""}`}
-        onClick={() => setModalOpen(true)}
+        onClick={() => handleOpen(true)}
         aria-label={`View details for ${title}`}
         >
         <div className="pc-img-wrap">
@@ -88,7 +108,7 @@ export default function ProductCard({ product, descLines = DEFAULT_DESC_LINES })
         <GalleryModal
           images={[asGalleryItem]}
           index={0}
-          onClose={() => setModalOpen(false)}
+          onClose={() => handleClose(true)}
           onIndexChange={() => {}}
           quoteButtonLabel={inStock ? "Buy Now" : "Out of Stock"}
           quoteAction={inStock ? buyUrl : null}

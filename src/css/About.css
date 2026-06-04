@@ -1,129 +1,152 @@
 .about-page {
-  padding: 20px;
-  max-width: 1100px;
+  max-width: 860px;
   margin: 0 auto;
+  padding: 24px 20px 52px;
   color: var(--text);
 }
 
-.about-page,
-.about-page * {
-  box-sizing: border-box;
-}
-
+/* ── Hero ── */
 .about-hero {
   text-align: center;
-  margin-bottom: 18px;
+  padding: 12px 0 32px;
+}
+
+.about-hero-kicker {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin: 0 0 10px;
 }
 
 .about-hero h1 {
-  margin: 0;
-  font-size: 2rem;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  font-weight: 900;
+  line-height: 1.15;
+  margin: 0 0 14px;
+  letter-spacing: -0.02em;
 }
 
-.about-hero p {
-  margin: 10px auto 0;
-  max-width: 70ch;
+.about-hero-sub {
+  font-size: 0.97rem;
   color: var(--muted);
+  max-width: 58ch;
+  margin: 0 auto;
+  line-height: 1.65;
 }
 
-/* Owner */
+/* ── Stats ── */
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.about-stat {
+  background: var(--surface);
+  border: 1px solid var(--nav-border);
+  border-radius: var(--radius);
+  padding: 18px 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.about-stat-num {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.about-stat-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Owner ── */
+.about-owner {
+  margin-bottom: 28px;
+}
+
 .owner-card {
   border: 1px solid var(--nav-border);
   background: var(--surface);
   border-radius: var(--radius);
-  padding: 14px;
+  padding: 20px;
+  border-left: 3px solid var(--accent);
 }
 
 .owner-kicker {
-  color: var(--muted);
-  font-weight: 800;
+  color: var(--accent);
+  font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  font-size: 0.78rem;
-}
-
-.owner-name {
-  margin-top: 6px;
-  font-weight: 900;
-  font-size: 1.25rem;
+  font-size: 0.75rem;
+  margin-bottom: 10px;
 }
 
 .owner-text {
-  margin: 10px 0 0;
+  margin: 0 0 10px;
   color: var(--muted);
-  line-height: 1.55;
+  line-height: 1.65;
+  font-size: 0.92rem;
 }
+.owner-text:last-child { margin-bottom: 0; }
 
-.owner-actions {
-  margin-top: 12px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.about-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  border: 1px solid var(--nav-border);
-  background: var(--brand);
-  color: var(--brand-contrast);
-  padding: 10px 14px;
-  border-radius: 999px;
-  font-weight: 900;
-}
-
-.about-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  border: 1px solid var(--nav-border);
-  background: var(--surface-2);
-  color: var(--text);
-  padding: 10px 14px;
-  border-radius: 999px;
-  font-weight: 850;
-}
-
-.about-link:hover {
-  background: var(--surface);
-}
-
-/* Highlights */
+/* ── Highlights ── */
 .about-proof {
-  margin-top: 18px;
+  margin-bottom: 28px;
+}
+
+.about-section-head {
+  margin-bottom: 14px;
 }
 
 .about-section-head h2 {
-  margin: 0 0 6px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 4px;
 }
 
 .about-section-head p {
-  margin: 0 0 12px;
+  margin: 0;
   color: var(--muted);
+  font-size: 0.88rem;
 }
 
 .proof-grid {
   display: grid;
-  gap: 12px;
+  gap: 14px;
   grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .proof-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .proof-card {
   border: 1px solid var(--nav-border);
   background: var(--surface);
   border-radius: var(--radius);
-  padding: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .proof-media {
-  border: 1px solid var(--nav-border);
-  background: var(--surface-2);
-  border-radius: var(--radius);
-  overflow: hidden;
   aspect-ratio: 4 / 3;
+  background: var(--surface-2);
+  overflow: hidden;
 }
 
 .proof-media img {
@@ -131,58 +154,100 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.3s ease;
+}
+
+.proof-card:hover .proof-media img {
+  transform: scale(1.03);
+}
+
+.proof-body {
+  padding: 14px;
+  flex: 1;
 }
 
 .proof-title {
-  margin-top: 10px;
-  font-weight: 900;
+  font-weight: 800;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
 }
 
 .proof-text {
-  margin-top: 6px;
+  margin: 0;
   color: var(--muted);
-  line-height: 1.5;
+  line-height: 1.55;
+  font-size: 0.88rem;
 }
 
-/* Bottom */
+/* ── Bottom CTA ── */
 .about-bottom {
-  margin-top: 18px;
+  margin-top: 4px;
 }
 
 .bottom-card {
   border: 1px solid var(--nav-border);
-  background: var(--surface);
+  background: var(--surface-2);
   border-radius: var(--radius);
-  padding: 14px;
+  padding: 28px 24px;
   text-align: center;
-  justify-content: center;
-  max-width: 1000px;
 }
 
 .bottom-card h2 {
-  margin: 0 0 6px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 8px;
 }
 
 .bottom-card p {
-  margin: 0;
+  margin: 0 auto 18px;
   color: var(--muted);
-  line-height: 1.55;
-    margin-left: auto;
-  margin-right: auto;
-  max-width: 70ch;
+  line-height: 1.6;
+  max-width: 52ch;
+  font-size: 0.92rem;
 }
 
 .bottom-actions {
-  margin-top: 12px;
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-/* Desktop */
-@media (min-width: 900px) {
-  .proof-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+.about-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: var(--accent);
+  color: var(--brand-contrast);
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: opacity 0.15s;
+}
+.about-cta:hover { opacity: 0.85; }
+
+.about-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border: 1px solid var(--nav-border);
+  background: var(--surface);
+  color: var(--text);
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.15s;
+}
+.about-link:hover { background: var(--surface); }
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  .about-page { padding-inline: 14px; }
+  .about-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .about-stat { padding: 14px 8px; }
+  .about-stat-label { font-size: 0.7rem; }
 }

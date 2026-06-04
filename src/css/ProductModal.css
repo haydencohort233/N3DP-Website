@@ -251,7 +251,7 @@
 /* Actions */
 .pm-actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 8px;
   margin-top: auto;
 }
@@ -268,7 +268,11 @@
   text-align: center;
 }
 
-.pm-btn--buy { background: var(--accent); color: var(--brand-contrast); }
+.pm-btn--buy { 
+  background: var(--accent); 
+  color: var(--brand-contrast); 
+  flex: 3;
+}
 .pm-btn--buy:hover:not(:disabled) { opacity: 0.88; }
 
 .pm-btn--disabled,
@@ -538,4 +542,23 @@
   min-height: 0;
   padding: 14px 16px 28px;
 }
+}
+
+.pm-btn--share {
+  flex: 1;
+  width: auto;
+  padding: 12px;
+  margin-top: 0;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--nav-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 0.85rem;
+}
+
+.pm-btn--share:hover {
+  background: var(--surface);
 }
