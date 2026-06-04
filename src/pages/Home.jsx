@@ -30,9 +30,9 @@ export default function Home() {
   return (
     <main className="home" id="about">
       <SEO
-        title={site.name}
-        description="3D printing and CAD design services for prototypes and custom parts in Nashville."
-        image="/assets/logo.png"
+        title="Nashville 3D Printing & Custom Prints | Nashville3DPrints"
+        description="Quality 3D printing in Nashville, TN. Custom parts, prototypes, figurines and more. 1,000+ customers served since 2020. Get a free quote today!"
+        image="/assets/og-image.png"
       />
 
       {/* ── Shop Section ── */}

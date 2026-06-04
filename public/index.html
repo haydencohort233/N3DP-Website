@@ -2,32 +2,85 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+
+    <!-- ═══════════════════════════════
+         CRITICAL SEO — edit these
+    ═══════════════════════════════ -->
+    <title>Nashville 3D Printing & Custom Prints | Nashville3DPrints</title>
+    <meta name="description" content="Quality 3D printing services in Nashville, TN. Custom parts, prototypes, figurines, and more. 1,000+ customers served. Get a free quote today!" />
+    <meta name="keywords" content="3D printing Nashville, custom 3D prints Nashville TN, 3D printing service Tennessee, rapid prototyping Nashville, custom parts Nashville, PLA PETG printing Nashville" />
+    <meta name="author" content="Hayden Janes" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://nashville3dprints.com" />
+
+    <!-- ═══════════════════════════════
+         OPEN GRAPH (Facebook, iMessage, Discord, Slack)
+    ═══════════════════════════════ -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Nashville3DPrints" />
+    <meta property="og:title" content="Nashville 3D Printing & Custom Prints | Nashville3DPrints" />
+    <meta property="og:description" content="Quality 3D printing services in Nashville, TN. Custom parts, prototypes, figurines, and more. 1,000+ customers served. Get a free quote today!" />
+    <meta property="og:url" content="https://nashville3dprints.com" />
+    <meta property="og:image" content="https://nashville3dprints.com/assets/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- ═══════════════════════════════
+         TWITTER / X CARD
+    ═══════════════════════════════ -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nashville 3D Printing & Custom Prints | Nashville3DPrints" />
+    <meta name="twitter:description" content="Quality 3D printing services in Nashville, TN. Custom parts, prototypes, and more. Get a free quote!" />
+    <meta name="twitter:image" content="https://nashville3dprints.com/assets/og-image.png" />
+
+    <!-- ═══════════════════════════════
+         LOCAL BUSINESS SCHEMA
+         (big ranking factor for local searches)
+    ═══════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": "https://nashville3dprints.com#localbusiness",
+      "name": "Nashville3DPrints",
+      "description": "Quality 3D printing services in Nashville, TN. Custom parts, prototypes, figurines, and more.",
+      "url": "https://nashville3dprints.com",
+      "telephone": "+12092023221",
+      "email": "nashville3dprinting@gmail.com",
+      "founder": "Hayden Janes",
+      "foundingDate": "2020",
+      "areaServed": {
+        "@type": "State",
+        "name": "Tennessee"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1008 Drummond Dr"
+        "addressLocality": "Nashville",
+        "addressRegion": "TN",
+        "postalCode": "37211",
+        "addressCountry": "US"
+      },
+      "sameAs": [
+        "https://www.instagram.com/nashville3dprints",
+        "https://www.facebook.com/nashville3dprints"
+      ],
+      "priceRange": "$$",
+      "image": "https://nashville3dprints.com/assets/og-image.png"
+    }
+    </script>
+
+    <!-- ═══════════════════════════════
+         FONTS
+    ═══════════════════════════════ -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Google tag (gtag.js) -->
-    <script async crossorigin="anonymous" src="https://www.googletagmanager.com/gtag/js?id=G-W263GWDX2V"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet" />
 
-      const host = location.hostname;
-
-      // Don't track dev hosts
-      const isDevHost =
-        host === "localhost" ||
-        host === "127.0.0.1" ||
-        host.endsWith(".local");
-
-      if (!isDevHost) {
-        // If you use the React Router pageview hook, prevent automatic page_view here
-        gtag("config", "G-W263GWDX2V", { send_page_view: false });
-      }
-    </script>
+    <!-- ═══════════════════════════════
+         PRECONNECTS
+    ═══════════════════════════════ -->
     <link rel="preconnect" href="https://challenges.cloudflare.com" />
     <script
       src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
@@ -36,43 +89,36 @@
       crossorigin="anonymous"
     ></script>
 
-    <!-- Viewport -->
+    <!-- ═══════════════════════════════
+         VIEWPORT + THEME
+    ═══════════════════════════════ -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- Favicons -->
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="%PUBLIC_URL%/favicon/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="%PUBLIC_URL%/favicon/favicon-16x16.png"
-    />
-    <link rel="icon" href="%PUBLIC_URL%/favicon/favicon.ico" />
-
-    <!-- Apple / iOS -->
-    <link
-      rel="apple-touch-icon"
-      href="%PUBLIC_URL%/favicon/apple-touch-icon.png"
-    />
-
-    <!-- PWA / Android -->
-    <link rel="manifest" href="%PUBLIC_URL%/favicon/site.webmanifest" />
     <meta name="theme-color" content="#000000" />
 
-    <!-- Basic SEO fallback -->
-    <meta
-      name="description"
-      content="3D Printing Website - Request a quote!"
-    />
+    <!-- ═══════════════════════════════
+         FAVICONS
+    ═══════════════════════════════ -->
+    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon/favicon-16x16.png" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/favicon/site.webmanifest" />
 
-    <title>Nashville3DPrints</title>
+    <!-- ═══════════════════════════════
+         GOOGLE ANALYTICS
+    ═══════════════════════════════ -->
+    <script async crossorigin="anonymous" src="https://www.googletagmanager.com/gtag/js?id=G-W263GWDX2V"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      const host = location.hostname;
+      const isDevHost = host === "localhost" || host === "127.0.0.1" || host.endsWith(".local");
+      if (!isDevHost) {
+        gtag("config", "G-W263GWDX2V", { send_page_view: false });
+      }
+    </script>
   </head>
-
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
